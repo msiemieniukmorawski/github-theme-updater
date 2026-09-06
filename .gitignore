@@ -1,0 +1,104 @@
+# GitHub Theme Updater — .gitignore
+#
+# UWAGA: to repozytorium jest jednocześnie źródłem paczki instalacyjnej.
+# Wszystko, co tu zignorujesz, NIE znajdzie się w archiwum ZIP pobieranym
+# z GitHuba — a więc nie trafi też na serwer przy aktualizacji.
+# Zanim dopiszesz regułę, sprawdź, czy plik nie jest potrzebny w działającej
+# wtyczce (dotyczy zwłaszcza vendor/, plików .mo i zbudowanych assetów).
+
+# --- System operacyjny -------------------------------------------------------
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# --- Edytory i IDE -----------------------------------------------------------
+.idea/
+.fleet/
+*.iml
+*.sublime-project
+*.sublime-workspace
+*.code-workspace
+.history/
+nbproject/
+.buildpath
+.project
+.settings/
+
+# VS Code: konfiguracja zespołowa bywa przydatna w repo, więc trzymamy
+# extensions.json i settings.json, a ignorujemy resztę.
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+
+# --- Zależności --------------------------------------------------------------
+# Wtyczka nie ma zależności runtime — vendor/ służy tylko narzędziom
+# deweloperskim (PHPCS, PHPUnit). Jeśli kiedykolwiek dodasz pakiet używany
+# w czasie działania wtyczki, USUŃ tę regułę, inaczej wtyczka wyląduje
+# na produkcji bez autoloadera Composera.
+/vendor/
+/node_modules/
+
+# composer.lock i package-lock.json zostają w repo — to produkt końcowy,
+# a nie biblioteka, więc wersje zależności mają być odtwarzalne.
+
+# --- Narzędzia i cache -------------------------------------------------------
+.phpunit.result.cache
+.phpunit.cache/
+.phpstan.cache/
+.php-cs-fixer.cache
+
+# Local overrides of the committed *.dist configuration.
+/phpunit.xml
+/phpcs.xml
+/.phpcs.xml
+/phpstan.neon
+.php_cs.cache
+/.phpcs-cache/
+/coverage/
+clover.xml
+.eslintcache
+.stylelintcache
+
+# --- Build i artefakty wydania ----------------------------------------------
+/build/
+/dist/
+/release/
+*.zip
+*.tar
+*.tar.gz
+
+# --- Środowisko i sekrety ----------------------------------------------------
+# Token GitHuba trzymamy w wp-config.php (GTHU_GITHUB_TOKEN) albo w ustawieniach
+# wtyczki — nigdy w repozytorium.
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+auth.json
+
+# --- Logi i pliki tymczasowe -------------------------------------------------
+*.log
+error_log
+debug.log
+*.bak
+*.orig
+*.rej
+*.swp
+*.swo
+*~
+.tmp/
+tmp/
+
+# --- Tłumaczenia -------------------------------------------------------------
+# Pliki .pot, .po i .mo ZOSTAJĄ w repozytorium — .mo jest potrzebny
+# do wyświetlenia tłumaczeń w działającej wtyczce.
+# Ignorujemy tylko kopie robocze z Poedita.
+*.po~
+*.mo~

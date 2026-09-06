@@ -1,0 +1,1280 @@
+# Copyright (C) 2026 ms-m.pl
+# This file is distributed under the GPL-2.0-or-later.
+msgid ""
+msgstr ""
+"Project-Id-Version: GitHub Theme Updater 2.2.0\n"
+"Report-Msgid-Bugs-To: https://ms-m.pl\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2026-09-06T20:24:13+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.12.0\n"
+"X-Domain: github-theme-updater\n"
+
+#. Plugin Name of the plugin
+#: github-theme-updater.php
+msgid "GitHub Theme Updater"
+msgstr ""
+
+#. Description of the plugin
+#: github-theme-updater.php
+msgid "Updates a WordPress theme straight from a GitHub repository, private ones included, with backups, version rollback and per-path protection against overwriting."
+msgstr ""
+
+#. Author of the plugin
+#: github-theme-updater.php
+msgid "ms-m.pl"
+msgstr ""
+
+#. Author URI of the plugin
+#: github-theme-updater.php
+msgid "https://ms-m.pl"
+msgstr ""
+
+#. translators: %s: installed version label.
+#: includes/class-admin-actions.php:134
+#, php-format
+msgid "The theme was updated to version %s."
+msgstr ""
+
+#. translators: %s: previously installed version.
+#: includes/class-admin-actions.php:141
+#, php-format
+msgid "Previous version: %s."
+msgstr ""
+
+#. translators: %s: comma separated list of protected paths.
+#: includes/class-admin-actions.php:149
+#, php-format
+msgid "Protected paths were skipped: %s."
+msgstr ""
+
+#. translators: %s: URL of the backups tab.
+#: includes/class-admin-actions.php:157
+#, php-format
+msgid "A backup of the previous version is on the <a href=\"%s\">Backups</a> tab."
+msgstr ""
+
+#. translators: %s: restored version.
+#: includes/class-admin-actions.php:231
+#, php-format
+msgid "The theme was restored from a backup (version %s)."
+msgstr ""
+
+#: includes/class-admin-actions.php:232
+#: views/tab-backups.php:72
+#: views/tab-update.php:135
+#: views/tab-update.php:391
+msgid "unknown"
+msgstr ""
+
+#: includes/class-admin-actions.php:262
+msgid "The backup was deleted."
+msgstr ""
+
+#: includes/class-admin-actions.php:300
+msgid "A backup of the current theme was created."
+msgstr ""
+
+#: includes/class-admin-actions.php:318
+msgid "The lock was released. Before starting an update, check the Backups tab to confirm the previous operation finished cleanly."
+msgstr ""
+
+#. translators: %s: newest version found on GitHub.
+#: includes/class-admin-actions.php:353
+#, php-format
+msgid "Data refreshed from GitHub. Newest available version: %s."
+msgstr ""
+
+#. translators: 1: repository name, 2: visibility, 3: default branch.
+#: includes/class-admin-actions.php:380
+#, php-format
+msgid "The connection works. Repository: %1$s (%2$s), default branch: %3$s."
+msgstr ""
+
+#: includes/class-admin-actions.php:382
+msgid "private"
+msgstr ""
+
+#: includes/class-admin-actions.php:382
+msgid "public"
+msgstr ""
+
+#: includes/class-admin-actions.php:398
+#: includes/class-admin-actions.php:438
+msgid "You do not have permission to perform this operation."
+msgstr ""
+
+#: includes/class-admin-page.php:111
+#: includes/class-admin-page.php:215
+msgid "Theme updates from GitHub"
+msgstr ""
+
+#: includes/class-admin-page.php:112
+msgid "Theme from GitHub"
+msgstr ""
+
+#: includes/class-admin-page.php:131
+#: includes/class-admin-page.php:190
+#: views/tab-backups.php:131
+#: views/tab-help.php:110
+#: views/tab-help.php:218
+msgid "Settings"
+msgstr ""
+
+#: includes/class-admin-page.php:172
+msgid "Skipped — backups are turned off."
+msgstr ""
+
+#: includes/class-admin-page.php:173
+msgid "The progress could not be read. The page will reload when the update finishes."
+msgstr ""
+
+#: includes/class-admin-page.php:174
+msgid "The connection to the server was interrupted. Reloading the page…"
+msgstr ""
+
+#: includes/class-admin-page.php:175
+msgid "You have unsaved changes in the settings. Leave the page anyway?"
+msgstr ""
+
+#: includes/class-admin-page.php:188
+#: views/tab-help.php:164
+msgid "Update"
+msgstr ""
+
+#: includes/class-admin-page.php:189
+msgid "Backups"
+msgstr ""
+
+#: includes/class-admin-page.php:191
+msgid "Instructions"
+msgstr ""
+
+#: includes/class-admin-page.php:202
+msgid "You do not have permission to manage theme updates."
+msgstr ""
+
+#. translators: %s: directory path.
+#: includes/class-backup-manager.php:86
+#, php-format
+msgid "Could not create the backup directory: %s"
+msgstr ""
+
+#: includes/class-backup-manager.php:160
+msgid "There is nothing to back up — the theme directory does not exist."
+msgstr ""
+
+#: includes/class-backup-manager.php:220
+msgid "No theme directory is set."
+msgstr ""
+
+#: includes/class-backup-manager.php:227
+msgid "Could not create the theme directory."
+msgstr ""
+
+#: includes/class-backup-manager.php:270
+#: includes/class-backup-manager.php:329
+msgid "The requested backup was not found."
+msgstr ""
+
+#: includes/class-backup-manager.php:336
+msgid "Could not delete the backup."
+msgstr ""
+
+#. translators: %s: filesystem method reported by WordPress, e.g. ftpext.
+#: includes/class-filesystem.php:74
+#, php-format
+msgid "WordPress has no direct file access (method: %s). Add the FS_METHOD constant set to “direct” to wp-config.php, or fix the permissions on the themes directory."
+msgstr ""
+
+#: includes/class-filesystem.php:83
+msgid "Could not initialise the WordPress filesystem."
+msgstr ""
+
+#: includes/class-filesystem.php:90
+msgid "The WordPress filesystem is unavailable."
+msgstr ""
+
+#. translators: %s: directory path.
+#: includes/class-filesystem.php:200
+#: includes/class-filesystem.php:327
+#: includes/class-filesystem.php:399
+#, php-format
+msgid "Could not read the contents of the directory %s."
+msgstr ""
+
+#. translators: %s: file or directory path relative to the theme root.
+#: includes/class-filesystem.php:271
+#, php-format
+msgid "%s cannot be deleted by the web server user. Check the ownership and permissions of the theme files. Nothing has been changed yet."
+msgstr ""
+
+#. translators: %s: directory path.
+#: includes/class-filesystem.php:338
+#, php-format
+msgid "Could not create the directory %s."
+msgstr ""
+
+#. translators: %s: file path.
+#: includes/class-filesystem.php:369
+#, php-format
+msgid "Could not copy the file %s."
+msgstr ""
+
+#. translators: %s: file or directory path.
+#: includes/class-filesystem.php:439
+#, php-format
+msgid "Could not delete %s. A file inside is read-only, locked by another program, or owned by a different user than PHP runs as."
+msgstr ""
+
+#: includes/class-filesystem.php:469
+#: includes/class-filesystem.php:496
+msgid "No style.css was found in the downloaded archive. Make sure the repository holds a theme, rather than, say, an entire wp-content directory."
+msgstr ""
+
+#: includes/class-filesystem.php:478
+msgid "Could not read the contents of the downloaded archive."
+msgstr ""
+
+#. translators: %s: repository URL.
+#: includes/class-github-client.php:131
+#, php-format
+msgid "The repository %s has no releases yet. Create one on GitHub, or switch the plugin to branch mode under Settings."
+msgstr ""
+
+#. translators: %s: git tag name.
+#: includes/class-github-client.php:164
+#, php-format
+msgid "No release tagged %s was found."
+msgstr ""
+
+#: includes/class-github-client.php:211
+msgid "This release has no ZIP file to download."
+msgstr ""
+
+#: includes/class-github-client.php:249
+msgid "Could not create a temporary file. Check that the temporary directory is writable."
+msgstr ""
+
+#: includes/class-github-client.php:283
+msgid "The downloaded file is empty or corrupt. Try again in a moment."
+msgstr ""
+
+#: includes/class-github-client.php:296
+msgid "The downloaded file is not a ZIP archive. GitHub may have answered with an error page — check the token and the repository address."
+msgstr ""
+
+#: includes/class-github-client.php:334
+msgid "The GitHub response is not valid JSON."
+msgstr ""
+
+#: includes/class-github-client.php:341
+msgid "GitHub returned an unexpected response while fetching the release list."
+msgstr ""
+
+#. translators: %s: underlying HTTP error message.
+#: includes/class-github-client.php:390
+#, php-format
+msgid "Could not connect to GitHub: %s"
+msgstr ""
+
+#: includes/class-github-client.php:410
+msgid "GitHub rejected the token (401). The token is invalid or has expired — generate a new one and save it under Settings."
+msgstr ""
+
+#: includes/class-github-client.php:417
+msgid "The GitHub request limit was exceeded (403). Try again in a quarter of an hour or so."
+msgstr ""
+
+#: includes/class-github-client.php:419
+msgid "No access to this repository (403). Make sure the token has the “repo” scope (classic) or “Contents: Read” access to this repository (fine-grained)."
+msgstr ""
+
+#: includes/class-github-client.php:424
+msgid "Repository not found (404). Check the owner/repository name, and for a private repository, whether the token has access to it."
+msgstr ""
+
+#: includes/class-github-client.php:428
+msgid "Too many requests to GitHub (429). Wait a moment and try again."
+msgstr ""
+
+#. translators: %d: HTTP status code.
+#: includes/class-github-client.php:434
+#, php-format
+msgid "GitHub responded with HTTP error %d."
+msgstr ""
+
+#. translators: %s: error message returned by the GitHub API.
+#: includes/class-github-client.php:442
+#, php-format
+msgid "GitHub says: %s"
+msgstr ""
+
+#: includes/class-github-client.php:458
+msgid "No GitHub repository is set. Fill it in on the Settings tab."
+msgstr ""
+
+#. translators: %s: number of seconds.
+#: includes/class-history.php:131
+#, php-format
+msgid "%s s"
+msgstr ""
+
+#. translators: 1: number of minutes, 2: number of seconds.
+#: includes/class-history.php:138
+#, php-format
+msgid "%1$s min %2$s s"
+msgstr ""
+
+#: includes/class-install-progress.php:51
+msgid "Checking the release on GitHub"
+msgstr ""
+
+#: includes/class-install-progress.php:52
+msgid "Downloading the archive"
+msgstr ""
+
+#: includes/class-install-progress.php:53
+msgid "Unpacking the archive"
+msgstr ""
+
+#: includes/class-install-progress.php:54
+msgid "Checking the theme files can be replaced"
+msgstr ""
+
+#: includes/class-install-progress.php:55
+msgid "Backing up the current theme"
+msgstr ""
+
+#: includes/class-install-progress.php:56
+msgid "Removing the old theme files"
+msgstr ""
+
+#: includes/class-install-progress.php:57
+msgid "Copying the new files"
+msgstr ""
+
+#: includes/class-install-progress.php:58
+msgid "Finishing up"
+msgstr ""
+
+#: includes/class-install-progress.php:69
+msgid "Restoring the theme from the backup"
+msgstr ""
+
+#. translators: %s: number of files copied so far.
+#. translators: %s: number of files copied.
+#: includes/class-install-progress.php:188
+#: views/tab-update.php:423
+#, php-format
+msgid "%s file"
+msgid_plural "%s files"
+msgstr[0] ""
+msgstr[1] ""
+
+#. translators: %s: git branch name.
+#: includes/class-release.php:156
+#, php-format
+msgid "Branch %s"
+msgstr ""
+
+#. translators: %s: value entered by the user.
+#: includes/class-settings.php:178
+#, php-format
+msgid "Repository not recognised: %s. Enter it as owner/repository, or paste an address such as https://github.com/owner/repository."
+msgstr ""
+
+#: includes/class-theme-installer.php:216
+msgid "Another operation on the theme files is already running. Wait a moment and reload this page."
+msgstr ""
+
+#: includes/class-theme-installer.php:237
+msgid "No theme directory is set. Fill in the “Theme directory” field under Settings."
+msgstr ""
+
+#. translators: %s: themes directory path.
+#: includes/class-theme-installer.php:254
+#, php-format
+msgid "The themes directory is not writable: %s"
+msgstr ""
+
+#. translators: %s: directory path.
+#: includes/class-theme-installer.php:285
+#, php-format
+msgid "Could not create the working directory %s."
+msgstr ""
+
+#. translators: %s: underlying error message.
+#: includes/class-theme-installer.php:304
+#, php-format
+msgid "Could not unpack the archive: %s"
+msgstr ""
+
+#. translators: %s: underlying error message.
+#: includes/class-theme-installer.php:367
+#, php-format
+msgid "The update was stopped because the backup failed: %s"
+msgstr ""
+
+#. translators: %s: directory path.
+#: includes/class-theme-installer.php:385
+#, php-format
+msgid "Could not create the theme directory %s."
+msgstr ""
+
+#: includes/class-theme-installer.php:483
+msgid "The archive’s style.css has no “Theme Name” header, so it does not look like a WordPress theme."
+msgstr ""
+
+#. translators: 1: theme name in the archive, 2: theme directory name, 3: theme name on disk.
+#: includes/class-theme-installer.php:515
+#, php-format
+msgid "The archive holds the theme “%1$s”, but the directory %2$s contains “%3$s”. Check the repository and the theme directory under Settings. Nothing has been changed."
+msgstr ""
+
+#: includes/class-theme-installer.php:571
+msgid "The theme was restored from the backup."
+msgstr ""
+
+#: includes/class-theme-installer.php:575
+msgid "WARNING: the theme could not be restored automatically — use the Backups tab."
+msgstr ""
+
+#: includes/class-theme-installer.php:578
+msgid "WARNING: backups are turned off, so the theme could not be restored — the theme directory may be incomplete."
+msgstr ""
+
+#: includes/class-update-checker.php:154
+msgid "GitHub Theme Updater:"
+msgstr ""
+
+#. translators: %s: version number available on GitHub.
+#: includes/class-update-checker.php:158
+#, php-format
+msgid "a newer version of the theme is available (%s)."
+msgstr ""
+
+#: includes/class-update-checker.php:163
+msgid "Go to updates"
+msgstr ""
+
+#: includes/class-update-checker.php:165
+msgid "Hide this notice"
+msgstr ""
+
+#: views/tab-backups.php:28
+msgid "Theme backups"
+msgstr ""
+
+#: views/tab-backups.php:30
+msgid "A backup is a full snapshot of the theme directory taken just before an update. Restoring one replaces the current theme files with its contents."
+msgstr ""
+
+#: views/tab-backups.php:37
+msgid "Back up now"
+msgstr ""
+
+#: views/tab-backups.php:45
+msgid "There are no backups yet. The first one is created automatically with the next theme update."
+msgstr ""
+
+#: views/tab-backups.php:54
+msgid "Version"
+msgstr ""
+
+#: views/tab-backups.php:55
+msgid "Created"
+msgstr ""
+
+#: views/tab-backups.php:56
+msgid "Theme"
+msgstr ""
+
+#: views/tab-backups.php:57
+msgid "Size"
+msgstr ""
+
+#: views/tab-backups.php:58
+#: views/tab-update.php:371
+msgid "Author"
+msgstr ""
+
+#: views/tab-backups.php:59
+msgid "Actions"
+msgstr ""
+
+#: views/tab-backups.php:101
+msgid "Restore this backup? The current theme files will be replaced."
+msgstr ""
+
+#: views/tab-backups.php:103
+msgid "Restore"
+msgstr ""
+
+#: views/tab-backups.php:114
+msgid "Delete this backup permanently?"
+msgstr ""
+
+#: views/tab-backups.php:116
+msgid "Delete"
+msgstr ""
+
+#. translators: 1: number of backups kept, 2: URL of the settings tab.
+#: views/tab-backups.php:129
+#, php-format
+msgid "The last %1$d backups are kept — older ones are deleted automatically. You can change the limit on the %2$s tab."
+msgstr ""
+
+#: views/tab-help.php:21
+msgid "How it works"
+msgstr ""
+
+#: views/tab-help.php:23
+msgid "You keep the theme code in a GitHub repository."
+msgstr ""
+
+#: views/tab-help.php:24
+msgid "When the theme is ready, you publish a new release on GitHub with a version number."
+msgstr ""
+
+#: views/tab-help.php:25
+msgid "This plugin sees the new release and installs it on the site in one click."
+msgstr ""
+
+#: views/tab-help.php:26
+msgid "Before overwriting anything it takes a backup, and leaves the files you nominated untouched."
+msgstr ""
+
+#: views/tab-help.php:31
+msgid "Step 1. Generate an access token"
+msgstr ""
+
+#: views/tab-help.php:33
+msgid "A token is only needed when the repository is private. For a public one you can skip this step."
+msgstr ""
+
+#: views/tab-help.php:36
+msgid "Recommended: a fine-grained token"
+msgstr ""
+
+#. translators: %s: link to the GitHub token settings page.
+#: views/tab-help.php:42
+#, php-format
+msgid "Go to %s and click “Generate new token”."
+msgstr ""
+
+#: views/tab-help.php:47
+msgid "Token name: anything you like, for example “Theme updates — site name”. Including the site name helps you tell later which token is used where."
+msgstr ""
+
+#: views/tab-help.php:48
+msgid "Expiration: set an expiry date, for example 90 days. After that a new token has to be generated."
+msgstr ""
+
+#. translators: %s: repository name.
+#: views/tab-help.php:53
+#, php-format
+msgid "Repository access: choose “Only select repositories” and pick %s."
+msgstr ""
+
+#. translators: %s: required permission name.
+#: views/tab-help.php:62
+#, php-format
+msgid "Permissions → Repository permissions: set %s. Nothing else is needed."
+msgstr ""
+
+#: views/tab-help.php:67
+msgid "Click “Generate token” and copy the result straight away — GitHub shows it only once."
+msgstr ""
+
+#: views/tab-help.php:70
+msgid "Simpler: a classic token"
+msgstr ""
+
+#. translators: %s: link to the classic token settings page.
+#: views/tab-help.php:76
+#, php-format
+msgid "Go to %s and choose “Generate new token (classic)”."
+msgstr ""
+
+#. translators: %s: required scope name.
+#: views/tab-help.php:85
+#, php-format
+msgid "Under “Scopes” tick only %s — that grants access to private repositories."
+msgstr ""
+
+#: views/tab-help.php:90
+msgid "Generate the token and copy it."
+msgstr ""
+
+#: views/tab-help.php:95
+msgid "Safer, outside the database:"
+msgstr ""
+
+#: views/tab-help.php:96
+msgid "you can also put the token in wp-config.php. It then never reaches the database and is not visible in the admin:"
+msgstr ""
+
+#: views/tab-help.php:103
+msgid "Step 2. Fill in the plugin settings"
+msgstr ""
+
+#. translators: %s: URL of the settings tab.
+#: views/tab-help.php:109
+#, php-format
+msgid "Go to the %s tab."
+msgstr ""
+
+#: views/tab-help.php:114
+msgid "In “GitHub repository”, paste the repository address from your browser."
+msgstr ""
+
+#: views/tab-help.php:115
+msgid "In “Access token”, paste the token from step 1."
+msgstr ""
+
+#: views/tab-help.php:116
+msgid "In “Theme directory”, enter the name of the theme folder on this site — suggestions appear when you click the field."
+msgstr ""
+
+#: views/tab-help.php:117
+msgid "Save the settings and click “Test connection”. A green message with the repository name should appear."
+msgstr ""
+
+#: views/tab-help.php:122
+msgid "Step 3. Publish a new version of the theme"
+msgstr ""
+
+#: views/tab-help.php:124
+msgid "You do this on the code side, every time you want to ship a new version."
+msgstr ""
+
+#: views/tab-help.php:127
+msgid "A. Tag the version in the repository"
+msgstr ""
+
+#: views/tab-help.php:128
+msgid "In the terminal, inside the project directory, once your changes are committed:"
+msgstr ""
+
+#. translators: 1: example version number, 2: example version number.
+#: views/tab-help.php:135
+#, php-format
+msgid "Version numbers use the %1$s format. Each release has to carry a higher number (%2$s), otherwise the plugin will not treat it as newer."
+msgstr ""
+
+#: views/tab-help.php:142
+msgid "B. Create a release on GitHub"
+msgstr ""
+
+#. translators: %s: link to the repository releases page.
+#: views/tab-help.php:148
+#, php-format
+msgid "Open the releases page of the repository: %s."
+msgstr ""
+
+#: views/tab-help.php:155
+msgid "Click “Draft a new release”."
+msgstr ""
+
+#: views/tab-help.php:156
+msgid "Under “Choose a tag”, pick the tag you just pushed."
+msgstr ""
+
+#: views/tab-help.php:157
+msgid "Enter a release title and, optionally, a list of changes. You will see that description later on the Update tab."
+msgstr ""
+
+#: views/tab-help.php:158
+msgid "Click “Publish release”."
+msgstr ""
+
+#. translators: %s: URL of the update tab.
+#: views/tab-help.php:163
+#, php-format
+msgid "Go back to the %s tab and click “Check again” — the new version should show up."
+msgstr ""
+
+#: views/tab-help.php:172
+msgid "What exactly happens during an update"
+msgstr ""
+
+#: views/tab-help.php:174
+msgid "The plugin downloads the ZIP archive of the selected version from GitHub."
+msgstr ""
+
+#: views/tab-help.php:175
+msgid "It unpacks it into a temporary directory and checks that there really is a theme inside, by looking for style.css."
+msgstr ""
+
+#: views/tab-help.php:176
+msgid "It backs up the current theme."
+msgstr ""
+
+#: views/tab-help.php:177
+msgid "It empties the theme directory, skipping protected paths."
+msgstr ""
+
+#: views/tab-help.php:178
+msgid "It copies the new files in, again skipping protected paths."
+msgstr ""
+
+#: views/tab-help.php:179
+msgid "If anything goes wrong while copying, the theme is restored automatically from the backup."
+msgstr ""
+
+#: views/tab-help.php:182
+msgid "Nothing in the theme directory changes until the backup exists, so a download error or a corrupt archive cannot disturb a working site."
+msgstr ""
+
+#: views/tab-help.php:187
+msgid "When something goes wrong"
+msgstr ""
+
+#: views/tab-help.php:189
+msgid "“GitHub rejected the token (401)”"
+msgstr ""
+
+#: views/tab-help.php:190
+msgid "The token expired, or it was copied incompletely. Generate a new one and save it under Settings."
+msgstr ""
+
+#: views/tab-help.php:192
+msgid "“No access to this repository (403)”"
+msgstr ""
+
+#: views/tab-help.php:193
+msgid "The token exists but does not cover this repository. For a fine-grained token, check that the repository is on the “Only select repositories” list and has the Contents: Read-only permission."
+msgstr ""
+
+#: views/tab-help.php:195
+msgid "“Repository not found (404)”"
+msgstr ""
+
+#: views/tab-help.php:196
+msgid "Usually a typo in the repository name — or the repository is private and the token has not been saved yet."
+msgstr ""
+
+#: views/tab-help.php:198
+msgid "“No style.css was found in the downloaded archive”"
+msgstr ""
+
+#: views/tab-help.php:199
+msgid "The repository should hold the theme itself — style.css in the repository root, or one directory below it. If you keep all of wp-content there, point the plugin at a repository holding only the theme instead."
+msgstr ""
+
+#: views/tab-help.php:201
+msgid "“WordPress has no direct file access”"
+msgstr ""
+
+#. translators: %s: PHP constant definition.
+#: views/tab-help.php:206
+#, php-format
+msgid "The server does not let WordPress write files directly. Usually adding this to wp-config.php is enough: %s — if it does not help, the problem is permissions on the themes directory."
+msgstr ""
+
+#: views/tab-help.php:212
+msgid "The client’s changes disappeared after an update"
+msgstr ""
+
+#. translators: %s: URL of the settings tab.
+#: views/tab-help.php:217
+#, php-format
+msgid "An update replaces the theme files with the repository version. Add anything that has to survive to the protected paths list on the %s tab."
+msgstr ""
+
+#: views/tab-settings.php:26
+msgid "Where the theme comes from"
+msgstr ""
+
+#: views/tab-settings.php:31
+msgid "GitHub repository"
+msgstr ""
+
+#: views/tab-settings.php:43
+msgid "You can simply paste the repository address from your browser — the plugin works out the owner and the name itself."
+msgstr ""
+
+#: views/tab-settings.php:45
+msgid "Examples: company-name/theme-name, https://github.com/company-name/theme-name"
+msgstr ""
+
+#: views/tab-settings.php:52
+msgid "Access token"
+msgstr ""
+
+#: views/tab-settings.php:57
+msgid "The token is set in wp-config.php"
+msgstr ""
+
+#: views/tab-settings.php:61
+msgid "This is the safest option — the token never reaches the database. To change it, edit wp-config.php."
+msgstr ""
+
+#: views/tab-settings.php:75
+msgid "A token is already saved. Leave the field empty to keep it."
+msgstr ""
+
+#: views/tab-settings.php:77
+msgid "Only required for private repositories."
+msgstr ""
+
+#: views/tab-settings.php:80
+msgid "How do I generate a token?"
+msgstr ""
+
+#: views/tab-settings.php:88
+msgid "Delete the saved token"
+msgstr ""
+
+#: views/tab-settings.php:98
+msgid "Theme directory"
+msgstr ""
+
+#. translators: %s: themes directory path.
+#: views/tab-settings.php:121
+#, php-format
+msgid "Name of the folder in %s that should be overwritten. That is the one replaced with the repository contents."
+msgstr ""
+
+#: views/tab-settings.php:130
+#: views/tab-settings.php:133
+msgid "Download mode"
+msgstr ""
+
+#: views/tab-settings.php:142
+msgid "Releases — recommended"
+msgstr ""
+
+#: views/tab-settings.php:145
+msgid "You install tagged, finished versions, and can go back to any earlier one."
+msgstr ""
+
+#: views/tab-settings.php:155
+msgid "Branch — the current state of the code"
+msgstr ""
+
+#: views/tab-settings.php:158
+msgid "Pulls code straight from a branch, with no releases involved. Handy while working on the theme, but there is no version history to roll back to."
+msgstr ""
+
+#: views/tab-settings.php:166
+msgid "Branch name"
+msgstr ""
+
+#: views/tab-settings.php:178
+msgid "Used in branch mode only."
+msgstr ""
+
+#: views/tab-settings.php:185
+msgid "ZIP file from the release"
+msgstr ""
+
+#: views/tab-settings.php:197
+msgid "Leave empty to download the repository source. Fill it in if you attach a built ZIP package to your releases — give the pattern of its name, for example theme-*.zip."
+msgstr ""
+
+#: views/tab-settings.php:203
+msgid "Pre-releases"
+msgstr ""
+
+#: views/tab-settings.php:212
+msgid "Also show releases marked as pre-release"
+msgstr ""
+
+#: views/tab-settings.php:220
+msgid "Files protected from overwriting"
+msgstr ""
+
+#: views/tab-settings.php:225
+msgid "Protected paths"
+msgstr ""
+
+#: views/tab-settings.php:236
+msgid "One path per line, relative to the theme directory. These files and directories are neither deleted nor overwritten with the GitHub version."
+msgstr ""
+
+#: views/tab-settings.php:240
+msgid "the whole translations directory"
+msgstr ""
+
+#: views/tab-settings.php:241
+msgid "a single file"
+msgstr ""
+
+#: views/tab-settings.php:242
+msgid "a file in a subdirectory"
+msgstr ""
+
+#: views/tab-settings.php:243
+msgid "every file with that extension, at any depth"
+msgstr ""
+
+#: views/tab-settings.php:244
+msgid "lines starting with # are ignored"
+msgstr ""
+
+#: views/tab-settings.php:251
+msgid "Ignored paths"
+msgstr ""
+
+#: views/tab-settings.php:262
+msgid "Same syntax. These paths are never copied — not into backups, not from the GitHub archive — and are left alone on disk. Meant for development leftovers such as .git, node_modules or vendor, which can hold tens of thousands of files and turn a backup into a multi-minute job."
+msgstr ""
+
+#: views/tab-settings.php:265
+msgid "Do not ignore a directory the theme needs at runtime, such as a committed vendor directory: it would not be installed from the archive."
+msgstr ""
+
+#: views/tab-settings.php:273
+msgid "Backups and notifications"
+msgstr ""
+
+#: views/tab-settings.php:277
+msgid "Backup before an update"
+msgstr ""
+
+#: views/tab-settings.php:286
+msgid "Back up the theme before every update"
+msgstr ""
+
+#: views/tab-settings.php:289
+msgid "This lets a failed update be undone in one click. Recommended."
+msgstr ""
+
+#: views/tab-settings.php:296
+msgid "How many backups to keep"
+msgstr ""
+
+#: views/tab-settings.php:309
+msgid "Older backups are deleted automatically so they do not fill up the server."
+msgstr ""
+
+#: views/tab-settings.php:315
+msgid "Notifications"
+msgstr ""
+
+#: views/tab-settings.php:324
+msgid "Check automatically and announce new versions in the dashboard"
+msgstr ""
+
+#: views/tab-settings.php:327
+msgid "Checks run twice a day. The plugin never updates the theme by itself — the decision is always yours."
+msgstr ""
+
+#: views/tab-settings.php:333
+msgid "Uninstalling"
+msgstr ""
+
+#: views/tab-settings.php:342
+msgid "When the plugin is deleted, remove its settings and backups as well"
+msgstr ""
+
+#: views/tab-settings.php:345
+msgid "This applies to deleting the plugin, not to deactivating it. The theme is left alone."
+msgstr ""
+
+#: views/tab-settings.php:352
+msgid "Save settings"
+msgstr ""
+
+#: views/tab-settings.php:356
+msgid "Check the configuration"
+msgstr ""
+
+#: views/tab-settings.php:358
+msgid "The plugin will connect to GitHub and check that the repository is reachable with the saved token. Nothing is downloaded or changed."
+msgstr ""
+
+#: views/tab-settings.php:364
+msgid "Test connection"
+msgstr ""
+
+#: views/tab-update.php:35
+msgid "The plugin is not configured yet."
+msgstr ""
+
+#: views/tab-update.php:36
+msgid "Enter a GitHub repository and a theme directory to start pulling updates."
+msgstr ""
+
+#: views/tab-update.php:40
+msgid "Go to the settings"
+msgstr ""
+
+#: views/tab-update.php:43
+msgid "See the step-by-step instructions"
+msgstr ""
+
+#: views/tab-update.php:52
+msgid "Could not fetch data from GitHub."
+msgstr ""
+
+#: views/tab-update.php:60
+msgid "Multisite installation."
+msgstr ""
+
+#: views/tab-update.php:61
+msgid "The themes directory is shared across the whole network — an update replaces the theme files for every site using it."
+msgstr ""
+
+#: views/tab-update.php:69
+msgid "An operation on the theme files is running."
+msgstr ""
+
+#. translators: %s: human readable time difference, e.g. "2 minutes".
+#: views/tab-update.php:73
+#, php-format
+msgid "Started %s ago. Updates and restores are blocked while it runs."
+msgstr ""
+
+#: views/tab-update.php:79
+msgid "If the previous operation was interrupted — a server restart, a timeout — the lock expires by itself after 15 minutes. You can also release it by hand."
+msgstr ""
+
+#: views/tab-update.php:88
+msgid "Release the lock? Do this only if you are certain no update is still running — otherwise two operations can overwrite each other’s files."
+msgstr ""
+
+#: views/tab-update.php:90
+msgid "Release the lock"
+msgstr ""
+
+#: views/tab-update.php:94
+msgid "The button to release the lock appears after two minutes, so a slow but healthy update is not interrupted by accident."
+msgstr ""
+
+#: views/tab-update.php:107
+msgid "Updating the theme…"
+msgstr ""
+
+#: views/tab-update.php:108
+msgid "Elapsed time"
+msgstr ""
+
+#: views/tab-update.php:127
+msgid "The update continues on the server even if you close this tab. The result will appear on this screen when it finishes."
+msgstr ""
+
+#: views/tab-update.php:133
+msgid "Installed version"
+msgstr ""
+
+#. translators: %s: date and time of the last update.
+#: views/tab-update.php:142
+#, php-format
+msgid "Updated %s"
+msgstr ""
+
+#: views/tab-update.php:146
+msgid "This site has not been updated by the plugin yet."
+msgstr ""
+
+#: views/tab-update.php:156
+msgid "Version on the branch"
+msgstr ""
+
+#: views/tab-update.php:157
+msgid "Newest on GitHub"
+msgstr ""
+
+#: views/tab-update.php:161
+msgid "no data"
+msgstr ""
+
+#: views/tab-update.php:166
+msgid "Branch mode — the current state of the code is always installed."
+msgstr ""
+
+#: views/tab-update.php:168
+msgid "A version newer than the installed one is available."
+msgstr ""
+
+#: views/tab-update.php:170
+msgid "You are on the newest version."
+msgstr ""
+
+#: views/tab-update.php:177
+msgid "Repository"
+msgstr ""
+
+#. translators: %s: theme directory name.
+#: views/tab-update.php:189
+#, php-format
+msgid "Theme: %s"
+msgstr ""
+
+#. translators: %s: theme directory path.
+#: views/tab-update.php:203
+#, php-format
+msgid "The directory %s does not exist yet. The first update will create it and install the theme from scratch."
+msgstr ""
+
+#: views/tab-update.php:212
+msgid "Install the newest version"
+msgstr ""
+
+#. translators: %s: comma separated list of protected paths.
+#: views/tab-update.php:219
+#, php-format
+msgid "These paths will not be overwritten or deleted: %s."
+msgstr ""
+
+#: views/tab-update.php:223
+msgid "Change the list"
+msgstr ""
+
+#: views/tab-update.php:225
+msgid "No protected paths are set — the entire contents of the theme directory will be replaced."
+msgstr ""
+
+#: views/tab-update.php:226
+msgid "Add protected files"
+msgstr ""
+
+#. translators: %s: comma separated list of ignored paths.
+#: views/tab-update.php:235
+#, php-format
+msgid "Ignored — neither backed up nor installed: %s."
+msgstr ""
+
+#: views/tab-update.php:244
+msgid "The plugin will back up the current theme before updating."
+msgstr ""
+
+#: views/tab-update.php:246
+msgid "Backups are turned off."
+msgstr ""
+
+#: views/tab-update.php:247
+msgid "Without them a failed update cannot be undone in one click."
+msgstr ""
+
+#: views/tab-update.php:260
+msgid "Update the theme now? The theme files will be replaced with the GitHub version."
+msgstr ""
+
+#: views/tab-update.php:261
+msgid "Updating…"
+msgstr ""
+
+#. translators: %s: version to install.
+#: views/tab-update.php:267
+#, php-format
+msgid "Update to %s"
+msgstr ""
+
+#: views/tab-update.php:271
+msgid "No version to install"
+msgstr ""
+
+#: views/tab-update.php:281
+msgid "Check again"
+msgstr ""
+
+#. translators: %s: date and time of the last check.
+#: views/tab-update.php:291
+#, php-format
+msgid "Last check: %s"
+msgstr ""
+
+#: views/tab-update.php:300
+msgid "What changed in this version"
+msgstr ""
+
+#: views/tab-update.php:308
+msgid "Roll back to an earlier version"
+msgstr ""
+
+#: views/tab-update.php:310
+msgid "Installs the selected release from GitHub. It works exactly like an update — backup and protected paths included."
+msgstr ""
+
+#: views/tab-update.php:318
+msgid "Choose a version"
+msgstr ""
+
+#: views/tab-update.php:327
+msgid "installed"
+msgstr ""
+
+#: views/tab-update.php:331
+msgid "pre-release"
+msgstr ""
+
+#: views/tab-update.php:341
+msgid "Install the selected version of the theme?"
+msgstr ""
+
+#: views/tab-update.php:342
+msgid "Installing…"
+msgstr ""
+
+#: views/tab-update.php:344
+msgid "Install this version"
+msgstr ""
+
+#: views/tab-update.php:351
+msgid "Recent operations"
+msgstr ""
+
+#. translators: %s: number of entries kept in the log.
+#: views/tab-update.php:356
+#, php-format
+msgid "Up to %s most recent updates and restores, newest first. Failed attempts are listed too."
+msgstr ""
+
+#: views/tab-update.php:363
+msgid "Nothing has been recorded yet."
+msgstr ""
+
+#: views/tab-update.php:368
+msgid "Date"
+msgstr ""
+
+#: views/tab-update.php:369
+msgid "Operation"
+msgstr ""
+
+#: views/tab-update.php:370
+msgid "Result"
+msgstr ""
+
+#: views/tab-update.php:372
+msgid "Duration"
+msgstr ""
+
+#. translators: %s: version restored from the backup.
+#: views/tab-update.php:390
+#, php-format
+msgid "Restore from backup (version %s)"
+msgstr ""
+
+#. translators: %s: version that was installed.
+#: views/tab-update.php:396
+#, php-format
+msgctxt "history entry"
+msgid "Update to %s"
+msgstr ""
+
+#. translators: %s: version installed before the operation.
+#: views/tab-update.php:408
+#, php-format
+msgid "previously %s"
+msgstr ""
+
+#: views/tab-update.php:417
+msgid "Completed"
+msgstr ""
+
+#: views/tab-update.php:430
+msgid "Failed"
+msgstr ""
+
+#: views/tab-update.php:448
+msgid "Last error"
+msgstr ""

@@ -1,0 +1,28 @@
+parameters:
+	level: 6
+
+	paths:
+		- github-theme-updater.php
+		- uninstall.php
+		- includes
+		- views
+
+	excludePaths:
+		- vendor (?)
+		- node_modules (?)
+		- tests/fixtures (?)
+
+	# The plugin autoloads through its own spl_autoload_register, which PHPStan
+	# cannot follow, so the class files are pointed out explicitly.
+	scanDirectories:
+		- includes
+
+	bootstrapFiles:
+		- tests/phpstan-bootstrap.php
+
+	# Views are included from Admin_Page::view(), which hands them their
+	# variables through extract(); PHPStan cannot see that indirection.
+	ignoreErrors:
+		-
+			identifier: variable.undefined
+			path: views/*

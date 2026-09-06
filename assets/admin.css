@@ -1,0 +1,346 @@
+/**
+ * GitHub Theme Updater — admin styles.
+ */
+
+.gthu-tab-content {
+	margin-top: 20px;
+	max-width: 900px;
+}
+
+/* Status cards ---------------------------------------------------------- */
+
+.gthu-cards {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+	gap: 16px;
+	margin-bottom: 20px;
+}
+
+.gthu-card {
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+	padding: 16px 18px;
+	background: #fff;
+	border: 1px solid #dcdcde;
+	border-left: 4px solid #dcdcde;
+	border-radius: 4px;
+}
+
+.gthu-card--highlight {
+	border-left-color: #2271b1;
+}
+
+.gthu-card__label {
+	font-size: 12px;
+	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: .04em;
+	color: #646970;
+}
+
+.gthu-card__value {
+	font-size: 22px;
+	line-height: 1.3;
+	font-weight: 600;
+	word-break: break-word;
+}
+
+.gthu-card__value--small {
+	font-size: 16px;
+}
+
+.gthu-card__meta {
+	font-size: 12px;
+	color: #646970;
+}
+
+/* Panels ---------------------------------------------------------------- */
+
+.gthu-panel {
+	padding: 4px 20px 20px;
+	margin-bottom: 20px;
+	background: #fff;
+	border: 1px solid #dcdcde;
+	border-radius: 4px;
+}
+
+.gthu-panel--muted {
+	background: #f6f7f7;
+}
+
+.gthu-panel h2 {
+	font-size: 15px;
+	margin: 16px 0 8px;
+}
+
+.gthu-panel h3 {
+	font-size: 13px;
+	margin: 20px 0 6px;
+}
+
+.gthu-hint {
+	color: #50575e;
+	margin: 6px 0;
+}
+
+.gthu-indent {
+	margin: 2px 0 12px 24px;
+}
+
+/* Actions --------------------------------------------------------------- */
+
+.gthu-actions {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 12px;
+	margin: 16px 0;
+}
+
+.gthu-actions form {
+	margin: 0;
+}
+
+.gthu-inline-form {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	margin: 0;
+}
+
+.gthu-link-danger {
+	color: #b32d2e;
+}
+
+.gthu-link-danger:hover,
+.gthu-link-danger:focus {
+	color: #8a2424;
+}
+
+/* Lists and code -------------------------------------------------------- */
+
+.gthu-steps {
+	margin: 8px 0 8px 20px;
+}
+
+.gthu-steps li {
+	margin-bottom: 8px;
+	line-height: 1.6;
+}
+
+.gthu-examples {
+	margin: 10px 0 0;
+	list-style: none;
+}
+
+.gthu-examples li {
+	margin-bottom: 4px;
+	color: #50575e;
+}
+
+.gthu-code {
+	padding: 12px 14px;
+	background: #f6f7f7;
+	border: 1px solid #dcdcde;
+	border-radius: 4px;
+	overflow-x: auto;
+}
+
+.gthu-notes {
+	margin-top: 16px;
+	padding: 10px 14px;
+	background: #f6f7f7;
+	border: 1px solid #dcdcde;
+	border-radius: 4px;
+}
+
+.gthu-notes summary {
+	cursor: pointer;
+	font-weight: 600;
+}
+
+.gthu-notes__body {
+	margin-top: 8px;
+	max-height: 320px;
+	overflow-y: auto;
+}
+
+/* Backups table --------------------------------------------------------- */
+
+.gthu-table {
+	margin-bottom: 12px;
+}
+
+.gthu-table__actions {
+	white-space: nowrap;
+}
+
+.gthu-table__actions .gthu-inline-form + .gthu-inline-form {
+	margin-left: 10px;
+}
+
+/* Settings -------------------------------------------------------------- */
+
+.gthu-settings .form-table th {
+	width: 220px;
+}
+
+.gthu-help .gthu-panel:first-child {
+	border-left: 4px solid #2271b1;
+}
+
+@media screen and (max-width: 782px) {
+	.gthu-settings .form-table th {
+		width: auto;
+	}
+}
+
+/* Update progress ------------------------------------------------------- */
+
+.gthu-progress {
+	padding: 16px 20px 12px;
+	margin-bottom: 20px;
+	background: #fff;
+	border: 1px solid #dcdcde;
+	border-left: 4px solid #2271b1;
+	border-radius: 4px;
+}
+
+.gthu-progress__header {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	margin-bottom: 10px;
+}
+
+.gthu-progress__title {
+	font-size: 14px;
+}
+
+.gthu-progress__elapsed {
+	margin-left: auto;
+	font-variant-numeric: tabular-nums;
+	color: #646970;
+}
+
+.gthu-progress__spinner,
+.gthu-progress__step.is-active .gthu-progress__icon {
+	box-sizing: border-box;
+	width: 16px;
+	height: 16px;
+	border: 2px solid #c3c4c7;
+	border-top-color: #2271b1;
+	border-radius: 50%;
+	animation: gthu-spin .8s linear infinite;
+}
+
+.gthu-progress__steps {
+	margin: 0 0 8px;
+	list-style: none;
+}
+
+.gthu-progress__step[hidden] {
+	display: none;
+}
+
+.gthu-progress__step {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	padding: 5px 0;
+	color: #8c8f94;
+	line-height: 1.4;
+}
+
+.gthu-progress__icon {
+	display: inline-block;
+	flex: 0 0 auto;
+	box-sizing: border-box;
+	width: 16px;
+	height: 16px;
+	border: 2px solid #c3c4c7;
+	border-radius: 50%;
+	text-align: center;
+	line-height: 12px;
+}
+
+.gthu-progress__step.is-active {
+	color: #1d2327;
+	font-weight: 600;
+}
+
+.gthu-progress__step.is-done {
+	color: #50575e;
+}
+
+.gthu-progress__step.is-done .gthu-progress__icon {
+	border-color: #00a32a;
+	background: #00a32a;
+	color: #fff;
+	font-family: dashicons;
+	font-size: 12px;
+	font-weight: 400;
+}
+
+.gthu-progress__step.is-done .gthu-progress__icon::before {
+	content: "\f147";
+}
+
+.gthu-progress__step.is-skipped .gthu-progress__icon {
+	border-style: dashed;
+}
+
+.gthu-progress__step.is-skipped .gthu-progress__label {
+	text-decoration: line-through;
+}
+
+.gthu-progress__detail {
+	font-size: 12px;
+	font-weight: 400;
+	color: #646970;
+	font-variant-numeric: tabular-nums;
+}
+
+.gthu-progress__note {
+	margin: 0;
+	padding-top: 8px;
+	border-top: 1px solid #f0f0f1;
+}
+
+@keyframes gthu-spin {
+	to {
+		transform: rotate(360deg);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.gthu-progress__spinner,
+	.gthu-progress__step.is-active .gthu-progress__icon {
+		animation: none;
+		border-top-color: #2271b1;
+		border-right-color: #2271b1;
+	}
+}
+
+/* Operation log --------------------------------------------------------- */
+
+.gthu-status {
+	display: inline-block;
+	padding: 1px 8px;
+	margin-right: 6px;
+	border-radius: 10px;
+	font-size: 12px;
+	font-weight: 600;
+	line-height: 1.6;
+}
+
+.gthu-status--ok {
+	background: #edfaef;
+	color: #007017;
+}
+
+.gthu-status--error {
+	background: #fcf0f1;
+	color: #8a2424;
+}

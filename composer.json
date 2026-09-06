@@ -1,0 +1,61 @@
+{
+    "name": "ms-m/github-theme-updater",
+    "description": "Updates a WordPress theme straight from a GitHub repository, with backups, rollback and per-path protection.",
+    "type": "wordpress-plugin",
+    "license": "GPL-2.0-or-later",
+    "homepage": "https://ms-m.pl",
+    "authors": [
+        {
+            "name": "ms-m.pl",
+            "homepage": "https://ms-m.pl",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": ">=7.4"
+    },
+    "require-dev": {
+        "phpcompatibility/phpcompatibility-wp": "^2.1",
+        "phpstan/extension-installer": "^1.4",
+        "phpunit/phpunit": "^9.6",
+        "squizlabs/php_codesniffer": "^3.9",
+        "szepeviktor/phpstan-wordpress": "^2.0",
+        "wp-coding-standards/wpcs": "^3.1"
+    },
+    "config": {
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true,
+            "phpstan/extension-installer": true
+        },
+        "sort-packages": true,
+        "platform": {
+            "php": "7.4"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "MSM\\GitHubThemeUpdater\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "lint": "@php -r \"foreach (new RecursiveIteratorIterator(new RecursiveDirectoryIterator('.')) as $f) { if ($f->isFile() && $f->getExtension() === 'php' && strpos($f->getPathname(), 'vendor') === false) { passthru(PHP_BINARY . ' -l ' . escapeshellarg($f->getPathname()), $c); if ($c) exit(1); } } echo 'No syntax errors.' . PHP_EOL;\"",
+        "phpcs": "phpcs",
+        "phpcbf": "phpcbf",
+        "test": "phpunit",
+        "check": [
+            "@lint",
+            "@phpcs",
+            "@phpstan",
+            "@test"
+        ],
+        "phpstan": "phpstan analyse --memory-limit=1G"
+    },
+    "scripts-descriptions": {
+        "lint": "Runs php -l over every plugin file.",
+        "phpcs": "Checks the code against the WordPress coding standards.",
+        "phpcbf": "Fixes what phpcs can fix automatically.",
+        "test": "Runs the PHPUnit suite.",
+        "check": "Runs lint, phpcs, phpstan and the test suite.",
+        "phpstan": "Runs static analysis at PHPStan level 6."
+    }
+}
