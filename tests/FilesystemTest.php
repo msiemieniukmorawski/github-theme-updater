@@ -117,14 +117,24 @@ final class FilesystemTest extends TestCase {
 		$this->assertSame( array(), $this->entries( $this->root ) );
 	}
 
-	public function testEnsureDeletableMakesReadOnlyFilesWritable(): void {
+	public function testEnsureDeletableAcceptsReadOnlyFiles(): void {
 		$this->seed( array( 'a/b.txt', 'ignored/c.txt' ) );
 		chmod( $this->root . '/a/b.txt', 0444 );
 		chmod( $this->root . '/ignored/c.txt', 0444 );
 
 		$this->assertTrue( $this->fs->ensure_deletable( $this->root, Path_Rules::from_text( 'ignored' ) ) );
-		$this->assertTrue( is_writable( $this->root . '/a/b.txt' ) );
-		$this->assertFalse( is_writable( $this->root . '/ignored/c.txt' ), 'ignored paths are left alone' );
+
+		// Only Windows refuses to unlink a read-only file, so only there the
+		// flag is cleared up front. On Linux deletion needs a writable parent
+		// directory, which is what the check looks at; the file stays as it was.
+		if ( '\\' === DIRECTORY_SEPARATOR ) {
+			$this->assertTrue( is_writable( $this->root . '/a/b.txt' ), 'read-only flag cleared so unlink() will accept the file' );
+			$this->assertFalse( is_writable( $this->root . '/ignored/c.txt' ), 'ignored paths are left alone' );
+		}
+
+		$this->assertTrue( $this->fs->empty_dir( $this->root, Path_Rules::from_text( 'ignored' ) ) );
+		$this->assertFileDoesNotExist( $this->root . '/a/b.txt' );
+		$this->assertFileExists( $this->root . '/ignored/c.txt' );
 	}
 
 	public function testEnsureDeletableReportsADirectoryThePhpUserCannotWrite(): void {
