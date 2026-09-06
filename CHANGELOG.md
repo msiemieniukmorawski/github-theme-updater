@@ -92,9 +92,9 @@ and the project uses [Semantic Versioning](https://semver.org/).
   taken, so it does not tempt anyone during a slow but healthy backup.
 - Links between tabs on the Settings and Instructions tabs open in a new tab, so
   a click no longer discards unsaved form input.
-- `Plugin URI` removed from the plugin header — it pointed at the same page as
-  `Author URI`, giving the plugins list two links to one address. The author
-  link stays.
+- `Plugin URI` now points at the GitHub repository instead of the author's
+  site, so "Visit plugin site" on the plugins list leads to the README, the
+  changelog and the issue tracker rather than duplicating the author link.
 - The "Install this version" button shows "Installing…" once clicked, like the
   main update button.
 - Releasing the lock by hand also clears the progress record, and uninstalling

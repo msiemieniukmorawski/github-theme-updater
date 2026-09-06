@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GitHub Theme Updater 2.2.0\n"
-"Report-Msgid-Bugs-To: https://ms-m.pl\n"
+"Report-Msgid-Bugs-To: https://github.com/msiemieniukmorawski/github-theme-updater/issues\n"
 "POT-Creation-Date: 2026-09-06T20:24:13+00:00\n"
 "PO-Revision-Date: 2026-09-06 22:00+0000\n"
 "Last-Translator: ms-m.pl <https://ms-m.pl>\n"

@@ -1,6 +1,7 @@
 <?php
 /**
  * Plugin Name:       GitHub Theme Updater
+ * Plugin URI:        https://github.com/msiemieniukmorawski/github-theme-updater
  * Description:       Updates a WordPress theme straight from a GitHub repository, private ones included, with backups, version rollback and per-path protection against overwriting.
  * Version:           2.2.0
  * Requires at least: 5.8

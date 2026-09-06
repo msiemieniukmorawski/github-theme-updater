@@ -3,7 +3,11 @@
     "description": "Updates a WordPress theme straight from a GitHub repository, with backups, rollback and per-path protection.",
     "type": "wordpress-plugin",
     "license": "GPL-2.0-or-later",
-    "homepage": "https://ms-m.pl",
+    "homepage": "https://github.com/msiemieniukmorawski/github-theme-updater",
+    "support": {
+        "issues": "https://github.com/msiemieniukmorawski/github-theme-updater/issues",
+        "source": "https://github.com/msiemieniukmorawski/github-theme-updater"
+    },
     "authors": [
         {
             "name": "ms-m.pl",
