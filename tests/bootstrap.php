@@ -201,3 +201,24 @@ require_once __DIR__ . '/fixtures/wp/class-wp-filesystem-base.php';
 require_once __DIR__ . '/fixtures/wp/class-wp-filesystem-direct.php';
 require_once $gthu_includes . 'class-filesystem.php';
 require_once $gthu_includes . 'class-backup-manager.php';
+
+// -----------------------------------------------------------------------------
+// Automation: the pure helpers of the scheduler, the reports and the webhook.
+// -----------------------------------------------------------------------------
+
+if ( ! function_exists( 'is_email' ) ) {
+	/**
+	 * Close enough to core for the recipient parser: a syntactically valid
+	 * address is returned as-is, anything else yields false.
+	 *
+	 * @param string $email Candidate address.
+	 * @return string|false
+	 */
+	function is_email( $email ) {
+		return false !== filter_var( $email, FILTER_VALIDATE_EMAIL ) ? $email : false;
+	}
+}
+
+require_once $gthu_includes . 'class-auto-updater.php';
+require_once $gthu_includes . 'class-notifier.php';
+require_once $gthu_includes . 'class-webhook.php';
