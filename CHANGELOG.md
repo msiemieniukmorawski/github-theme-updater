@@ -3,6 +3,61 @@
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and the project uses [Semantic Versioning](https://semver.org/).
 
+## [2.3.0] — 2026-09-08
+
+### Added
+
+- **Scheduled automatic updates.** A new "Automatic updates" panel on the
+  Settings tab: tick "Scheduled update", pick an hour, and once a day the
+  plugin checks GitHub and installs the newest release when it is newer than
+  the installed one. The run goes through the same sequence as the Update
+  button (lock, backup, verification, copy, automatic rollback, entry in the
+  operation log). Nothing happens when the versions match. Releases mode only —
+  a branch has no version to compare. Settings `auto_update` and
+  `auto_update_time`; cron hook `gthu_auto_update` (new `Auto_Updater` class).
+  The panel explains why the run can be later than the chosen hour (WP-Cron
+  needs a visitor, page caches, `DISABLE_WP_CRON`, a held lock, time zone and
+  DST changes, a busy server) and how a system cron makes the time exact.
+- **E-mail reports** (`notify_emails`, one or more addresses). Every automatic
+  update, successful or failed, sends a plain text message with the previous
+  and the new version, the backup name, the number of files, the protected
+  paths, a link to the plugin screen and the release notes written on GitHub.
+  A failed GitHub check is reported once per distinct error. Manual updates
+  from the Update tab are not e-mailed. New `Notifier` class; filters
+  `gthu_notification_recipients` and `gthu_notification_message`.
+- **GitHub webhook** (`webhook_enabled`): update the moment a release is
+  published. REST endpoint `POST /wp-json/gthu/v1/release` (new `Webhook`
+  class), registered only while the feature is on. Every delivery must carry
+  GitHub's `X-Hub-Signature-256` (HMAC-SHA256 under a shared secret, compared
+  in constant time); the plugin generates the 64-character secret itself,
+  stores it encrypted like the token, shows it once, and accepts a
+  `GTHU_WEBHOOK_SECRET` constant instead. Only `release` / `published` events
+  for the configured repository are accepted; other repositories are rejected,
+  drafts and (unless enabled) pre-releases are ignored, delivery IDs are
+  remembered so redeliveries are no-ops, and oversized bodies are refused. The
+  payload never decides what is installed: a verified delivery only queues a
+  normal automatic run (`gthu_webhook_update` single event, retried when
+  GitHub's API lags behind the event), which fetches the release list with the
+  site's own token. The Instructions tab walks through the GitHub side.
+- "Run now" and "Send a test e-mail" buttons under the settings, so the whole
+  chain can be tried while someone is watching.
+- The operation log names the author of automatic entries: "Automatic
+  (schedule)" or "Automatic (GitHub webhook)". History entries carry a
+  `trigger` field; `Theme_Installer::install()` accepts it as a third argument.
+- Action `gthu_auto_update_finished( $status, $trigger, $message, $release )`
+  after every automatic run, whatever the outcome.
+- Runtime state gained `auto_last_run`, `auto_last_trigger`, `auto_last_status`,
+  `auto_last_message`, `auto_notified_error`, `webhook_last_at`,
+  `webhook_last_status` and `webhook_last_message`; the Settings tab shows the
+  last automatic run and the last webhook delivery.
+
+### Changed
+
+- The description of the "Notifications" setting no longer claims the plugin
+  never updates on its own; that is now an opt-in feature.
+- Deactivation and uninstall clear the new cron events and the webhook
+  delivery memory (`gthu_webhook_deliveries` transient).
+
 ## [2.2.0] — 2026-09-06
 
 ### Added

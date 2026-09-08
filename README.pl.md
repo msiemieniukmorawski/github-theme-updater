@@ -37,6 +37,9 @@ includes/
   class-backup-manager.php    tworzenie, przywracanie i rotacja kopii zapasowych
   class-theme-installer.php   przebieg aktualizacji + automatyczne wycofanie
   class-update-checker.php    cykliczne sprawdzanie wersji i powiadomienie
+  class-auto-updater.php      aktualizacje bez udziału człowieka: harmonogram dzienny i uruchomienia z webhooka
+  class-notifier.php          raporty e-mail z automatycznych uruchomień
+  class-webhook.php           endpoint webhooka GitHuba: weryfikacja podpisu, filtrowanie, kolejkowanie
   class-notices.php           komunikaty przenoszone przez przekierowanie
   class-admin-page.php        menu i zakładki
   class-admin-actions.php     obsługa formularzy (nonce, uprawnienia, redirect)
@@ -74,8 +77,13 @@ Wszystko siedzi w jednej opcji `gthu_settings`, więc zapis formularza jest atom
 | `backup_limit` | `3` | ile kopii przechowywać |
 | `check_updates` | `true` | cykliczne sprawdzanie i powiadomienie w kokpicie |
 | `delete_data` | `false` | czy usunąć dane wtyczki przy jej odinstalowaniu |
+| `auto_update` | `false` | raz dziennie instaluj nowsze wydanie bez klikania — patrz [Aktualizacje automatyczne](#aktualizacje-automatyczne) |
+| `auto_update_time` | `03:00` | preferowana godzina tego uruchomienia, w strefie czasowej strony |
+| `notify_emails` | `''` | adresy (po przecinku), które dostają raport po każdym automatycznym uruchomieniu |
+| `webhook_enabled` | `false` | aktualizuj od razu po opublikowaniu wydania, przez webhook GitHuba |
+| `webhook_secret` | `''` | sekret webhooka, generowany przez wtyczkę i szyfrowany jak token; `webhook_secret_at` zapisuje, kiedy |
 
-Stan działania (`gthu_state`, `autoload = false`): `installed_version`, `installed_at`, `installed_by`, `last_check`, `latest_version`, `last_error`.
+Stan działania (`gthu_state`, `autoload = false`): `installed_version`, `installed_at`, `installed_by`, `last_check`, `latest_version`, `last_error`, a także wynik ostatniego automatycznego uruchomienia (`auto_last_run`, `auto_last_trigger`, `auto_last_status`, `auto_last_message`, `auto_notified_error`) i ostatniego wywołania webhooka (`webhook_last_at`, `webhook_last_status`, `webhook_last_message`).
 
 Dziennik operacji (`gthu_history`, `autoload = false`): ostatnie 5 aktualizacji i przywróceń, także nieudanych — z wersją, poprzednią wersją, wynikiem, liczbą skopiowanych plików, autorem i czasem trwania. Widoczny na dole zakładki Aktualizacja; filtr `gthu_history_limit` zmienia liczbę przechowywanych wpisów.
 
@@ -134,6 +142,55 @@ Bez JavaScriptu formularz wysyła się zwyczajnie, a wynik pojawia się po przek
 
 ---
 
+## Aktualizacje automatyczne
+
+Domyślnie wyłączone. Obie opcje są w panelu „Aktualizacje automatyczne" na zakładce Ustawienia, działają **tylko w trybie wydań** (gałąź nie ma numeru wersji do porównania) i wykonują dokładnie tę samą sekwencję co przycisk Aktualizuj — blokada, kopia zapasowa, weryfikacja, kopiowanie, wycofanie przy błędzie, dziennik operacji — a na końcu wysyłają raport e-mailem. Przycisk **Uruchom teraz** pod ustawieniami wykonuje jedno takie uruchomienie od razu, razem z mailami, więc cały łańcuch można sprawdzić, gdy ktoś patrzy.
+
+### Uruchomienie z harmonogramu
+
+`auto_update` planuje zdarzenie WP-Cron `gthu_auto_update` codziennie o godzinie `auto_update_time` (strefa czasowa strony). Uruchomienie pobiera listę wydań z pominięciem cache, porównuje najnowsze z `installed_version` i instaluje je tylko wtedy, gdy jest nowsze. Brak nowszej wersji oznacza brak działania i brak maila. Uruchomienie, które zastanie zajętą blokadę (trwająca aktualizacja lub przywracanie), jest pomijane do następnego dnia. Harmonogram jest synchronizowany przy każdym zapisie ustawień, po każdym uruchomieniu (dryf przy zmianie czasu) i przez sprawdzanie dwa razy dziennie jako zabezpieczenie.
+
+**Godzina to „nie wcześniej niż", a nie gwarancja.** WordPress nie ma własnego zegara; WP-Cron budzi się tylko wtedy, gdy jakieś żądanie uruchomi PHP. Uruchomienie spóźnia się, gdy:
+
+- nikt nie odwiedza strony w nocy — zadanie czeka na pierwsze żądanie po zaplanowanej godzinie;
+- cache stron albo CDN obsługuje odwiedzających bez dotykania PHP;
+- ustawione jest `DISABLE_WP_CRON`, a cron systemowy hostingu odpala się rzadziej;
+- inna operacja trzyma w tym momencie blokadę;
+- zmieniła się strefa czasowa strony albo czas letni/zimowy (korekta przy następnym uruchomieniu lub zapisie ustawień);
+- serwer jest zajęty albo poprzedni proces crona jeszcze trwa — WordPress uruchamia tylko jeden naraz.
+
+Aby godzina była dokładna, dodaj `define( 'DISABLE_WP_CRON', true );` do `wp-config.php` i niech cron systemowy wywołuje `wp-cron.php` co kilka minut:
+
+```
+*/5 * * * * curl -s https://example.com/wp-cron.php?doing_wp_cron > /dev/null 2>&1
+```
+
+### Raporty e-mail
+
+`notify_emails` przyjmuje jeden lub więcej adresów (rozdzielonych przecinkami, średnikami lub spacjami; błędne wpisy są zgłaszane przy zapisie). Każde automatyczne uruchomienie, które coś zainstaluje albo się na tym wyłoży, wysyła wiadomość tekstową z poprzednią i nową wersją, źródłem uruchomienia, nazwą kopii zapasowej, liczbą plików, chronionymi ścieżkami, linkiem do ekranu wtyczki i notatką z wydania napisaną na GitHubie. Nieudane sprawdzenie GitHuba (wygasły token, zmieniona nazwa repozytorium) jest zgłaszane raz na dany błąd. Aktualizacje uruchomione ręcznie z zakładki Aktualizacja nie są mailowane. **Wyślij testowy e-mail** potwierdza adresy i konfigurację poczty na stronie.
+
+### Webhook GitHuba
+
+`webhook_enabled` sprawia, że aktualizacja dzieje się w chwili opublikowania wydania. Konfiguracja:
+
+1. Zaznacz opcję i zapisz. Wtyczka generuje 64-znakowy sekret, zapisuje go zaszyfrowany (jak token) i pokazuje **raz**; adres do wpisania pojawia się pod polem wyboru. Stała `GTHU_WEBHOOK_SECRET` w `wp-config.php` może zastąpić zapisany sekret.
+2. Na GitHubie: repozytorium → Settings → Webhooks → Add webhook. Payload URL `https://example.com/wp-json/gthu/v1/release`, content type `application/json`, sekret z kroku 1, weryfikacja SSL włączona, zdarzenia: „Let me select individual events" → tylko **Releases**, Active.
+3. GitHub wysyła ping; w „Recent Deliveries" powinno być 200, a na zakładce Ustawienia „GitHub wysłał ping".
+
+Strona musi być dostępna z internetu (lokalna instalacja deweloperska wymaga tunelu). Po dostarczeniu wtyczka kolejkuje jednorazowe zdarzenie `gthu_webhook_update` i szturcha cron, więc aktualizacja rusza w ciągu minuty lub dwóch; gdy API GitHuba nie nadążyło jeszcze za zdarzeniem, próba jest ponawiana po 3 i 6 minutach.
+
+Jak endpoint jest zabezpieczony:
+
+- Trasa w ogóle nie jest rejestrowana, gdy funkcja jest wyłączona lub nie ma sekretu — odpowiada 404 jak każdy nieznany adres.
+- Treści powyżej 256 KB są odrzucane, zanim zostaną odczytane.
+- Każde żądanie musi nieść `X-Hub-Signature-256`, czyli HMAC-SHA256 surowej treści pod sekretem, porównywany przez `hash_equals()` w callbacku uprawnień. Niepodpisane żądania dostają 401, źle podpisane 403; jedno i drugie zostawia tylko notatkę na zakładce Ustawienia.
+- Liczą się wyłącznie zdarzenia `release` z akcją `published`. `ping` odpowiada pongiem; inne zdarzenia i akcje zwracają 202 i nic nie robią.
+- `repository.full_name` z treści musi zgadzać się ze skonfigurowanym repozytorium (inaczej 403). Szkice oraz, o ile `include_prereleases` nie jest włączone, wydania wstępne są ignorowane.
+- Identyfikatory `X-GitHub-Delivery` są pamiętane przez tydzień, więc ponowne dostarczenie lub odtworzone żądanie nic nie robi.
+- **Treść żądania nigdy nie decyduje, co zostanie zainstalowane.** Zweryfikowane dostarczenie tylko kolejkuje zwykłe automatyczne uruchomienie, które pyta API GitHuba o najnowsze wydanie własnym tokenem strony i instaluje je tylko wtedy, gdy jest nowsze od zainstalowanego — po tym samym sprawdzeniu tożsamości motywu, kopii zapasowej i wycofaniu co każda inna aktualizacja, pod tą samą blokadą.
+
+---
+
 ## Punkty rozszerzeń
 
 ### Akcje
@@ -143,6 +200,7 @@ Bez JavaScriptu formularz wysyła się zwyczajnie, a wynik pojawia się po przek
 | `gthu_before_install` | `Release $release` | przed pobraniem archiwum |
 | `gthu_after_install` | `Release $release, array $summary` | po udanej aktualizacji |
 | `gthu_install_failed` | `WP_Error $error` | po nieudanej próbie |
+| `gthu_auto_update_finished` | `string $status, string $trigger, string $message, ?Release $release` | po każdym automatycznym uruchomieniu, niezależnie od wyniku (`updated`, `failed`, `up_to_date`, `locked`, `check_failed`, `branch_mode`, `not_configured`) |
 
 ### Filtry
 
@@ -153,6 +211,8 @@ Bez JavaScriptu formularz wysyła się zwyczajnie, a wynik pojawia się po przek
 | `gthu_cache_lifetime` | `900` | czas życia cache listy wydań (sekundy) |
 | `gthu_download_timeout` | `300` | limit czasu pobierania archiwum (sekundy) |
 | `gthu_history_limit` | `5` | liczba operacji przechowywanych w dzienniku na zakładce Aktualizacja |
+| `gthu_notification_recipients` | adresy z ustawień | kto dostaje raport; drugi argument to zdarzenie (`installed`, `failed`, `check_failed`, `test`) |
+| `gthu_notification_message` | `['to', 'subject', 'body', 'headers']` | raport przed `wp_mail()`; zwróć tablicę bez `to`, aby go nie wysyłać |
 
 Przykład — czyszczenie cache obiektowego po każdej aktualizacji:
 
@@ -205,7 +265,44 @@ Jeśli panel jest niedostępny, kopie leżą w `wp-content/gthu-backups/` i moż
 
 ### Czy wtyczka zaktualizuje motyw sama?
 
-Nie. Sprawdza wersje dwa razy dziennie i pokazuje powiadomienie, ale instalację zawsze uruchamia człowiek. Automatyczne sprawdzanie można wyłączyć w Ustawieniach.
+Tylko jeśli ją o to poprosisz. Domyślnie sprawdza wersje dwa razy dziennie i pokazuje powiadomienie, a instalację uruchamia człowiek. Panel „Aktualizacje automatyczne" na zakładce Ustawienia dodaje dwie opcjonalne drogi bez klikania: nocne uruchomienie o wybranej godzinie oraz webhook GitHuba, który aktualizuje w chwili opublikowania wydania. Obie idą tą samą ścieżką co przycisk — kopia zapasowa, weryfikacja, wycofanie, dziennik — i wysyłają raport e-mailem. Patrz [Aktualizacje automatyczne](#aktualizacje-automatyczne).
+
+### Ustawiłem aktualizację na 3:00, a poszła o 6:40. Dlaczego?
+
+Bo WordPress nie ma własnego zegara. WP-Cron, jego harmonogram, budzi się tylko wtedy, gdy jakieś żądanie uruchomi PHP na stronie — odsłona, ekran panelu, wywołanie REST. Wybrana godzina to więc „nie wcześniej niż": uruchomienie startuje z pierwszym takim żądaniem po niej. Typowe powody spóźnienia:
+
+- **Brak odwiedzin w nocy.** Na cichej stronie zadanie czeka na pierwszego porannego odwiedzającego.
+- **Cache stron albo CDN.** Strony z cache są serwowane bez PHP, więc nawet ruchliwa strona może wyglądać dla harmonogramu na pustą.
+- **`DISABLE_WP_CRON` i cron systemowy.** Uruchomienie odbywa się przy najbliższym odpaleniu tego crona — co 5 minut, co godzinę, jak skonfigurował hosting.
+- **Zajęta blokada.** Aktualizacja, przywracanie albo kopia zapasowa uruchomiona ręcznie w tym momencie przesuwa uruchomienie na następny dzień.
+- **Zmiana strefy czasowej albo czasu letniego/zimowego.** Harmonogram jest poprawiany przy następnym uruchomieniu i zapisie ustawień, więc jedno uruchomienie może wypaść o godzinę obok.
+- **Zajęty serwer.** WordPress uruchamia jeden proces crona naraz i pomija uruchomienie, którego nie może rozpocząć.
+
+Aby godzina była pewna, dodaj `define( 'DISABLE_WP_CRON', true );` do `wp-config.php` i niech cron systemowy wywołuje `wp-cron.php` co kilka minut — patrz [Uruchomienie z harmonogramu](#uruchomienie-z-harmonogramu). Przycisk **Uruchom teraz** pod ustawieniami nie zależy od żadnej z tych rzeczy.
+
+### Czy aktualizacja w nocy, bez nadzoru, jest bezpieczna?
+
+Tak samo jak kliknięcie w dzień: to ta sama ścieżka w kodzie. Wtyczka pobiera wydanie, sprawdza, czy w archiwum jest motyw i czy to ten sam motyw, który leży na dysku, sprawdza, czy każdy plik do usunięcia da się usunąć, robi kopię zapasową i dopiero wtedy podmienia pliki. Błąd w trakcie kopiowania automatycznie przywraca kopię. Czego wtyczka nie wie, to czy *nowa wersja* motywu jest dobra — od tego jest strona testowa. Zostaw `create_backup` włączone i przeczytaj rano maila.
+
+### W nocy nic się nie stało. Aktualizacja została pominięta?
+
+Najpewniej nie było nic do zrobienia: uruchomienie instaluje tylko wtedy, gdy na GitHubie jest wydanie **nowsze** niż `installed_version`, a uruchomienie bez instalacji nie wysyła maila. Linia „Ostatnie automatyczne uruchomienie" na zakładce Ustawienia pokazuje, kiedy poszło i co zdecydowało („Nic do zrobienia: zainstalowana v1.4.0, najnowsza na GitHubie v1.4.0"). Jeśli ta linia jest stara, WP-Cron się nie obudził — patrz poprzednie pytanie. Jeśli mówi o zajętej blokadzie, ktoś w tym momencie aktualizował albo przywracał.
+
+### Jakie maile będę dostawać?
+
+Tylko o automatycznych uruchomieniach (harmonogram lub webhook) i tylko wtedy, gdy coś się wydarzyło: udana aktualizacja, nieudana próba albo nieudane sprawdzenie GitHuba (wygasły token, zmieniona nazwa repozytorium — zgłaszane raz na dany błąd, nie co noc). Aktualizacje uruchomione ręcznie z zakładki Aktualizacja nie są mailowane. Raport zawiera poprzednią i nową wersję, źródło uruchomienia, nazwę kopii zapasowej, liczbę plików, chronione ścieżki i opis wydania napisany na GitHubie. Jeśli nic nie przychodzi, kliknij **Wyślij testowy e-mail**: sam WordPress często ląduje w spamie, a wtyczka SMTP to naprawia.
+
+### Czy adres webhooka można bezpiecznie wystawić na świat?
+
+Tak. Gdy opcja jest wyłączona, adres nie istnieje (404). Gdy jest włączona, każde żądanie musi nieść podpis HMAC-SHA256 GitHuba pod sekretem, który znasz tylko Ty i GitHub; wszystko bez podpisu lub ze złym podpisem jest odrzucane, zanim zostanie odczytane dalej. Przyjmowane są wyłącznie zdarzenia „release published" dla skonfigurowanego repozytorium, powtórzone dostarczenia są ignorowane, a — co najważniejsze — żądanie nigdy nie decyduje, co zostanie zainstalowane. Ono tylko kolejkuje to samo uruchomienie, którego używa harmonogram, a ono pyta API GitHuba Twoim tokenem i instaluje najnowsze wydanie, jeśli jest nowsze. Szczegóły w [Webhook GitHuba](#webhook-githuba).
+
+### Webhook na GitHubie pokazuje czerwony krzyżyk
+
+Otwórz „Recent Deliveries" na GitHubie i spójrz na kod odpowiedzi. 404: opcja jest wyłączona na stronie albo adres wpisano z literówką. 401: żądanie nie miało podpisu — pole „Secret" na GitHubie jest puste. 403: sekret się różni albo webhook siedzi w innym repozytorium niż wpisane w Ustawieniach; zakładka Ustawienia pokazuje, które z nich. Timeout zwykle oznacza, że strona nie jest dostępna z internetu — lokalna strona deweloperska potrzebuje tunelu.
+
+### Czy mogę aktualizować automatycznie z gałęzi?
+
+Nie. Gałąź nie ma numeru wersji, więc wtyczka nie potrafi stwierdzić, czy bieżący stan kodu jest nowszy od zainstalowanego. Obie opcje automatyczne zapisują się, ale w trybie Gałąź nic nie robią; zakładka Ustawienia o tym informuje. Zamiast tego publikuj wydania — patrz krok 3 na zakładce Instrukcja.
 
 ### Czy stracę ustawienia motywu, treści albo widgety?
 
@@ -313,12 +410,13 @@ Sprawdzenie wstępne (krok 4 powyżej) znalazło ścieżkę, której użytkownik
 
 - Lista wydań jest w transiencie `gthu_releases_cache` (domyślnie 15 minut). Przycisk **Sprawdź ponownie** czyści go i pobiera dane na nowo; cache czyści się też sam po zmianie repozytorium lub tokenu.
 - Ostatni błąd zapisuje się w `gthu_state.last_error` i jest widoczny na dole zakładki Aktualizacja.
-- Powiadomienia o nowych wersjach opierają się na cronie WordPressa (`gthu_check_for_updates`, dwa razy dziennie). Przy `DISABLE_WP_CRON` trzeba mieć skonfigurowany cron systemowy, inaczej `latest_version` nie odświeży się samo — ręczne sprawdzenie działa niezależnie.
+- Powiadomienia o nowych wersjach opierają się na cronie WordPressa (`gthu_check_for_updates`, dwa razy dziennie), podobnie jak automatyczna aktualizacja z harmonogramu (`gthu_auto_update`, codziennie o wybranej godzinie) i uruchomienie z webhooka (`gthu_webhook_update`, zdarzenia jednorazowe). Przy `DISABLE_WP_CRON` trzeba mieć skonfigurowany cron systemowy, inaczej `latest_version` nie odświeży się samo, a nocne uruchomienie czeka na odwiedzającego — ręczne sprawdzenie i przycisk **Uruchom teraz** działają niezależnie.
 
 ```bash
-wp cron event list | grep gthu          # czy zadanie jest zaplanowane
+wp cron event list | grep gthu          # czy zadania są zaplanowane i na kiedy
 wp cron event run gthu_check_for_updates
-wp option get gthu_state --format=json  # stan: wersje, ostatnie sprawdzenie, ostatni błąd
+wp cron event run gthu_auto_update      # nocne uruchomienie, od razu
+wp option get gthu_state --format=json  # stan: wersje, ostatnie sprawdzenie, ostatni błąd, ostatnie automatyczne uruchomienie, ostatni webhook
 wp option get gthu_history --format=json  # ostatnie aktualizacje i przywrócenia
 wp transient delete gthu_releases_cache
 ```
