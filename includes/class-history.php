@@ -104,6 +104,7 @@ final class History {
 			'backup'   => '',
 			'time'     => time(),
 			'user'     => get_current_user_id(),
+			'trigger'  => 'user',
 		);
 	}
 

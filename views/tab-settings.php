@@ -4,17 +4,24 @@
  *
  * @package MSM\GitHubThemeUpdater
  *
- * @var Settings $settings Settings repository.
+ * @var Settings             $settings Settings repository.
+ * @var array<string, mixed> $state    Runtime state.
+ * @var int                  $next_run When the next scheduled run is due, 0 if none.
  */
 
 namespace MSM\GitHubThemeUpdater;
 
 defined( 'ABSPATH' ) || exit;
 
-$gthu_option     = Settings::OPTION;
-$gthu_token      = $settings->token();
-$gthu_from_const = $settings->token_is_constant();
-$gthu_themes     = wp_get_themes();
+$gthu_option          = Settings::OPTION;
+$gthu_token           = $settings->token();
+$gthu_from_const      = $settings->token_is_constant();
+$gthu_themes          = wp_get_themes();
+$gthu_datetime_format = get_option( 'date_format' ) . ' ' . get_option( 'time_format' );
+$gthu_has_secret      = $settings->has_webhook_secret();
+$gthu_secret_const    = $settings->webhook_secret_is_constant();
+$gthu_is_branch       = 'branch' === $settings->get( 'source' );
+$gthu_wp_cron_off     = defined( 'DISABLE_WP_CRON' ) && DISABLE_WP_CRON;
 
 settings_errors( $gthu_option );
 ?>
@@ -324,7 +331,7 @@ settings_errors( $gthu_option );
 						<?php esc_html_e( 'Check automatically and announce new versions in the dashboard', 'github-theme-updater' ); ?>
 					</label>
 					<p class="description">
-						<?php esc_html_e( 'Checks run twice a day. The plugin never updates the theme by itself — the decision is always yours.', 'github-theme-updater' ); ?>
+						<?php esc_html_e( 'Checks run twice a day and only show a notice. Installing without a click is a separate, opt-in feature — see “Automatic updates” below.', 'github-theme-updater' ); ?>
 					</p>
 				</td>
 			</tr>
@@ -349,8 +356,240 @@ settings_errors( $gthu_option );
 		</table>
 	</div>
 
+	<div class="gthu-panel" id="gthu-automation">
+		<h2><?php esc_html_e( 'Automatic updates', 'github-theme-updater' ); ?></h2>
+		<p class="gthu-hint">
+			<?php esc_html_e( 'With either option on, the plugin installs a newer release by itself, using exactly the same sequence as the Update button: lock, backup, verification, copy, automatic rollback on failure, entry in the operation log. Releases only — a branch has no version number to compare.', 'github-theme-updater' ); ?>
+		</p>
+
+		<?php if ( $gthu_is_branch ) : ?>
+			<div class="notice notice-warning inline">
+				<p><?php esc_html_e( 'The download mode is set to Branch. Automatic updates will not run until it is switched to Releases.', 'github-theme-updater' ); ?></p>
+			</div>
+		<?php endif; ?>
+
+		<table class="form-table" role="presentation">
+			<tr>
+				<th scope="row"><?php esc_html_e( 'Scheduled update', 'github-theme-updater' ); ?></th>
+				<td>
+					<label>
+						<input
+							type="checkbox"
+							name="<?php echo esc_attr( $gthu_option ); ?>[auto_update]"
+							value="1"
+							<?php checked( (bool) $settings->get( 'auto_update' ) ); ?>
+						>
+						<?php esc_html_e( 'Once a day, check GitHub and install the newest release if it is newer than the installed one', 'github-theme-updater' ); ?>
+					</label>
+					<p class="description">
+						<?php esc_html_e( 'When nothing newer is available, the run does nothing and nobody is e-mailed.', 'github-theme-updater' ); ?>
+					</p>
+				</td>
+			</tr>
+
+			<tr>
+				<th scope="row">
+					<label for="gthu-auto-time"><?php esc_html_e( 'Preferred time', 'github-theme-updater' ); ?></label>
+				</th>
+				<td>
+					<input
+						type="time"
+						id="gthu-auto-time"
+						step="60"
+						name="<?php echo esc_attr( $gthu_option ); ?>[auto_update_time]"
+						value="<?php echo esc_attr( (string) $settings->get( 'auto_update_time' ) ); ?>"
+					>
+					<p class="description">
+						<?php
+						printf(
+							/* translators: %s: timezone name from the general settings. */
+							esc_html__( 'Site time zone (%s). Pick a quiet hour: the update takes the theme offline for a moment while files are replaced.', 'github-theme-updater' ),
+							'<code>' . esc_html( wp_timezone_string() ) . '</code>'
+						);
+						?>
+					</p>
+
+					<?php if ( $next_run ) : ?>
+						<p class="description">
+							<?php
+							printf(
+								/* translators: %s: date and time. */
+								esc_html__( 'Next run planned for: %s', 'github-theme-updater' ),
+								'<strong>' . esc_html( wp_date( $gthu_datetime_format, $next_run ) ) . '</strong>'
+							);
+							?>
+						</p>
+					<?php endif; ?>
+
+					<details class="gthu-notes">
+						<summary><?php esc_html_e( 'Why the update may run later than the time set here', 'github-theme-updater' ); ?></summary>
+						<div class="gthu-notes__body">
+							<p><?php esc_html_e( 'The time is a “not before”, not a guarantee. WordPress has no clock of its own — its scheduler (WP-Cron) only wakes up when something else runs PHP on the site. The run can therefore be late when:', 'github-theme-updater' ); ?></p>
+							<ul class="gthu-examples">
+								<li><?php esc_html_e( 'Nobody visits the site. WP-Cron piggybacks on page views, so on a quiet site the 3:00 task runs with the first visitor of the morning — that may be 6:40.', 'github-theme-updater' ); ?></li>
+								<li><?php esc_html_e( 'A page cache or CDN serves visitors without touching PHP. Cached pages do not wake the scheduler either, so even a busy site can look empty to it.', 'github-theme-updater' ); ?></li>
+								<li>
+									<?php
+									printf(
+										/* translators: %s: PHP constant name. */
+										esc_html__( '%s is set in wp-config.php and the site relies on a system cron. The run then happens on the next tick of that cron — every 5 minutes, every hour, whatever the hosting configured.', 'github-theme-updater' ),
+										'<code>DISABLE_WP_CRON</code>'
+									);
+									?>
+								</li>
+								<li><?php esc_html_e( 'Another operation holds the lock at that moment (an update or restore started by hand, a backup in progress). The run is skipped and tries again the next day.', 'github-theme-updater' ); ?></li>
+								<li><?php esc_html_e( 'The site time zone changes, or the clocks move for daylight saving. The schedule is corrected on the next run and on the next settings save, so one run can land an hour off.', 'github-theme-updater' ); ?></li>
+								<li><?php esc_html_e( 'The server is busy or the previous cron run is still going. WordPress runs one cron worker at a time and skips a tick it cannot start.', 'github-theme-updater' ); ?></li>
+							</ul>
+							<p>
+								<?php
+								printf(
+									/* translators: %s: PHP constant definition. */
+									esc_html__( 'For a time you can count on, ask the hosting to call wp-cron.php from a system cron every few minutes and add %s to wp-config.php. The Instructions tab shows how.', 'github-theme-updater' ),
+									'<code>define( \'DISABLE_WP_CRON\', true );</code>'
+								);
+								?>
+							</p>
+							<?php if ( $gthu_wp_cron_off ) : ?>
+								<p><strong><?php esc_html_e( 'DISABLE_WP_CRON is set on this site, so the time depends on the system cron of the server.', 'github-theme-updater' ); ?></strong></p>
+							<?php endif; ?>
+						</div>
+					</details>
+				</td>
+			</tr>
+
+			<tr>
+				<th scope="row">
+					<label for="gthu-notify-emails"><?php esc_html_e( 'E-mail reports to', 'github-theme-updater' ); ?></label>
+				</th>
+				<td>
+					<input
+						type="text"
+						id="gthu-notify-emails"
+						class="large-text"
+						name="<?php echo esc_attr( $gthu_option ); ?>[notify_emails]"
+						value="<?php echo esc_attr( (string) $settings->get( 'notify_emails' ) ); ?>"
+						placeholder="you@example.com, colleague@example.com"
+					>
+					<p class="description">
+						<?php esc_html_e( 'One or more addresses separated by commas. After every automatic update (scheduled or from the webhook) they receive a plain text message with the previous and the new version, the backup name and the release notes written on GitHub. A failed attempt is reported the same way, with the error. Updates started by hand from the Update tab are not e-mailed.', 'github-theme-updater' ); ?>
+					</p>
+				</td>
+			</tr>
+
+			<tr>
+				<th scope="row"><?php esc_html_e( 'GitHub webhook', 'github-theme-updater' ); ?></th>
+				<td>
+					<label>
+						<input
+							type="checkbox"
+							name="<?php echo esc_attr( $gthu_option ); ?>[webhook_enabled]"
+							value="1"
+							<?php checked( (bool) $settings->get( 'webhook_enabled' ) ); ?>
+						>
+						<?php esc_html_e( 'Update as soon as a release is published on GitHub', 'github-theme-updater' ); ?>
+					</label>
+					<p class="description">
+						<?php esc_html_e( 'GitHub calls this site the moment you click “Publish release”; the plugin then queues an update that runs within a minute or two. The site must be reachable from the internet. Full setup steps are on the Instructions tab.', 'github-theme-updater' ); ?>
+					</p>
+
+					<?php if ( $settings->get( 'webhook_enabled' ) && $gthu_has_secret ) : ?>
+						<p class="description">
+							<?php esc_html_e( 'Payload URL to enter on GitHub:', 'github-theme-updater' ); ?><br>
+							<code class="gthu-secret"><?php echo esc_html( Webhook::url() ); ?></code>
+						</p>
+						<p class="description">
+							<?php if ( $gthu_secret_const ) : ?>
+								<?php esc_html_e( 'The secret is set in wp-config.php (GTHU_WEBHOOK_SECRET).', 'github-theme-updater' ); ?>
+							<?php else : ?>
+								<?php
+								printf(
+									/* translators: %s: date and time. */
+									esc_html__( 'A secret was generated on %s and is stored encrypted. It cannot be displayed again; if it was lost, generate a new one and update the webhook on GitHub.', 'github-theme-updater' ),
+									esc_html( wp_date( $gthu_datetime_format, (int) $settings->get( 'webhook_secret_at', 0 ) ) )
+								);
+								?>
+							<?php endif; ?>
+						</p>
+						<?php if ( ! $gthu_secret_const ) : ?>
+							<p>
+								<label>
+									<input type="checkbox" name="<?php echo esc_attr( $gthu_option ); ?>[regenerate_webhook_secret]" value="1">
+									<?php esc_html_e( 'Generate a new secret when saving (the old one stops working immediately)', 'github-theme-updater' ); ?>
+								</label>
+							</p>
+						<?php endif; ?>
+					<?php elseif ( $settings->get( 'webhook_enabled' ) ) : ?>
+						<p class="description"><?php esc_html_e( 'No secret is available yet. Save the settings to generate one.', 'github-theme-updater' ); ?></p>
+					<?php else : ?>
+						<p class="description"><?php esc_html_e( 'Tick the box and save: the plugin generates a secret and shows it once, together with the address to enter on GitHub.', 'github-theme-updater' ); ?></p>
+					<?php endif; ?>
+
+					<?php if ( $state['webhook_last_at'] ) : ?>
+						<p class="description">
+							<?php
+							printf(
+								/* translators: 1: date and time, 2: what happened. */
+								esc_html__( 'Last delivery %1$s: %2$s', 'github-theme-updater' ),
+								esc_html( wp_date( $gthu_datetime_format, (int) $state['webhook_last_at'] ) ),
+								'<span class="gthu-status gthu-status--' . ( 'rejected' === $state['webhook_last_status'] ? 'error' : 'ok' ) . '">' . esc_html( (string) $state['webhook_last_message'] ) . '</span>'
+							);
+							?>
+						</p>
+					<?php endif; ?>
+				</td>
+			</tr>
+
+			<?php if ( $state['auto_last_run'] ) : ?>
+				<tr>
+					<th scope="row"><?php esc_html_e( 'Last automatic run', 'github-theme-updater' ); ?></th>
+					<td>
+						<p>
+							<?php
+							$gthu_auto_ok = in_array( (string) $state['auto_last_status'], array( 'updated', 'up_to_date' ), true );
+
+							echo esc_html( wp_date( $gthu_datetime_format, (int) $state['auto_last_run'] ) );
+							echo ' (' . esc_html( Auto_Updater::trigger_label( (string) $state['auto_last_trigger'] ) ) . ')';
+							?>
+							<br>
+							<span class="gthu-status gthu-status--<?php echo $gthu_auto_ok ? 'ok' : 'error'; ?>"><?php echo esc_html( (string) $state['auto_last_message'] ); ?></span>
+						</p>
+					</td>
+				</tr>
+			<?php endif; ?>
+		</table>
+	</div>
+
 	<?php submit_button( __( 'Save settings', 'github-theme-updater' ) ); ?>
 </form>
+
+<div class="gthu-panel">
+	<h2><?php esc_html_e( 'Try the automation', 'github-theme-updater' ); ?></h2>
+	<p class="gthu-hint">
+		<?php esc_html_e( '“Run now” does exactly what the nightly run does — including installing a newer release, if there is one, and e-mailing the report. Save the settings first.', 'github-theme-updater' ); ?>
+	</p>
+	<div class="gthu-actions">
+		<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
+			<?php wp_nonce_field( 'gthu_run_auto' ); ?>
+			<input type="hidden" name="action" value="gthu_run_auto">
+			<button
+				type="submit"
+				class="button"
+				data-gthu-confirm="<?php echo esc_attr__( 'Run the automatic update now? If GitHub has a newer release, it will be installed straight away.', 'github-theme-updater' ); ?>"
+			>
+				<?php esc_html_e( 'Run now', 'github-theme-updater' ); ?>
+			</button>
+		</form>
+
+		<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
+			<?php wp_nonce_field( 'gthu_test_email' ); ?>
+			<input type="hidden" name="action" value="gthu_test_email">
+			<button type="submit" class="button">
+				<?php esc_html_e( 'Send a test e-mail', 'github-theme-updater' ); ?>
+			</button>
+		</form>
+	</div>
+</div>
 
 <div class="gthu-panel">
 	<h2><?php esc_html_e( 'Check the configuration', 'github-theme-updater' ); ?></h2>

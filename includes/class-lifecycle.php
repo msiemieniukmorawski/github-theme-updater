@@ -43,6 +43,7 @@ final class Lifecycle {
 		}
 
 		Update_Checker::schedule();
+		plugin()->auto_updater()->sync_schedule();
 		update_option( self::VERSION_OPTION, VERSION );
 	}
 
@@ -53,6 +54,7 @@ final class Lifecycle {
 	 */
 	public static function deactivate() {
 		Update_Checker::unschedule();
+		Auto_Updater::unschedule_all();
 		Github_Client::flush_cache();
 	}
 
@@ -73,6 +75,7 @@ final class Lifecycle {
 		}
 
 		Update_Checker::schedule();
+		plugin()->auto_updater()->sync_schedule();
 		update_option( self::VERSION_OPTION, VERSION );
 	}
 

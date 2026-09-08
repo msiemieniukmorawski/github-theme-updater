@@ -67,16 +67,40 @@ final class Plugin {
 	private $checker;
 
 	/**
+	 * E-mail reports.
+	 *
+	 * @var Notifier
+	 */
+	private $notifier;
+
+	/**
+	 * Unattended updates.
+	 *
+	 * @var Auto_Updater
+	 */
+	private $auto_updater;
+
+	/**
+	 * GitHub webhook endpoint.
+	 *
+	 * @var Webhook
+	 */
+	private $webhook;
+
+	/**
 	 * Builds the object graph.
 	 */
 	public function __construct() {
-		$this->settings   = new Settings();
-		$this->client     = new Github_Client( $this->settings );
-		$this->backups    = new Backup_Manager( $this->settings );
-		$this->installer  = new Theme_Installer( $this->settings, $this->client, $this->backups );
-		$this->admin_page = new Admin_Page( $this->settings, $this->client, $this->backups );
-		$this->actions    = new Admin_Actions( $this->settings, $this->client, $this->backups, $this->installer );
-		$this->checker    = new Update_Checker( $this->settings, $this->client );
+		$this->settings     = new Settings();
+		$this->client       = new Github_Client( $this->settings );
+		$this->backups      = new Backup_Manager( $this->settings );
+		$this->installer    = new Theme_Installer( $this->settings, $this->client, $this->backups );
+		$this->notifier     = new Notifier( $this->settings );
+		$this->auto_updater = new Auto_Updater( $this->settings, $this->client, $this->installer, $this->notifier );
+		$this->webhook      = new Webhook( $this->settings, $this->auto_updater );
+		$this->admin_page   = new Admin_Page( $this->settings, $this->client, $this->backups );
+		$this->actions      = new Admin_Actions( $this->settings, $this->client, $this->backups, $this->installer, $this->auto_updater, $this->notifier );
+		$this->checker      = new Update_Checker( $this->settings, $this->client );
 	}
 
 	/**
@@ -92,6 +116,8 @@ final class Plugin {
 		$this->admin_page->register();
 		$this->actions->register();
 		$this->checker->register();
+		$this->auto_updater->register();
+		$this->webhook->register();
 
 		Notices::register();
 	}
@@ -143,5 +169,23 @@ final class Plugin {
 	 */
 	public function installer() {
 		return $this->installer;
+	}
+
+	/**
+	 * Automatic updater accessor.
+	 *
+	 * @return Auto_Updater
+	 */
+	public function auto_updater() {
+		return $this->auto_updater;
+	}
+
+	/**
+	 * E-mail reports accessor.
+	 *
+	 * @return Notifier
+	 */
+	public function notifier() {
+		return $this->notifier;
 	}
 }

@@ -344,3 +344,13 @@
 	background: #fcf0f1;
 	color: #8a2424;
 }
+
+/* Webhook address and one-time secret: long, unbreakable strings. */
+.gthu-secret {
+	display: inline-block;
+	max-width: 100%;
+	padding: 4px 8px;
+	overflow-wrap: anywhere;
+	word-break: break-all;
+	user-select: all;
+}

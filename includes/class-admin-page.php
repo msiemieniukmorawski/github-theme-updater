@@ -246,6 +246,8 @@ final class Admin_Page {
 					'tab-settings',
 					array(
 						'settings' => $this->settings,
+						'state'    => $this->settings->state(),
+						'next_run' => Auto_Updater::next_scheduled(),
 					)
 				);
 				break;

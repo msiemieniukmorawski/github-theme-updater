@@ -90,6 +90,12 @@ final class Settings {
 			'backup_limit'        => 3,
 			'check_updates'       => true,
 			'delete_data'         => false,
+			'auto_update'         => false,
+			'auto_update_time'    => Auto_Updater::DEFAULT_TIME,
+			'notify_emails'       => '',
+			'webhook_enabled'     => false,
+			'webhook_secret'      => '',
+			'webhook_secret_at'   => 0,
 		);
 	}
 
@@ -221,6 +227,63 @@ final class Settings {
 		$ignored                = isset( $input['ignored_paths'] ) ? (string) $input['ignored_paths'] : '';
 		$clean['ignored_paths'] = Path_Rules::from_text( $ignored )->to_text();
 
+		// Automatic updates.
+		$clean['auto_update']      = ! empty( $input['auto_update'] );
+		$clean['auto_update_time'] = Auto_Updater::sanitize_time( isset( $input['auto_update_time'] ) ? (string) $input['auto_update_time'] : '' );
+
+		list( $emails, $rejected ) = Notifier::parse_recipients( isset( $input['notify_emails'] ) ? (string) $input['notify_emails'] : '' );
+
+		$clean['notify_emails'] = implode( ', ', $emails );
+
+		if ( ! empty( $rejected ) ) {
+			add_settings_error(
+				self::OPTION,
+				'gthu_notify_emails',
+				sprintf(
+					/* translators: %s: comma separated list of rejected entries. */
+					__( 'These entries are not e-mail addresses and were dropped: %s.', 'github-theme-updater' ),
+					esc_html( implode( ', ', $rejected ) )
+				),
+				'warning'
+			);
+		}
+
+		if ( ( $clean['auto_update'] || ! empty( $input['webhook_enabled'] ) ) && 'branch' === $clean['source'] ) {
+			add_settings_error(
+				self::OPTION,
+				'gthu_auto_update_branch',
+				__( 'Automatic updates are saved but will not run: they work in release mode only. Switch the download mode to Releases.', 'github-theme-updater' ),
+				'warning'
+			);
+		}
+
+		// Webhook. The secret is generated here rather than typed in, so it is
+		// always long and random, and it is shown exactly once — like GitHub does.
+		$clean['webhook_enabled'] = ! empty( $input['webhook_enabled'] );
+
+		$needs_secret = $clean['webhook_enabled']
+			&& ! $this->webhook_secret_is_constant()
+			&& ( '' === (string) $current['webhook_secret'] || ! empty( $input['regenerate_webhook_secret'] ) );
+
+		if ( $needs_secret ) {
+			$secret = Webhook::generate_secret();
+
+			$clean['webhook_secret']    = Token_Storage::encrypt( $secret );
+			$clean['webhook_secret_at'] = time();
+
+			add_settings_error(
+				self::OPTION,
+				'gthu_webhook_secret',
+				sprintf(
+					'%1$s<br><code class="gthu-secret">%2$s</code><br>%3$s',
+					esc_html__( 'A new webhook secret was generated. Copy it now and paste it into the “Secret” field of the webhook on GitHub — it will not be shown again.', 'github-theme-updater' ),
+					esc_html( $secret ),
+					esc_html__( 'Until the secret on GitHub matches, every delivery is rejected.', 'github-theme-updater' )
+				),
+				'success'
+			);
+		}
+
 		// The remote configuration changed, so any cached API response is stale.
 		if ( $clean['repository'] !== $current['repository'] || $clean['token'] !== $current['token'] ) {
 			Github_Client::flush_cache();
@@ -286,6 +349,40 @@ final class Settings {
 	 */
 	public function has_token() {
 		return '' !== $this->token();
+	}
+
+	/**
+	 * Returns the webhook secret in clear text.
+	 *
+	 * A `GTHU_WEBHOOK_SECRET` constant wins over the stored value, mirroring
+	 * the token.
+	 *
+	 * @return string
+	 */
+	public function webhook_secret() {
+		if ( defined( 'GTHU_WEBHOOK_SECRET' ) && GTHU_WEBHOOK_SECRET ) {
+			return (string) GTHU_WEBHOOK_SECRET;
+		}
+
+		return Token_Storage::decrypt( (string) $this->get( 'webhook_secret', '' ) );
+	}
+
+	/**
+	 * Whether the webhook secret comes from wp-config.php.
+	 *
+	 * @return bool
+	 */
+	public function webhook_secret_is_constant() {
+		return defined( 'GTHU_WEBHOOK_SECRET' ) && GTHU_WEBHOOK_SECRET;
+	}
+
+	/**
+	 * Whether a webhook secret is available at all.
+	 *
+	 * @return bool
+	 */
+	public function has_webhook_secret() {
+		return '' !== $this->webhook_secret();
 	}
 
 	/**
@@ -363,12 +460,22 @@ final class Settings {
 
 		return array_merge(
 			array(
-				'installed_version' => '',
-				'installed_at'      => 0,
-				'installed_by'      => 0,
-				'last_check'        => 0,
-				'latest_version'    => '',
-				'last_error'        => '',
+				'installed_version'    => '',
+				'installed_at'         => 0,
+				'installed_by'         => 0,
+				'last_check'           => 0,
+				'latest_version'       => '',
+				'last_error'           => '',
+				// Automatic runs.
+				'auto_last_run'        => 0,
+				'auto_last_trigger'    => '',
+				'auto_last_status'     => '',
+				'auto_last_message'    => '',
+				'auto_notified_error'  => '',
+				// Webhook deliveries.
+				'webhook_last_at'      => 0,
+				'webhook_last_status'  => '',
+				'webhook_last_message' => '',
 			),
 			is_array( $state ) ? $state : array()
 		);

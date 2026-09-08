@@ -47,18 +47,36 @@ final class Admin_Actions {
 	private $installer;
 
 	/**
+	 * Automatic updater.
+	 *
+	 * @var Auto_Updater
+	 */
+	private $auto_updater;
+
+	/**
+	 * E-mail reports.
+	 *
+	 * @var Notifier
+	 */
+	private $notifier;
+
+	/**
 	 * Constructor.
 	 *
-	 * @param Settings        $settings  Settings repository.
-	 * @param Github_Client   $client    GitHub client.
-	 * @param Backup_Manager  $backups   Backup manager.
-	 * @param Theme_Installer $installer Theme installer.
+	 * @param Settings        $settings     Settings repository.
+	 * @param Github_Client   $client       GitHub client.
+	 * @param Backup_Manager  $backups      Backup manager.
+	 * @param Theme_Installer $installer    Theme installer.
+	 * @param Auto_Updater    $auto_updater Automatic updater.
+	 * @param Notifier        $notifier     E-mail reports.
 	 */
-	public function __construct( Settings $settings, Github_Client $client, Backup_Manager $backups, Theme_Installer $installer ) {
-		$this->settings  = $settings;
-		$this->client    = $client;
-		$this->backups   = $backups;
-		$this->installer = $installer;
+	public function __construct( Settings $settings, Github_Client $client, Backup_Manager $backups, Theme_Installer $installer, Auto_Updater $auto_updater, Notifier $notifier ) {
+		$this->settings     = $settings;
+		$this->client       = $client;
+		$this->backups      = $backups;
+		$this->installer    = $installer;
+		$this->auto_updater = $auto_updater;
+		$this->notifier     = $notifier;
 	}
 
 	/**
@@ -76,6 +94,8 @@ final class Admin_Actions {
 			'gthu_refresh'        => 'handle_refresh',
 			'gthu_test'           => 'handle_test',
 			'gthu_dismiss_update' => 'handle_dismiss_update',
+			'gthu_run_auto'       => 'handle_run_auto',
+			'gthu_test_email'     => 'handle_test_email',
 		);
 
 		foreach ( $actions as $action => $method ) {
@@ -384,6 +404,81 @@ final class Admin_Actions {
 			),
 			'success'
 		);
+
+		$this->redirect( 'settings' );
+	}
+
+	/**
+	 * Runs the automatic update sequence right now, e-mails included.
+	 *
+	 * The quickest way to confirm the whole chain works before trusting it
+	 * to run unattended at night.
+	 *
+	 * @return void
+	 */
+	public function handle_run_auto() {
+		$this->authorize( 'gthu_run_auto' );
+
+		ignore_user_abort( true );
+
+		$outcome = $this->auto_updater->run( 'manual' );
+
+		switch ( $outcome['status'] ) {
+			case 'updated':
+				$type = 'success';
+				break;
+
+			case 'up_to_date':
+				$type = 'info';
+				break;
+
+			case 'failed':
+			case 'check_failed':
+				$type = 'error';
+				break;
+
+			default:
+				$type = 'warning';
+		}
+
+		$message = sprintf(
+			/* translators: %s: outcome of the run. */
+			__( 'Automatic update run: %s', 'github-theme-updater' ),
+			esc_html( $outcome['message'] )
+		);
+
+		if ( in_array( $outcome['status'], array( 'updated', 'failed' ), true ) ) {
+			$message .= ' ' . ( empty( $this->notifier->recipients( 'test' ) )
+				? __( 'No report was e-mailed: no address is saved.', 'github-theme-updater' )
+				: __( 'A report was e-mailed to the saved addresses.', 'github-theme-updater' ) );
+		}
+
+		Notices::add( $message, $type );
+		$this->redirect( 'settings' );
+	}
+
+	/**
+	 * Sends a test message to the saved addresses.
+	 *
+	 * @return void
+	 */
+	public function handle_test_email() {
+		$this->authorize( 'gthu_test_email' );
+
+		$sent = $this->notifier->test();
+
+		if ( is_wp_error( $sent ) ) {
+			Notices::error( $sent );
+		} else {
+			Notices::add(
+				sprintf(
+					/* translators: %s: comma separated list of addresses. */
+					__( 'A test message was sent to: %s. If it does not arrive, check the spam folder and the mail configuration of the site.', 'github-theme-updater' ),
+					'<strong>' . esc_html( implode( ', ', $this->notifier->recipients( 'test' ) ) ) . '</strong>'
+				),
+				'success'
+			);
+		}
 
 		$this->redirect( 'settings' );
 	}

@@ -168,6 +168,90 @@ git push origin v1.2.0</code></pre>
 		</ol>
 	</div>
 
+	<div class="gthu-panel" id="gthu-help-automation">
+		<h2><?php esc_html_e( 'Step 4 (optional). Let the plugin update the theme by itself', 'github-theme-updater' ); ?></h2>
+		<p class="gthu-hint">
+			<?php esc_html_e( 'Two ways, which can be combined: a nightly run at a chosen hour, and a GitHub webhook that starts the update the moment a release is published. Both use the same sequence as the Update button — backup, verification, automatic rollback, operation log — and both e-mail a report. Both work in Releases mode only.', 'github-theme-updater' ); ?>
+		</p>
+
+		<h3><?php esc_html_e( 'A. Nightly schedule', 'github-theme-updater' ); ?></h3>
+		<ol class="gthu-steps">
+			<li>
+				<?php
+				printf(
+					/* translators: %s: URL of the settings tab. */
+					esc_html__( 'On the %s tab, under “Automatic updates”, tick “Scheduled update” and pick a quiet hour.', 'github-theme-updater' ),
+					'<a href="' . esc_url( Admin_Page::url( 'settings' ) ) . '#gthu-automation" target="_blank" rel="noopener noreferrer">' . esc_html__( 'Settings', 'github-theme-updater' ) . '</a>'
+				);
+				?>
+			</li>
+			<li><?php esc_html_e( 'Enter the e-mail addresses that should receive the report, separated by commas, and save.', 'github-theme-updater' ); ?></li>
+			<li><?php esc_html_e( 'Click “Send a test e-mail” to make sure messages from this site arrive. If they do not, the site needs an SMTP plugin — WordPress alone often ends up in spam.', 'github-theme-updater' ); ?></li>
+			<li><?php esc_html_e( 'Click “Run now” once. It does exactly what the nightly run will do, so you see the whole chain work while you are watching.', 'github-theme-updater' ); ?></li>
+		</ol>
+
+		<h4><?php esc_html_e( 'Why the run may be late, and how to make the hour exact', 'github-theme-updater' ); ?></h4>
+		<p><?php esc_html_e( 'WordPress has no clock of its own. Its scheduler, WP-Cron, only wakes up when a page view or another request runs PHP. The chosen hour is therefore a “not before”. Common reasons for a late run:', 'github-theme-updater' ); ?></p>
+		<ul class="gthu-examples">
+			<li><?php esc_html_e( 'No visitors at night — the task waits for the first request after the scheduled time.', 'github-theme-updater' ); ?></li>
+			<li><?php esc_html_e( 'A page cache or a CDN answers visitors without running PHP, so even traffic does not wake the scheduler.', 'github-theme-updater' ); ?></li>
+			<li><?php esc_html_e( 'The hosting disabled WP-Cron and runs a system cron instead; the update happens on its next tick.', 'github-theme-updater' ); ?></li>
+			<li><?php esc_html_e( 'Another update, restore or backup holds the lock at that moment; the run is skipped until the next day.', 'github-theme-updater' ); ?></li>
+			<li><?php esc_html_e( 'The site time zone or daylight saving changed; the schedule corrects itself on the next run or settings save.', 'github-theme-updater' ); ?></li>
+			<li><?php esc_html_e( 'The server is busy or the previous cron worker is still running; WordPress skips a tick it cannot start.', 'github-theme-updater' ); ?></li>
+		</ul>
+		<p><?php esc_html_e( 'For an exact hour, disable the page-view trigger and let the server call the scheduler every few minutes. Add this to wp-config.php:', 'github-theme-updater' ); ?></p>
+		<pre class="gthu-code"><code>define( 'DISABLE_WP_CRON', true );</code></pre>
+		<p><?php esc_html_e( 'and ask the hosting for a system cron entry like this (most control panels have a form for it):', 'github-theme-updater' ); ?></p>
+		<pre class="gthu-code"><code>*/5 * * * * curl -s <?php echo esc_html( site_url( '/wp-cron.php?doing_wp_cron' ) ); ?> &gt; /dev/null 2&gt;&amp;1</code></pre>
+
+		<h3><?php esc_html_e( 'B. Update the moment a release is published (GitHub webhook)', 'github-theme-updater' ); ?></h3>
+		<p><?php esc_html_e( 'GitHub sends a signed message to this site every time a release is published. The plugin verifies the signature, checks that the message concerns the configured repository, and queues an update that runs within a minute or two. It never installs what the message says: it asks GitHub for the newest release with your own token, exactly like the nightly run. The site must be reachable from the internet — a local development site is not, unless a tunnel is used.', 'github-theme-updater' ); ?></p>
+		<ol class="gthu-steps">
+			<li>
+				<?php
+				printf(
+					/* translators: %s: URL of the settings tab. */
+					esc_html__( 'On the %s tab, tick “Update as soon as a release is published on GitHub” and save. A green box shows the secret once — copy it now.', 'github-theme-updater' ),
+					'<a href="' . esc_url( Admin_Page::url( 'settings' ) ) . '#gthu-automation" target="_blank" rel="noopener noreferrer">' . esc_html__( 'Settings', 'github-theme-updater' ) . '</a>'
+				);
+				?>
+			</li>
+			<li>
+				<?php
+				printf(
+					/* translators: %s: link to the repository webhook settings page. */
+					esc_html__( 'On GitHub, open %s and click “Add webhook”.', 'github-theme-updater' ),
+					$repository
+						? '<a href="' . esc_url( $repository->html_url() . '/settings/hooks/new' ) . '" target="_blank" rel="noopener noreferrer">' . esc_html( $repository->full_name() . ' → Settings → Webhooks' ) . '</a>'
+						: '<code>github.com/' . esc_html( $gthu_repo_name ) . '/settings/hooks</code>'
+				);
+				?>
+			</li>
+			<li>
+				<?php esc_html_e( 'Payload URL: the address shown under the checkbox after saving:', 'github-theme-updater' ); ?>
+				<code class="gthu-secret"><?php echo esc_html( Webhook::url() ); ?></code>
+			</li>
+			<li><?php esc_html_e( 'Content type: application/json.', 'github-theme-updater' ); ?></li>
+			<li><?php esc_html_e( 'Secret: paste the secret copied in step 1.', 'github-theme-updater' ); ?></li>
+			<li><?php esc_html_e( 'SSL verification: leave enabled (the site must have a valid HTTPS certificate).', 'github-theme-updater' ); ?></li>
+			<li><?php esc_html_e( 'Which events: choose “Let me select individual events”, tick only “Releases” and untick “Pushes”.', 'github-theme-updater' ); ?></li>
+			<li><?php esc_html_e( 'Make sure “Active” is ticked and click “Add webhook”. GitHub sends a ping straight away; under “Recent Deliveries” it should show a green tick with response 200, and the Settings tab shows “GitHub sent a ping”.', 'github-theme-updater' ); ?></li>
+			<li><?php esc_html_e( 'Publish the next release as usual. Within a couple of minutes the theme is updated, the operation log lists it as “Automatic (GitHub webhook)”, and the report arrives by e-mail.', 'github-theme-updater' ); ?></li>
+		</ol>
+
+		<h4><?php esc_html_e( 'How the webhook is protected', 'github-theme-updater' ); ?></h4>
+		<ul class="gthu-examples">
+			<li><?php esc_html_e( 'The address does not exist at all while the feature is off — it answers 404 like any unknown URL.', 'github-theme-updater' ); ?></li>
+			<li><?php esc_html_e( 'Every message must carry a signature (HMAC-SHA256 of the body under the secret). It is checked in constant time before anything else happens; unsigned or wrongly signed requests are rejected with 401/403 and only leave a note on the Settings tab.', 'github-theme-updater' ); ?></li>
+			<li><?php esc_html_e( 'The secret is 64 random hexadecimal characters, generated by the plugin, stored encrypted like the token and never displayed again. It can be replaced at any time, or kept in wp-config.php as GTHU_WEBHOOK_SECRET.', 'github-theme-updater' ); ?></li>
+			<li><?php esc_html_e( 'Only “release published” events for the configured repository are accepted; a message about another repository is rejected. Drafts and, unless enabled, pre-releases are ignored.', 'github-theme-updater' ); ?></li>
+			<li><?php esc_html_e( 'The message never decides what gets installed. The plugin fetches the release list from GitHub with its own token and installs the newest one only if it is newer than the installed version.', 'github-theme-updater' ); ?></li>
+			<li><?php esc_html_e( 'Each delivery has an identifier; a redelivered or replayed message is recognised and does nothing. Oversized bodies are refused before being read.', 'github-theme-updater' ); ?></li>
+			<li><?php esc_html_e( 'The update itself runs under the same lock as a manual one, so it can never overlap with an update or a restore started from the admin.', 'github-theme-updater' ); ?></li>
+		</ul>
+	</div>
+
 	<div class="gthu-panel">
 		<h2><?php esc_html_e( 'What exactly happens during an update', 'github-theme-updater' ); ?></h2>
 		<ol class="gthu-steps">

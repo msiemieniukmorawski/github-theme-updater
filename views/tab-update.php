@@ -434,7 +434,19 @@ $gthu_update_needed   = $latest && $latest->is_newer_than( $gthu_installed );
 								<?php endif; ?>
 							<?php endif; ?>
 						</td>
-						<td><?php echo esc_html( $gthu_entry_user ? $gthu_entry_user->display_name : '—' ); ?></td>
+						<td>
+							<?php
+							$gthu_entry_trigger = (string) $gthu_entry['trigger'];
+
+							if ( 'schedule' === $gthu_entry_trigger ) {
+								esc_html_e( 'Automatic (schedule)', 'github-theme-updater' );
+							} elseif ( 'webhook' === $gthu_entry_trigger ) {
+								esc_html_e( 'Automatic (GitHub webhook)', 'github-theme-updater' );
+							} else {
+								echo esc_html( $gthu_entry_user ? $gthu_entry_user->display_name : '—' );
+							}
+							?>
+						</td>
 						<td><?php echo esc_html( History::format_duration( (float) $gthu_entry['duration'] ) ); ?></td>
 					</tr>
 				<?php endforeach; ?>

@@ -76,9 +76,10 @@ final class Theme_Installer {
 	 *
 	 * @param Release $release Release to install.
 	 * @param bool    $locked  Whether the caller already holds the lock from lock().
+	 * @param string  $trigger What started the installation: `user` (the admin screen), `schedule`, `webhook` or `manual`.
 	 * @return array<string, mixed>|WP_Error Installation summary.
 	 */
-	public function install( Release $release, $locked = false ) {
+	public function install( Release $release, $locked = false, $trigger = 'user' ) {
 		if ( ! $locked && ! self::lock() ) {
 			return self::locked_error();
 		}
@@ -102,6 +103,7 @@ final class Theme_Installer {
 				'duration' => microtime( true ) - $started,
 				'files'    => is_array( $result ) ? (int) $result['files'] : 0,
 				'backup'   => is_array( $result ) && ! empty( $result['backup']['id'] ) ? (string) $result['backup']['id'] : '',
+				'trigger'  => (string) $trigger,
 			)
 		);
 

@@ -17,12 +17,11 @@ delete_transient( 'gthu_releases_cache' );
 delete_transient( 'gthu_install_lock' );
 delete_option( 'gthu_install_lock' );
 delete_transient( 'gthu_install_progress' );
+delete_transient( 'gthu_webhook_deliveries' );
 
-$gthu_timestamp = wp_next_scheduled( 'gthu_check_for_updates' );
-
-if ( $gthu_timestamp ) {
-	wp_unschedule_event( $gthu_timestamp, 'gthu_check_for_updates' );
-}
+wp_clear_scheduled_hook( 'gthu_check_for_updates' );
+wp_clear_scheduled_hook( 'gthu_auto_update' );
+wp_unschedule_hook( 'gthu_webhook_update' );
 
 if ( ! is_array( $gthu_settings ) || empty( $gthu_settings['delete_data'] ) ) {
 	return;
