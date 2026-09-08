@@ -2,9 +2,9 @@
 
 **English** · [Polski](README.pl.md)
 
-Updates a WordPress theme straight from a GitHub repository — private ones included — with backups, version rollback, and per-path protection against overwriting.
+Updates a WordPress theme straight from a GitHub repository - private ones included - with backups, version rollback, and per-path protection against overwriting.
 
-- **Version:** 2.2.0
+- **Version:** 2.3.0
 - **Author:** [ms-m.pl](https://ms-m.pl)
 - **Requires:** WordPress 5.8+, PHP 7.4+
 - **Text domain:** `github-theme-updater`
@@ -77,7 +77,7 @@ Everything lives in a single `gthu_settings` option, which keeps a form submit a
 | `backup_limit` | `3` | how many backups to keep |
 | `check_updates` | `true` | scheduled checks and a dashboard notice |
 | `delete_data` | `false` | whether to remove plugin data when the plugin is deleted |
-| `auto_update` | `false` | install a newer release once a day without anyone clicking — see [Automatic updates](#automatic-updates) |
+| `auto_update` | `false` | install a newer release once a day without anyone clicking - see [Automatic updates](#automatic-updates) |
 | `auto_update_time` | `03:00` | preferred hour of that run, in the site time zone |
 | `notify_emails` | `''` | comma separated addresses that receive a report after every automatic run |
 | `webhook_enabled` | `false` | update the moment a release is published, through a GitHub webhook |
@@ -103,13 +103,13 @@ One rule per line, relative to the theme root:
 
 ### Ignored paths
 
-Same syntax, different purpose. A protected path is something the site owner wants to keep, and it still goes into every backup. An ignored path is something the plugin should never look at: it is left out of backups, never installed from the archive, and never deleted or overwritten on disk. The defaults are `.git` and `node_modules` — development leftovers that are not part of a theme but can hold tens of thousands of files and turn a backup into a multi-minute job. Add `vendor` if it is git-ignored in your repository; do not add it if the theme needs a committed `vendor` at runtime, because it would then be missing after the first install.
+Same syntax, different purpose. A protected path is something the site owner wants to keep, and it still goes into every backup. An ignored path is something the plugin should never look at: it is left out of backups, never installed from the archive, and never deleted or overwritten on disk. The defaults are `.git` and `node_modules` - development leftovers that are not part of a theme but can hold tens of thousands of files and turn a backup into a multi-minute job. Add `vendor` if it is git-ignored in your repository; do not add it if the theme needs a committed `vendor` at runtime, because it would then be missing after the first install.
 
 ---
 
 ## Token in wp-config.php
 
-The recommended setup for production — the token never reaches the database and cannot be read back from the admin:
+The recommended setup for production - the token never reaches the database and cannot be read back from the admin:
 
 ```php
 define( 'GTHU_GITHUB_TOKEN', 'ghp_...' );
@@ -144,20 +144,20 @@ Without JavaScript the form submits normally and the result appears after the re
 
 ## Automatic updates
 
-Off by default. Both options live in the "Automatic updates" panel on the Settings tab, work in **Releases mode only** (a branch has no version number to compare) and run the exact sequence of the Update button — lock, backup, verification, copy, rollback on failure, operation log — followed by an e-mail report. The **Run now** button under the settings performs one such run immediately, e-mails included, so the chain can be tested while someone is watching.
+Off by default. Both options live in the "Automatic updates" panel on the Settings tab, work in **Releases mode only** (a branch has no version number to compare) and run the exact sequence of the Update button - lock, backup, verification, copy, rollback on failure, operation log - followed by an e-mail report. The **Run now** button under the settings performs one such run immediately, e-mails included, so the chain can be tested while someone is watching.
 
 ### Scheduled run
 
 `auto_update` schedules the `gthu_auto_update` WP-Cron event daily at `auto_update_time` (site time zone). The run fetches the release list with the cache bypassed, compares the newest release with `installed_version`, and installs it only if it is newer. Nothing newer means nothing happens and no e-mail. A run that finds the install lock taken (an update or restore in progress) is skipped until the next day. The schedule is re-synchronised whenever the settings are saved, after each run (DST drift) and by the twice-daily check as a safety net.
 
-**The hour is a "not before", not a guarantee.** WordPress has no clock of its own; WP-Cron only wakes up when a request runs PHP. The run is late when:
+The hour is the earliest the run can start, not a guarantee. WordPress has no clock of its own; WP-Cron only wakes up when a request runs PHP. The run is late when:
 
-- nobody visits the site at night — the task waits for the first request after the scheduled time;
+- nobody visits the site at night - the task waits for the first request after the scheduled time;
 - a page cache or CDN serves visitors without touching PHP;
 - `DISABLE_WP_CRON` is set and the hosting's system cron ticks less often;
 - another operation holds the lock at that moment;
 - the site time zone or daylight saving changed (corrected on the next run or settings save);
-- the server is busy or a previous cron worker is still running — core runs one at a time.
+- the server is busy or a previous cron worker is still running - core runs one at a time.
 
 For an exact hour, add `define( 'DISABLE_WP_CRON', true );` to `wp-config.php` and have a system cron call `wp-cron.php` every few minutes:
 
@@ -181,13 +181,13 @@ The site must be reachable from the internet (a local development site needs a t
 
 How the endpoint is protected:
 
-- The route is not registered at all while the feature is off or no secret exists — it answers 404 like any unknown URL.
+- The route is not registered at all while the feature is off or no secret exists - it answers 404 like any unknown URL.
 - Bodies over 256 KB are refused before being read.
 - Every request must carry `X-Hub-Signature-256`, an HMAC-SHA256 of the raw body under the secret, compared with `hash_equals()` in the permission callback. Unsigned requests get 401, wrongly signed ones 403; both only leave a note on the Settings tab.
 - Only `release` events with the `published` action count. `ping` answers with a pong; other events and actions return 202 and do nothing.
 - The `repository.full_name` in the payload must match the configured repository (403 otherwise). Drafts and, unless `include_prereleases` is on, pre-releases are ignored.
 - `X-GitHub-Delivery` identifiers are remembered for a week, so a redelivered or replayed request is a no-op.
-- **The payload never decides what is installed.** A verified delivery only queues a normal automatic run, which asks GitHub's API for the newest release with the site's own token and installs it only if it is newer than the installed version — after the same identity check, backup and rollback as any other update, under the same lock.
+- The payload never decides what is installed. A verified delivery only queues a normal automatic run, which asks GitHub's API for the newest release with the site's own token and installs it only if it is newer than the installed version - after the same identity check, backup and rollback as any other update, under the same lock.
 
 ---
 
@@ -214,7 +214,7 @@ How the endpoint is protected:
 | `gthu_notification_recipients` | addresses from the settings | who receives a report; second argument is the event (`installed`, `failed`, `check_failed`, `test`) |
 | `gthu_notification_message` | `['to', 'subject', 'body', 'headers']` | the report before `wp_mail()`; return an array without `to` to suppress it |
 
-Example — flushing the object cache after every update:
+Example - flushing the object cache after every update:
 
 ```php
 add_action( 'gthu_after_install', function ( $release, $summary ) {
@@ -224,17 +224,17 @@ add_action( 'gthu_after_install', function ( $release, $summary ) {
 
 ---
 
-## FAQ — what can go wrong
+## FAQ - what can go wrong
 
 ### Can a failed update take down a live site?
 
-The theme directory is not touched at all until the backup has been taken. A download error, a bad token, a corrupt archive, a missing `style.css` — each of these ends with a message and zero changes on disk. If the update fails later, while copying files, the theme is restored automatically from the backup made moments earlier.
+The theme directory is not touched at all until the backup has been taken. A download error, a bad token, a corrupt archive, a missing `style.css` - each of these ends with a message and zero changes on disk. If the update fails later, while copying files, the theme is restored automatically from the backup made moments earlier.
 
 There is exactly one real window of risk: between emptying the theme directory and copying the new files in. On a large theme that takes a few seconds, and visitors may see an error during it. Run updates outside peak hours.
 
 ### What if I close the tab mid-update?
 
-The installer sets `ignore_user_abort( true )`, so PHP finishes the job even after the browser disconnects. You will not see the result message — but if you come back to the Update tab while the update is still running, it shows the current step and reloads itself when the update finishes.
+The installer sets `ignore_user_abort( true )`, so PHP finishes the job even after the browser disconnects. You will not see the result message - but if you come back to the Update tab while the update is still running, it shows the current step and reloads itself when the update finishes.
 
 If the process is killed outright (a PHP-FPM restart, the server's `max_execution_time`), the theme directory can be left in a partial state. In that case: **Backups → Restore** the top entry.
 
@@ -246,67 +246,67 @@ If a process was killed and left the lock behind, the Update tab shows how long 
 
 ### I changed the salts in wp-config.php and the plugin stopped connecting
 
-The token is encrypted with a key derived from `wp_salt( 'auth' )`. Changing the salts — or moving the database to an installation with a different `wp-config.php` — makes the stored token undecryptable, and it has to be pasted in again under Settings. If you move sites between environments, keeping the token in the `GTHU_GITHUB_TOKEN` constant is less trouble.
+The token is encrypted with a key derived from `wp_salt( 'auth' )`. Changing the salts - or moving the database to an installation with a different `wp-config.php` - makes the stored token undecryptable, and it has to be pasted in again under Settings. If you move sites between environments, keeping the token in the `GTHU_GITHUB_TOKEN` constant is less trouble.
 
 ### Files that are not in the repository disappear after an update
 
 Yes, and that is deliberate: after an update the theme directory is meant to match the repository. This covers both files deleted from the repo and files uploaded to the server by hand. Anything that has to survive belongs on the **protected paths** list before the update runs.
 
-The most common case: `vendor/` or `node_modules/` is in `.gitignore`, so it is missing from the GitHub archive — and the theme stops working after an update. Two ways out: add the directory to the protected paths, or attach a built ZIP to the release and set `asset_pattern`.
+The most common case: `vendor/` or `node_modules/` is in `.gitignore`, so it is missing from the GitHub archive - and the theme stops working after an update. Two ways out: add the directory to the protected paths, or attach a built ZIP to the release and set `asset_pattern`.
 
 ### I installed a broken version and the site went down
 
 Two ways back, both in the admin:
 
-1. **Backups → Restore** — brings back exactly what was there before the update.
-2. **Update → Roll back to an earlier version** — installs an older release from GitHub.
+1. **Backups → Restore** - brings back exactly what was there before the update.
+2. **Update → Roll back to an earlier version** - installs an older release from GitHub.
 
 If the admin is unreachable, the backups sit in `wp-content/gthu-backups/` and can be copied over via FTP.
 
 ### Will the plugin update the theme on its own?
 
-Only if you ask it to. By default it checks for versions twice a day and shows a notice, and a human starts the installation. The "Automatic updates" panel on the Settings tab adds two opt-in ways to skip the click: a nightly run at a chosen hour, and a GitHub webhook that updates the moment a release is published. Both follow the same sequence as the button — backup, verification, rollback, log — and e-mail a report. See [Automatic updates](#automatic-updates).
+Only if you ask it to. By default it checks for versions twice a day and shows a notice, and a human starts the installation. The "Automatic updates" panel on the Settings tab adds two opt-in ways to skip the click: a nightly run at a chosen hour, and a GitHub webhook that updates the moment a release is published. Both follow the same sequence as the button - backup, verification, rollback, log - and e-mail a report. See [Automatic updates](#automatic-updates).
 
 ### I set the update to 3:00 and it ran at 6:40. Why?
 
-Because WordPress has no clock of its own. WP-Cron, its scheduler, only wakes up when a request runs PHP on the site — a page view, an admin screen, a REST call. The hour you pick is therefore a "not before": the run starts with the first such request after it. The usual reasons for a late run:
+Because WordPress has no clock of its own. WP-Cron, its scheduler, only wakes up when a request runs PHP on the site - a page view, an admin screen, a REST call. The hour you pick is the earliest the run can start: it actually starts with the first such request after it. The usual reasons for a late run:
 
-- **No visitors at night.** On a quiet site the task waits for the first visitor of the morning.
-- **A page cache or a CDN.** Cached pages are served without PHP, so even a busy site can look empty to the scheduler.
-- **`DISABLE_WP_CRON` and a system cron.** The run happens on that cron's next tick — every 5 minutes, every hour, whatever the hosting configured.
-- **The lock is taken.** An update, restore or backup started by hand at that moment makes the run skip to the next day.
-- **Time zone or DST changed.** The schedule is corrected on the next run and on the next settings save, so one run can land an hour off.
-- **A busy server.** WordPress runs one cron worker at a time and skips a tick it cannot start.
+- No visitors at night: on a quiet site the task waits for the first visitor of the morning.
+- A page cache or a CDN: cached pages are served without PHP, so even a busy site can look empty to the scheduler.
+- `DISABLE_WP_CRON` and a system cron: the run happens on that cron's next tick, every 5 minutes or every hour, whatever the hosting configured.
+- The lock is taken: an update, restore or backup started by hand at that moment makes the run skip to the next day.
+- Time zone or DST changed: the schedule is corrected on the next run and on the next settings save, so one run can land an hour off.
+- A busy server: WordPress runs one cron worker at a time and skips a tick it cannot start.
 
-For an hour you can count on, add `define( 'DISABLE_WP_CRON', true );` to `wp-config.php` and have a system cron call `wp-cron.php` every few minutes — see [Scheduled run](#scheduled-run). The **Run now** button under the settings does not depend on any of this.
+For an hour you can count on, add `define( 'DISABLE_WP_CRON', true );` to `wp-config.php` and have a system cron call `wp-cron.php` every few minutes - see [Scheduled run](#scheduled-run). The **Run now** button under the settings does not depend on any of this.
 
 ### Is an unattended update at night safe?
 
-As safe as a click during the day: it is the same code path. The plugin downloads the release, checks that the archive is a theme and the same theme as the one on disk, checks that every file it will delete can be deleted, takes a backup, and only then replaces files. A failure during the copy restores the backup automatically. What it cannot know is whether the *new version* of your theme is any good — that is what a staging site is for. Keep `create_backup` on and read the e-mail in the morning.
+As safe as a click during the day: it is the same code path. The plugin downloads the release, checks that the archive is a theme and the same theme as the one on disk, checks that every file it will delete can be deleted, takes a backup, and only then replaces files. A failure during the copy restores the backup automatically. What it cannot know is whether the *new version* of your theme is any good - that is what a staging site is for. Keep `create_backup` on and read the e-mail in the morning.
 
 ### Nothing happened at night. Was the update skipped?
 
-Most likely there was nothing to do: the run only installs when GitHub has a release **newer** than `installed_version`, and a run with nothing to install sends no e-mail. The "Last automatic run" line on the Settings tab shows when it ran and what it decided ("Nothing to do: installed v1.4.0, newest on GitHub v1.4.0"). If that line is old, WP-Cron did not wake up — see the previous question. If it says the lock was taken, someone was updating or restoring at that moment.
+Most likely there was nothing to do: the run only installs when GitHub has a release **newer** than `installed_version`, and a run with nothing to install sends no e-mail. The "Last automatic run" line on the Settings tab shows when it ran and what it decided ("Nothing to do: installed v1.4.0, newest on GitHub v1.4.0"). If that line is old, WP-Cron did not wake up - see the previous question. If it says the lock was taken, someone was updating or restoring at that moment.
 
 ### Which e-mails will I get?
 
-Only about automatic runs (schedule or webhook), and only when something happened: a successful update, a failed attempt, or a failed GitHub check (an expired token, a renamed repository — reported once per distinct error, not every night). Updates started by hand from the Update tab are not e-mailed. The report holds the previous and the new version, the trigger, the backup name, the number of files, the protected paths and the release notes written on GitHub. If nothing arrives, click **Send a test e-mail**: WordPress alone often ends up in spam, and an SMTP plugin fixes that.
+Only about automatic runs (schedule or webhook), and only when something happened: a successful update, a failed attempt, or a failed GitHub check (an expired token, a renamed repository - reported once per distinct error, not every night). Updates started by hand from the Update tab are not e-mailed. The report holds the previous and the new version, the trigger, the backup name, the number of files, the protected paths and the release notes written on GitHub. If nothing arrives, click **Send a test e-mail**: WordPress alone often ends up in spam, and an SMTP plugin fixes that.
 
 ### Is it safe to expose the webhook address?
 
-Yes. While the option is off the address does not exist (404). While it is on, every request must carry GitHub's HMAC-SHA256 signature under a secret only you and GitHub know; anything unsigned or wrongly signed is refused before it is read further. Only "release published" events for the configured repository are accepted, repeated deliveries are ignored, and — the important part — the request never decides what gets installed. It only queues the same run the schedule uses, which asks GitHub's API with your own token and installs the newest release if it is newer. Details under [GitHub webhook](#github-webhook).
+Yes. While the option is off the address does not exist (404). While it is on, every request must carry GitHub's HMAC-SHA256 signature under a secret only you and GitHub know; anything unsigned or wrongly signed is refused before it is read further. Only "release published" events for the configured repository are accepted, repeated deliveries are ignored, and the request itself never decides what gets installed. It only queues the same run the schedule uses, which asks GitHub's API with your own token and installs the newest release if it is newer. Details under [GitHub webhook](#github-webhook).
 
 ### The webhook shows a red cross on GitHub
 
-Open "Recent Deliveries" on GitHub and look at the response code. 404: the option is off on the site, or the address was mistyped. 401: the request carried no signature — the "Secret" field on GitHub is empty. 403: the secret differs, or the webhook sits on a different repository than the one entered under Settings; the Settings tab shows which. A timeout usually means the site is not reachable from the internet — a local development site needs a tunnel.
+Open "Recent Deliveries" on GitHub and look at the response code. 404: the option is off on the site, or the address was mistyped. 401: the request carried no signature - the "Secret" field on GitHub is empty. 403: the secret differs, or the webhook sits on a different repository than the one entered under Settings; the Settings tab shows which. A timeout usually means the site is not reachable from the internet - a local development site needs a tunnel.
 
 ### Can I auto-update from a branch?
 
-No. A branch has no version number, so the plugin cannot tell whether the current state of the code is newer than what is installed. Both automatic options are saved but do nothing in Branch mode; the Settings tab says so. Publish releases instead — see step 3 on the Instructions tab.
+No. A branch has no version number, so the plugin cannot tell whether the current state of the code is newer than what is installed. Both automatic options are saved but do nothing in Branch mode; the Settings tab says so. Publish releases instead - see step 3 on the Instructions tab.
 
 ### Will I lose theme settings, content or widgets?
 
-No — an update only affects files in the theme directory. The database, theme options, Customizer, menus and content are untouched.
+No - an update only affects files in the theme directory. The database, theme options, Customizer, menus and content are untouched.
 
 ### Do I need a token for a public repository?
 
@@ -314,25 +314,25 @@ No. A token is only required for private repositories. It is still worth adding 
 
 ### The repository holds several themes, or all of wp-content
 
-The plugin looks for `style.css` and, with several themes present, will take the first one it finds — which need not be the right one. Recommended: one repository per theme. Alternative: attach a ready ZIP holding only the theme to the release and point at it with `asset_pattern`.
+The plugin looks for `style.css` and, with several themes present, will take the first one it finds - which need not be the right one. Recommended: one repository per theme. Alternative: attach a ready ZIP holding only the theme to the release and point at it with `asset_pattern`.
 
 ### Are backups reachable from the web?
 
-The directory gets an `index.php`, an `.htaccess` and a `web.config` that deny access. Those cover Apache and IIS — on nginx you have to add the rule yourself, or move backups outside the public directory with the `gthu_backup_dir` filter. Backups take space: theme size times the number of versions kept.
+The directory gets an `index.php`, an `.htaccess` and a `web.config` that deny access. Those cover Apache and IIS - on nginx you have to add the rule yourself, or move backups outside the public directory with the `gthu_backup_dir` filter. Backups take space: theme size times the number of versions kept.
 
 They deliberately do **not** live under `wp-content/upgrade/`: WordPress empties that directory before every core, plugin and theme update, which would delete them.
 
 ### Could wordpress.org overwrite my theme or this plugin?
 
-Only if a theme or plugin in the wordpress.org directory shares the slug — then core would happily offer an "update" that replaces your code with a stranger's. The plugin declares `Update URI: false`, which tells WordPress never to look it up in the directory, and it filters `site_transient_update_themes` so the managed theme slug is dropped from directory responses. For belt and braces, add `Update URI: https://your-domain.example/` to the theme's `style.css` as well.
+Only if a theme or plugin in the wordpress.org directory shares the slug - then core would happily offer an "update" that replaces your code with a stranger's. The plugin declares `Update URI: false`, which tells WordPress never to look it up in the directory, and it filters `site_transient_update_themes` so the managed theme slug is dropped from directory responses. For belt and braces, add `Update URI: https://your-domain.example/` to the theme's `style.css` as well.
 
 ### Does it work on multisite?
 
-It runs, but treat it as untested territory. Because the themes directory is shared across the network, the plugin requires the `manage_network_themes` capability there — a single site administrator cannot replace a theme other sites are running. Settings are still per-site, so two sites pointing at the same theme directory would overwrite each other; the Update tab warns about this.
+It runs, but treat it as untested territory. Because the themes directory is shared across the network, the plugin requires the `manage_network_themes` capability there - a single site administrator cannot replace a theme other sites are running. Settings are still per-site, so two sites pointing at the same theme directory would overwrite each other; the Update tab warns about this.
 
 ### Can I use it with a child theme?
 
-Yes — the plugin manages one directory, the one named in the "Theme directory" field. That can be a parent or a child theme. Managing both at once would need a second instance of the plugin.
+Yes - the plugin manages one directory, the one named in the "Theme directory" field. That can be a parent or a child theme. Managing both at once would need a second instance of the plugin.
 
 ---
 
@@ -380,16 +380,16 @@ The site-owner version of this lives in the admin: **Theme from GitHub → Instr
 
 | Message | Cause | What to do |
 | --- | --- | --- |
-| `401` — token rejected | token expired or was pasted incompletely | generate a new one; on fine-grained tokens check the expiry date |
-| `403` — no access to the repository | the token does not cover this repository | fine-grained: repository on the "Only select repositories" list plus `Contents: Read-only`; classic: the `repo` scope |
-| `403` — rate limit exceeded | request quota used up | wait; the `x-ratelimit-remaining` header is inspected and told apart from a permissions problem |
-| `404` — repository not found | a typo, or a private repo with no token | check `owner/repo` and whether the token was saved |
+| `401` - token rejected | token expired or was pasted incompletely | generate a new one; on fine-grained tokens check the expiry date |
+| `403` - no access to the repository | the token does not cover this repository | fine-grained: repository on the "Only select repositories" list plus `Contents: Read-only`; classic: the `repo` scope |
+| `403` - rate limit exceeded | request quota used up | wait; the `x-ratelimit-remaining` header is inspected and told apart from a permissions problem |
+| `404` - repository not found | a typo, or a private repo with no token | check `owner/repo` and whether the token was saved |
 | no releases in the repository | none published yet | create a release, or switch `source` to `branch` |
 
 ### File problems
 
 **`WordPress has no direct file access (method: ftpext)`**
-The plugin deliberately supports the `direct` transport only — an update has no way to ask for FTP credentials halfway through deleting a theme. Fix:
+The plugin deliberately supports the `direct` transport only - an update has no way to ask for FTP credentials halfway through deleting a theme. Fix:
 
 ```php
 define( 'FS_METHOD', 'direct' );
@@ -401,7 +401,7 @@ If that does not help, the problem is permissions on `wp-content/themes` (the di
 `style.css` has to sit in the repository root or at most three levels below it (`Filesystem::locate_theme_root()`). If the repository holds all of `wp-content`, point at a repository with just the theme, or attach a built package to the release and set `asset_pattern`.
 
 **`vendor cannot be deleted by the web server user` / `Could not delete …`**
-The pre-flight check (step 4 above) found a path the PHP user cannot remove, and stopped before touching anything. On Linux this almost always means the files are owned by another user — typically uploaded over SFTP as a different account than PHP-FPM runs as; `chown` them to the PHP user, or make the directories group-writable. On Windows the usual culprit is the read-only attribute, which git sets on pack files inside `.git` directories (including nested ones in `vendor` packages installed from VCS); the plugin clears it itself, so this message means something else holds the file, such as an editor or an indexer. A path that is not part of the theme belongs on the ignored paths list anyway.
+The pre-flight check (step 4 above) found a path the PHP user cannot remove, and stopped before touching anything. On Linux this almost always means the files are owned by another user - typically uploaded over SFTP as a different account than PHP-FPM runs as; `chown` them to the PHP user, or make the directories group-writable. On Windows the usual culprit is the read-only attribute, which git sets on pack files inside `.git` directories (including nested ones in `vendor` packages installed from VCS); the plugin clears it itself, so this message means something else holds the file, such as an editor or an indexer. A path that is not part of the theme belongs on the ignored paths list anyway.
 
 **The update stops halfway**
 `Theme_Installer::run()` sets `set_time_limit( 600 )` and `ignore_user_abort( true )`, but it cannot beat hard server limits. On large themes check `max_execution_time` and proxy limits (`proxy_read_timeout` in nginx). The download timeout itself is governed by the `gthu_download_timeout` filter.
@@ -410,7 +410,7 @@ The pre-flight check (step 4 above) found a path the PHP user cannot remove, and
 
 - The release list is cached in the `gthu_releases_cache` transient (15 minutes by default). The **Check again** button clears it and refetches; the cache also clears itself when the repository or token changes.
 - The last error is stored in `gthu_state.last_error` and shown at the bottom of the Update tab.
-- Update notices rely on WP-Cron (`gthu_check_for_updates`, twice daily), and so does the scheduled automatic update (`gthu_auto_update`, daily at the chosen hour) and the webhook-queued run (`gthu_webhook_update`, single events). With `DISABLE_WP_CRON` you need a system cron, otherwise `latest_version` never refreshes on its own and the nightly run waits for a visitor — manual checks and the **Run now** button work regardless.
+- Update notices rely on WP-Cron (`gthu_check_for_updates`, twice daily), and so does the scheduled automatic update (`gthu_auto_update`, daily at the chosen hour) and the webhook-queued run (`gthu_webhook_update`, single events). With `DISABLE_WP_CRON` you need a system cron, otherwise `latest_version` never refreshes on its own and the nightly run waits for a visitor - manual checks and the **Run now** button work regardless.
 
 ```bash
 wp cron event list | grep gthu          # are the events scheduled, and for when
@@ -423,7 +423,7 @@ wp transient delete gthu_releases_cache
 
 ### Changes vanished after an update
 
-An update replaces the theme directory with the repository version. Anything that has to survive must be on the protected paths list **before** the update. If it is already gone, the **Backups** tab holds a snapshot from just before the update — assuming `create_backup` was on.
+An update replaces the theme directory with the repository version. Anything that has to survive must be on the protected paths list **before** the update. If it is already gone, the **Backups** tab holds a snapshot from just before the update - assuming `create_backup` was on.
 
 ---
 
@@ -435,7 +435,7 @@ Behavioural changes:
 
 - The repository field takes plain `owner/repo`; a full API URL still works and gets normalised.
 - The theme inside the archive is found by `style.css` rather than by a directory named after the slug. Version 1.0 looked for a directory matching the slug, which GitHub archives never contain.
-- Protecting `/languages` is no longer hardcoded — it is one entry on a configurable list.
+- Protecting `/languages` is no longer hardcoded - it is one entry on a configurable list.
 - The version recorded after an update is the release tag, not the archive file name.
 - Forms require a nonce and a capability check; in 1.0 any logged-in user who reached the admin URL could trigger an update.
 - Files are written through `WP_Filesystem` instead of direct `unlink()`/`copy()` calls.

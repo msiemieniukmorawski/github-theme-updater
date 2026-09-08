@@ -3,7 +3,7 @@
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and the project uses [Semantic Versioning](https://semver.org/).
 
-## [2.3.0] — 2026-09-08
+## [2.3.0] - 2026-09-08
 
 ### Added
 
@@ -12,7 +12,7 @@ and the project uses [Semantic Versioning](https://semver.org/).
   plugin checks GitHub and installs the newest release when it is newer than
   the installed one. The run goes through the same sequence as the Update
   button (lock, backup, verification, copy, automatic rollback, entry in the
-  operation log). Nothing happens when the versions match. Releases mode only —
+  operation log). Nothing happens when the versions match. Releases mode only -
   a branch has no version to compare. Settings `auto_update` and
   `auto_update_time`; cron hook `gthu_auto_update` (new `Auto_Updater` class).
   The panel explains why the run can be later than the chosen hour (WP-Cron
@@ -58,7 +58,7 @@ and the project uses [Semantic Versioning](https://semver.org/).
 - Deactivation and uninstall clear the new cron events and the webhook
   delivery memory (`gthu_webhook_deliveries` transient).
 
-## [2.2.0] — 2026-09-06
+## [2.2.0] - 2026-09-06
 
 ### Added
 
@@ -76,7 +76,7 @@ and the project uses [Semantic Versioning](https://semver.org/).
 - The browser warns before leaving the Settings tab with unsaved form changes.
 - **Ignored paths** (`ignored_paths` setting, `.git` and `node_modules` by
   default). Unlike protected paths they are left out of backups, never installed
-  from the archive and left untouched on disk — during restores too. This covers
+  from the archive and left untouched on disk - during restores too. This covers
   a theme directory full of development leftovers, where the backup alone copied
   over a hundred thousand files and ran into the PHP time limit.
 - **Operation log.** The bottom of the Update tab shows the last 5 updates and
@@ -113,8 +113,8 @@ and the project uses [Semantic Versioning](https://semver.org/).
   read-only attribute (on Windows git sets it on pack files inside `.git`,
   including nested ones in `vendor` packages installed from VCS), and a failed
   restore from the backup went unreported. Now: (1) before the backup, the
-  installer checks that everything it is about to delete can be deleted — the
-  new "Checking the theme files can be replaced" step — and stops before touching
+  installer checks that everything it is about to delete can be deleted - the
+  new "Checking the theme files can be replaced" step - and stops before touching
   anything if not; (2) deletion retries after clearing read-only flags; (3) the
   message after a failed cleanup or copy says plainly whether the theme was
   restored from the backup, and, with backups turned off, that the directory may
@@ -155,12 +155,12 @@ and the project uses [Semantic Versioning](https://semver.org/).
 - Releasing the lock by hand also clears the progress record, and uninstalling
   removes the lock and progress transients.
 
-## [2.1.0] — 2026-09-06
+## [2.1.0] - 2026-09-06
 
 ### Changed
 
 - **English is now the source language of every string**, per WordPress
-  convention. The Polish interface stays — it ships as a full translation
+  convention. The Polish interface stays - it ships as a full translation
   (`languages/pl_PL.po` and `pl_PL.mo`, 237 entries) and switches on by itself
   on a site running in Polish. The plugin can now be read and translated by
   someone outside Poland, and the repository stops being a barrier to entry.
@@ -181,8 +181,8 @@ and the project uses [Semantic Versioning](https://semver.org/).
 ### Added
 
 - **GitHub Actions** (`.github/workflows/ci.yml`): syntax check and tests on
-  PHP 7.4–8.3, PHPCS and PHPStan on 8.3, on every push and pull request.
-- **PHPStan at level 6** with WordPress stubs (`phpstan.neon.dist`) — passes
+  PHP 7.4-8.3, PHPCS and PHPStan on 8.3, on every push and pull request.
+- **PHPStan at level 6** with WordPress stubs (`phpstan.neon.dist`) - passes
   clean. Array types across the codebase were tightened along the way.
 - `composer phpstan`, and `composer check` extended to run it.
 - `docs/screenshots/` with instructions on what to capture and how, plus a
@@ -190,7 +190,7 @@ and the project uses [Semantic Versioning](https://semver.org/).
 - Composer platform pinned to PHP 7.4 so the lock file matches the declared
   minimum.
 
-## [2.0.1] — 2026-09-06
+## [2.0.1] - 2026-09-06
 
 ### Fixed
 
@@ -200,10 +200,10 @@ and the project uses [Semantic Versioning](https://semver.org/).
   `wp-content/gthu-backups/`; existing backups are moved automatically on
   activation or version bump.
 - **A theme in a directory with a capital letter could not be updated.** The
-  directory name went through `sanitize_key()`, which lowercases it — for themes
+  directory name went through `sanitize_key()`, which lowercases it - for themes
   such as `Divi` or `Avada-Child` this produced a path that does not exist. Case
   is now preserved.
-- The working directory stays in `wp-content/upgrade/` — there WordPress
+- The working directory stays in `wp-content/upgrade/` - there WordPress
   clearing it is welcome, because those are temporary files.
 
 ### Security
@@ -215,7 +215,7 @@ and the project uses [Semantic Versioning](https://semver.org/).
 - Saving settings through `options.php` was gated by `manage_options` only,
   regardless of the capability required elsewhere in the plugin. Added the
   `option_page_capability_gthu_settings_group` filter.
-- The backup directory also gets a `web.config` — `.htaccess` alone does not
+- The backup directory also gets a `web.config` - `.htaccess` alone does not
   protect on IIS.
 
 ### Added
@@ -227,7 +227,7 @@ and the project uses [Semantic Versioning](https://semver.org/).
   `Release`, `Token_Storage` and theme directory name validation. These classes
   do not depend on WordPress, so the tests run without an installation.
 - `composer.json` with `lint`, `phpcs`, `phpcbf`, `test` and `check` scripts.
-- `phpcs.xml.dist` — WordPress Coding Standards ruleset; the code passes clean.
+- `phpcs.xml.dist` - WordPress Coding Standards ruleset; the code passes clean.
 - `phpunit.xml.dist`, `LICENSE` (GPL-2.0), `CHANGELOG.md`, `.gitignore`.
 
 ### Changed
@@ -237,7 +237,7 @@ and the project uses [Semantic Versioning](https://semver.org/).
   `$default`, `$class`).
 - README available in English (`README.md`) and Polish (`README.pl.md`).
 
-## [2.0.0] — 2026-09-06
+## [2.0.0] - 2026-09-06
 
 The plugin rewritten from a single file into a class structure.
 
@@ -251,12 +251,12 @@ The plugin rewritten from a single file into a class structure.
 - **Looking for a directory named after the slug inside the archive.** GitHub
   packages sources as `owner-repo-sha`, so that directory practically never
   existed. The theme is now located by its `style.css`.
-- **`basename($zip_url)` used as the version number** — the stored version is now
+- **`basename($zip_url)` used as the version number** - the stored version is now
   the release tag.
 - File operations go through `WP_Filesystem` instead of direct `unlink()` and
   `copy()`.
 - A lock against concurrent updates and restores.
-- `ignore_user_abort( true )` — closing the tab no longer interrupts a copy
+- `ignore_user_abort( true )` - closing the tab no longer interrupts a copy
   halfway.
 
 ### Added
@@ -283,7 +283,7 @@ The plugin rewritten from a single file into a class structure.
 - Options from version 1.0 migrate automatically; the old options are left in
   place so the previous version can be restored.
 
-## [1.0] — 2025-03-31
+## [1.0] - 2025-03-31
 
 First version: a single file, downloading the latest GitHub release, hard-coded
 protection of the `/languages` directory.
