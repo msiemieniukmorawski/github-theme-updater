@@ -4,9 +4,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GitHub Theme Updater 2.2.0\n"
-"Report-Msgid-Bugs-To: https://github.com/msiemieniukmorawski/github-theme-updater/issues\n"
-"POT-Creation-Date: 2026-09-06T20:24:13+00:00\n"
-"PO-Revision-Date: 2026-09-06 22:00+0000\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/github-theme-"
+"updater\n"
+"POT-Creation-Date: 2026-09-08T07:31:05+00:00\n"
+"PO-Revision-Date: 2026-09-08 12:00+0000\n"
 "Last-Translator: ms-m.pl <https://ms-m.pl>\n"
 "Language-Team: Polski\n"
 "Language: pl_PL\n"
@@ -20,6 +21,11 @@ msgstr ""
 #. Plugin Name of the plugin
 #: github-theme-updater.php
 msgid "GitHub Theme Updater"
+msgstr ""
+
+#. Plugin URI of the plugin
+#: github-theme-updater.php
+msgid "https://github.com/msiemieniukmorawski/github-theme-updater"
 msgstr ""
 
 #. Description of the plugin
@@ -44,25 +50,25 @@ msgid "https://ms-m.pl"
 msgstr ""
 
 #. translators: %s: installed version label.
-#: includes/class-admin-actions.php:134
+#: includes/class-admin-actions.php:154
 #, php-format
 msgid "The theme was updated to version %s."
 msgstr "Motyw został zaktualizowany do wersji %s."
 
 #. translators: %s: previously installed version.
-#: includes/class-admin-actions.php:141
+#: includes/class-admin-actions.php:161
 #, php-format
 msgid "Previous version: %s."
 msgstr "Poprzednia wersja: %s."
 
 #. translators: %s: comma separated list of protected paths.
-#: includes/class-admin-actions.php:149
+#: includes/class-admin-actions.php:169
 #, php-format
 msgid "Protected paths were skipped: %s."
 msgstr "Pominięto chronione ścieżki: %s."
 
 #. translators: %s: URL of the backups tab.
-#: includes/class-admin-actions.php:157
+#: includes/class-admin-actions.php:177
 #, php-format
 msgid ""
 "A backup of the previous version is on the <a href=\"%s\">Backups</a> tab."
@@ -71,25 +77,26 @@ msgstr ""
 "zapasowe</a>."
 
 #. translators: %s: restored version.
-#: includes/class-admin-actions.php:231
+#: includes/class-admin-actions.php:251
 #, php-format
 msgid "The theme was restored from a backup (version %s)."
 msgstr "Motyw został przywrócony z kopii zapasowej (wersja %s)."
 
-#: includes/class-admin-actions.php:232 views/tab-backups.php:72
-#: views/tab-update.php:135 views/tab-update.php:391
+#: includes/class-admin-actions.php:252 includes/class-auto-updater.php:241
+#: includes/class-auto-updater.php:282 includes/class-notifier.php:325
+#: views/tab-backups.php:72 views/tab-update.php:135 views/tab-update.php:391
 msgid "unknown"
 msgstr "nieznana"
 
-#: includes/class-admin-actions.php:262
+#: includes/class-admin-actions.php:282
 msgid "The backup was deleted."
 msgstr "Kopia zapasowa została usunięta."
 
-#: includes/class-admin-actions.php:300
+#: includes/class-admin-actions.php:320
 msgid "A backup of the current theme was created."
 msgstr "Utworzono kopię zapasową bieżącego motywu."
 
-#: includes/class-admin-actions.php:318
+#: includes/class-admin-actions.php:338
 msgid ""
 "The lock was released. Before starting an update, check the Backups tab to "
 "confirm the previous operation finished cleanly."
@@ -98,26 +105,50 @@ msgstr ""
 "Kopie zapasowe, czy poprzednia operacja dokończyła się poprawnie."
 
 #. translators: %s: newest version found on GitHub.
-#: includes/class-admin-actions.php:353
+#: includes/class-admin-actions.php:373
 #, php-format
 msgid "Data refreshed from GitHub. Newest available version: %s."
 msgstr "Odświeżono dane z GitHuba. Najnowsza dostępna wersja: %s."
 
 #. translators: 1: repository name, 2: visibility, 3: default branch.
-#: includes/class-admin-actions.php:380
+#: includes/class-admin-actions.php:400
 #, php-format
 msgid "The connection works. Repository: %1$s (%2$s), default branch: %3$s."
 msgstr "Połączenie działa. Repozytorium: %1$s (%2$s), gałąź domyślna: %3$s."
 
-#: includes/class-admin-actions.php:382
+#: includes/class-admin-actions.php:402
 msgid "private"
 msgstr "prywatne"
 
-#: includes/class-admin-actions.php:382
+#: includes/class-admin-actions.php:402
 msgid "public"
 msgstr "publiczne"
 
-#: includes/class-admin-actions.php:398 includes/class-admin-actions.php:438
+#. translators: %s: outcome of the run.
+#: includes/class-admin-actions.php:446
+#, php-format
+msgid "Automatic update run: %s"
+msgstr "Automatyczne uruchomienie: %s"
+
+#: includes/class-admin-actions.php:452
+msgid "No report was e-mailed: no address is saved."
+msgstr "Raport nie został wysłany: nie zapisano żadnego adresu e-mail."
+
+#: includes/class-admin-actions.php:453
+msgid "A report was e-mailed to the saved addresses."
+msgstr "Raport został wysłany na zapisane adresy."
+
+#. translators: %s: comma separated list of addresses.
+#: includes/class-admin-actions.php:476
+#, php-format
+msgid ""
+"A test message was sent to: %s. If it does not arrive, check the spam folder "
+"and the mail configuration of the site."
+msgstr ""
+"Wiadomość testowa została wysłana na: %s. Jeśli nie dotrze, sprawdź folder "
+"spam i konfigurację poczty na stronie."
+
+#: includes/class-admin-actions.php:493 includes/class-admin-actions.php:533
 msgid "You do not have permission to perform this operation."
 msgstr "Nie masz uprawnień do wykonania tej operacji."
 
@@ -130,7 +161,8 @@ msgid "Theme from GitHub"
 msgstr "Motyw z GitHuba"
 
 #: includes/class-admin-page.php:131 includes/class-admin-page.php:190
-#: views/tab-backups.php:131 views/tab-help.php:110 views/tab-help.php:218
+#: views/tab-backups.php:131 views/tab-help.php:110 views/tab-help.php:184
+#: views/tab-help.php:216 views/tab-help.php:302
 msgid "Settings"
 msgstr "Ustawienia"
 
@@ -169,6 +201,59 @@ msgstr "Instrukcja"
 #: includes/class-admin-page.php:202
 msgid "You do not have permission to manage theme updates."
 msgstr "Nie masz uprawnień do zarządzania aktualizacjami motywu."
+
+#: includes/class-auto-updater.php:185
+msgid "Scheduled updates are turned off."
+msgstr "Aktualizacje z harmonogramu są wyłączone."
+
+#: includes/class-auto-updater.php:189
+msgid "The GitHub webhook is turned off."
+msgstr "Webhook GitHuba jest wyłączony."
+
+#: includes/class-auto-updater.php:193
+msgid ""
+"The plugin is not configured: enter a repository and a theme directory first."
+msgstr ""
+"Wtyczka nie jest skonfigurowana: najpierw wpisz repozytorium i katalog "
+"motywu."
+
+#: includes/class-auto-updater.php:197
+msgid ""
+"Automatic updates work in release mode only. A branch has no version number "
+"to compare, so the plugin cannot tell whether it is newer."
+msgstr ""
+"Aktualizacje automatyczne działają tylko w trybie wydań. Gałąź nie ma numeru "
+"wersji do porównania, więc wtyczka nie potrafi stwierdzić, czy jest nowsza."
+
+#. translators: 1: installed version, 2: newest version on GitHub.
+#: includes/class-auto-updater.php:240
+#, php-format
+msgid "Nothing to do: installed %1$s, newest on GitHub %2$s."
+msgstr "Nic do zrobienia: zainstalowana %1$s, najnowsza na GitHubie %2$s."
+
+#. translators: 1: version that failed to install, 2: error message.
+#: includes/class-auto-updater.php:265
+#, php-format
+msgid "Updating to %1$s failed: %2$s"
+msgstr "Aktualizacja do %1$s nie powiodła się: %2$s"
+
+#. translators: 1: previously installed version, 2: newly installed version.
+#: includes/class-auto-updater.php:281
+#, php-format
+msgid "Updated from %1$s to %2$s."
+msgstr "Zaktualizowano z %1$s do %2$s."
+
+#: includes/class-auto-updater.php:473
+msgid "scheduled run"
+msgstr "harmonogram"
+
+#: includes/class-auto-updater.php:476 views/tab-settings.php:481
+msgid "GitHub webhook"
+msgstr "webhook GitHuba"
+
+#: includes/class-auto-updater.php:479
+msgid "started by hand from the plugin screen"
+msgstr "uruchomione ręcznie z ekranu wtyczki"
 
 #. translators: %s: directory path.
 #: includes/class-backup-manager.php:86
@@ -377,13 +462,13 @@ msgid "No GitHub repository is set. Fill it in on the Settings tab."
 msgstr "Nie ustawiono repozytorium GitHub. Uzupełnij je w zakładce Ustawienia."
 
 #. translators: %s: number of seconds.
-#: includes/class-history.php:131
+#: includes/class-history.php:132
 #, php-format
 msgid "%s s"
 msgstr "%s s"
 
 #. translators: 1: number of minutes, 2: number of seconds.
-#: includes/class-history.php:138
+#: includes/class-history.php:139
 #, php-format
 msgid "%1$s min %2$s s"
 msgstr "%1$s min %2$s s"
@@ -434,6 +519,197 @@ msgstr[0] "%s plik"
 msgstr[1] "%s pliki"
 msgstr[2] "%s plików"
 
+#. translators: 1: site name, 2: installed version.
+#: includes/class-notifier.php:116
+#, php-format
+msgid "[%1$s] Theme updated to %2$s"
+msgstr "[%1$s] Motyw zaktualizowany do %2$s"
+
+#. translators: 1: site URL, 2: version.
+#: includes/class-notifier.php:124
+#, php-format
+msgid "The theme on %1$s was updated to version %2$s."
+msgstr "Motyw na stronie %1$s został zaktualizowany do wersji %2$s."
+
+#. translators: %s: number of files.
+#: includes/class-notifier.php:137
+#, php-format
+msgid "Files copied: %s"
+msgstr "Skopiowane pliki: %s"
+
+#. translators: %s: backup identifier.
+#: includes/class-notifier.php:144
+#, php-format
+msgid "Backup of the previous version: %s (Backups tab)"
+msgstr "Kopia zapasowa poprzedniej wersji: %s (zakładka Kopie zapasowe)"
+
+#: includes/class-notifier.php:147
+msgid ""
+"Backup of the previous version: none (backups are turned off, or the theme "
+"directory did not exist yet)"
+msgstr ""
+"Kopia zapasowa poprzedniej wersji: brak (kopie są wyłączone albo katalog "
+"motywu jeszcze nie istniał)"
+
+#. translators: %s: comma separated list of paths.
+#: includes/class-notifier.php:152
+#, php-format
+msgid "Protected paths left untouched: %s"
+msgstr "Chronione ścieżki pozostawione bez zmian: %s"
+
+#. translators: %s: URL of the plugin screen.
+#: includes/class-notifier.php:160
+#, php-format
+msgid "Plugin screen: %s"
+msgstr "Ekran wtyczki: %s"
+
+#. translators: 1: site name, 2: version that failed to install.
+#: includes/class-notifier.php:181
+#, php-format
+msgid "[%1$s] Theme update to %2$s FAILED"
+msgstr "[%1$s] Aktualizacja motywu do %2$s NIE POWIODŁA SIĘ"
+
+#. translators: 1: site URL, 2: version.
+#: includes/class-notifier.php:189
+#, php-format
+msgid ""
+"The automatic update of the theme on %1$s to version %2$s did not complete."
+msgstr ""
+"Automatyczna aktualizacja motywu na stronie %1$s do wersji %2$s nie została "
+"ukończona."
+
+#. translators: %s: error message.
+#: includes/class-notifier.php:196 includes/class-notifier.php:234
+#, php-format
+msgid "Error: %s"
+msgstr "Błąd: %s"
+
+#: includes/class-notifier.php:204
+msgid ""
+"If the failure happened while files were being replaced, the theme was "
+"restored from the backup automatically and the error message above says so. "
+"Check the site anyway, then look at the Update tab for details:"
+msgstr ""
+"Jeśli błąd wystąpił podczas podmiany plików, motyw został automatycznie "
+"przywrócony z kopii zapasowej i powyższy komunikat o tym informuje. Mimo to "
+"sprawdź stronę, a szczegóły znajdziesz na zakładce Aktualizacja:"
+
+#. translators: %s: site name.
+#: includes/class-notifier.php:221
+#, php-format
+msgid "[%s] Theme update check failed"
+msgstr "[%s] Sprawdzenie aktualizacji motywu nie powiodło się"
+
+#. translators: %s: site URL.
+#: includes/class-notifier.php:228
+#, php-format
+msgid ""
+"The automatic update on %s could not check GitHub for a new version of the "
+"theme. Nothing was changed."
+msgstr ""
+"Automatyczna aktualizacja na stronie %s nie mogła sprawdzić na GitHubie, czy "
+"jest nowa wersja motywu. Nic nie zostało zmienione."
+
+#. translators: %s: what started the run.
+#: includes/class-notifier.php:239 includes/class-notifier.php:334
+#, php-format
+msgid "Started by: %s"
+msgstr "Uruchomione przez: %s"
+
+#: includes/class-notifier.php:243
+msgid ""
+"A message like this usually means an expired token or a renamed repository. "
+"This report is sent once; it repeats only if the error changes or after a "
+"successful check."
+msgstr ""
+"Taki komunikat zwykle oznacza wygasły token albo zmienioną nazwę "
+"repozytorium. Ten raport jest wysyłany raz; powtórzy się tylko, gdy błąd się "
+"zmieni albo po udanym sprawdzeniu."
+
+#: includes/class-notifier.php:261
+msgid ""
+"No valid e-mail address is saved. Enter at least one under Automatic updates "
+"and save the settings first."
+msgstr ""
+"Nie zapisano żadnego poprawnego adresu e-mail. Najpierw wpisz co najmniej "
+"jeden w sekcji Aktualizacje automatyczne i zapisz ustawienia."
+
+#. translators: %s: site name.
+#: includes/class-notifier.php:267
+#, php-format
+msgid "[%s] Test message from GitHub Theme Updater"
+msgstr "[%s] Wiadomość testowa z GitHub Theme Updater"
+
+#. translators: %s: site URL.
+#: includes/class-notifier.php:274
+#, php-format
+msgid ""
+"This is a test. Reports about automatic theme updates on %s will be sent to "
+"this address."
+msgstr ""
+"To jest test. Raporty o automatycznych aktualizacjach motywu na stronie %s "
+"będą wysyłane na ten adres."
+
+#. translators: %s: comma separated list of addresses.
+#: includes/class-notifier.php:280
+#, php-format
+msgid "Recipients: %s"
+msgstr "Odbiorcy: %s"
+
+#: includes/class-notifier.php:288
+msgid ""
+"WordPress could not send the message. Check the mail configuration of the "
+"site (an SMTP plugin usually helps)."
+msgstr ""
+"WordPress nie mógł wysłać wiadomości. Sprawdź konfigurację poczty na stronie "
+"(zwykle pomaga wtyczka SMTP)."
+
+#. translators: %s: site name.
+#: includes/class-notifier.php:309
+#, php-format
+msgid "Site: %s"
+msgstr "Strona: %s"
+
+#. translators: %s: theme directory name.
+#: includes/class-notifier.php:314
+#, php-format
+msgid "Theme directory: %s"
+msgstr "Katalog motywu: %s"
+
+#. translators: %s: repository name.
+#: includes/class-notifier.php:319
+#, php-format
+msgid "Repository: %s"
+msgstr "Repozytorium: %s"
+
+#. translators: %s: version.
+#: includes/class-notifier.php:324
+#, php-format
+msgid "Previous version: %s"
+msgstr "Poprzednia wersja: %s"
+
+#. translators: %s: version.
+#: includes/class-notifier.php:329
+#, php-format
+msgid "New version: %s"
+msgstr "Nowa wersja: %s"
+
+#. translators: %s: date and time.
+#: includes/class-notifier.php:339
+#, php-format
+msgid "When: %s"
+msgstr "Kiedy: %s"
+
+#. translators: %s: version.
+#: includes/class-notifier.php:357
+#, php-format
+msgid "Release notes for %s:"
+msgstr "Opis wydania %s:"
+
+#: includes/class-notifier.php:365
+msgid "(no release notes were written on GitHub)"
+msgstr "(na GitHubie nie napisano opisu wydania)"
+
 #. translators: %s: git branch name.
 #: includes/class-release.php:156
 #, php-format
@@ -441,7 +717,7 @@ msgid "Branch %s"
 msgstr "Gałąź %s"
 
 #. translators: %s: value entered by the user.
-#: includes/class-settings.php:178
+#: includes/class-settings.php:184
 #, php-format
 msgid ""
 "Repository not recognised: %s. Enter it as owner/repository, or paste an "
@@ -450,7 +726,34 @@ msgstr ""
 "Nie rozpoznano repozytorium: %s. Podaj je w formacie właściciel/repozytorium "
 "albo wklej adres https://github.com/właściciel/repozytorium."
 
-#: includes/class-theme-installer.php:216
+#. translators: %s: comma separated list of rejected entries.
+#: includes/class-settings.php:244
+#, php-format
+msgid "These entries are not e-mail addresses and were dropped: %s."
+msgstr "Te wpisy nie są adresami e-mail i zostały pominięte: %s."
+
+#: includes/class-settings.php:255
+msgid ""
+"Automatic updates are saved but will not run: they work in release mode "
+"only. Switch the download mode to Releases."
+msgstr ""
+"Aktualizacje automatyczne zostały zapisane, ale nie będą działać: działają "
+"tylko w trybie wydań. Przełącz tryb pobierania na Wydania."
+
+#: includes/class-settings.php:279
+msgid ""
+"A new webhook secret was generated. Copy it now and paste it into the "
+"“Secret” field of the webhook on GitHub — it will not be shown again."
+msgstr ""
+"Wygenerowano nowy sekret webhooka. Skopiuj go teraz i wklej w pole „Secret” "
+"webhooka na GitHubie — nie zostanie pokazany ponownie."
+
+#: includes/class-settings.php:281
+msgid "Until the secret on GitHub matches, every delivery is rejected."
+msgstr ""
+"Dopóki sekret na GitHubie się nie zgadza, każde wywołanie jest odrzucane."
+
+#: includes/class-theme-installer.php:218
 msgid ""
 "Another operation on the theme files is already running. Wait a moment and "
 "reload this page."
@@ -458,7 +761,7 @@ msgstr ""
 "Inna operacja na plikach motywu właśnie trwa. Odczekaj chwilę i odśwież tę "
 "stronę."
 
-#: includes/class-theme-installer.php:237
+#: includes/class-theme-installer.php:239
 msgid ""
 "No theme directory is set. Fill in the “Theme directory” field under "
 "Settings."
@@ -467,36 +770,36 @@ msgstr ""
 "Ustawieniach."
 
 #. translators: %s: themes directory path.
-#: includes/class-theme-installer.php:254
+#: includes/class-theme-installer.php:256
 #, php-format
 msgid "The themes directory is not writable: %s"
 msgstr "Katalog motywów nie jest zapisywalny: %s"
 
 #. translators: %s: directory path.
-#: includes/class-theme-installer.php:285
+#: includes/class-theme-installer.php:287
 #, php-format
 msgid "Could not create the working directory %s."
 msgstr "Nie udało się utworzyć katalogu roboczego %s."
 
 #. translators: %s: underlying error message.
-#: includes/class-theme-installer.php:304
+#: includes/class-theme-installer.php:306
 #, php-format
 msgid "Could not unpack the archive: %s"
 msgstr "Nie udało się rozpakować archiwum: %s"
 
 #. translators: %s: underlying error message.
-#: includes/class-theme-installer.php:367
+#: includes/class-theme-installer.php:369
 #, php-format
 msgid "The update was stopped because the backup failed: %s"
 msgstr "Aktualizację przerwano, bo nie udało się wykonać kopii zapasowej: %s"
 
 #. translators: %s: directory path.
-#: includes/class-theme-installer.php:385
+#: includes/class-theme-installer.php:387
 #, php-format
 msgid "Could not create the theme directory %s."
 msgstr "Nie udało się utworzyć katalogu motywu %s."
 
-#: includes/class-theme-installer.php:483
+#: includes/class-theme-installer.php:485
 msgid ""
 "The archive’s style.css has no “Theme Name” header, so it does not look like "
 "a WordPress theme."
@@ -505,7 +808,7 @@ msgstr ""
 "motyw WordPressa."
 
 #. translators: 1: theme name in the archive, 2: theme directory name, 3: theme name on disk.
-#: includes/class-theme-installer.php:515
+#: includes/class-theme-installer.php:517
 #, php-format
 msgid ""
 "The archive holds the theme “%1$s”, but the directory %2$s contains “%3$s”. "
@@ -515,18 +818,18 @@ msgstr ""
 "Archiwum zawiera motyw „%1$s”, a katalog %2$s zawiera „%3$s”. Sprawdź "
 "repozytorium i katalog motywu w Ustawieniach. Nic nie zostało zmienione."
 
-#: includes/class-theme-installer.php:571
+#: includes/class-theme-installer.php:573
 msgid "The theme was restored from the backup."
 msgstr "Motyw został przywrócony z kopii zapasowej."
 
-#: includes/class-theme-installer.php:575
+#: includes/class-theme-installer.php:577
 msgid ""
 "WARNING: the theme could not be restored automatically — use the Backups tab."
 msgstr ""
 "UWAGA: nie udało się automatycznie przywrócić motywu — użyj zakładki Kopie "
 "zapasowe."
 
-#: includes/class-theme-installer.php:578
+#: includes/class-theme-installer.php:580
 msgid ""
 "WARNING: backups are turned off, so the theme could not be restored — the "
 "theme directory may be incomplete."
@@ -551,6 +854,38 @@ msgstr "Przejdź do aktualizacji"
 #: includes/class-update-checker.php:165
 msgid "Hide this notice"
 msgstr "Ukryj to powiadomienie"
+
+#: includes/class-webhook.php:224
+msgid "Rejected a request without a signature."
+msgstr "Odrzucono żądanie bez podpisu."
+
+#: includes/class-webhook.php:230
+msgid ""
+"Rejected a request with a wrong signature. The secret on GitHub does not "
+"match the one saved here."
+msgstr ""
+"Odrzucono żądanie z błędnym podpisem. Sekret na GitHubie nie zgadza się z "
+"zapisanym tutaj."
+
+#: includes/class-webhook.php:249
+msgid "GitHub sent a ping: the webhook is set up correctly."
+msgstr "GitHub wysłał ping: webhook jest skonfigurowany poprawnie."
+
+#. translators: %s: repository name sent by GitHub.
+#: includes/class-webhook.php:288
+#, php-format
+msgid ""
+"Rejected a delivery for a different repository (%s). The webhook must be set "
+"up on the repository entered under Settings."
+msgstr ""
+"Odrzucono wywołanie dotyczące innego repozytorium (%s). Webhook musi być "
+"ustawiony w repozytorium wpisanym w Ustawieniach."
+
+#. translators: %s: git tag name.
+#: includes/class-webhook.php:328
+#, php-format
+msgid "GitHub announced release %s; the update was queued."
+msgstr "GitHub ogłosił wydanie %s; aktualizacja została zakolejkowana."
 
 #: views/tab-backups.php:28
 msgid "Theme backups"
@@ -858,15 +1193,312 @@ msgstr ""
 "pojawić."
 
 #: views/tab-help.php:172
+msgid "Step 4 (optional). Let the plugin update the theme by itself"
+msgstr "Krok 4 (opcjonalny). Pozwól wtyczce aktualizować motyw samodzielnie"
+
+#: views/tab-help.php:174
+msgid ""
+"Two ways, which can be combined: a nightly run at a chosen hour, and a "
+"GitHub webhook that starts the update the moment a release is published. "
+"Both use the same sequence as the Update button — backup, verification, "
+"automatic rollback, operation log — and both e-mail a report. Both work in "
+"Releases mode only."
+msgstr ""
+"Dwie drogi, które można łączyć: nocne uruchomienie o wybranej godzinie oraz "
+"webhook GitHuba, który rozpoczyna aktualizację w chwili opublikowania "
+"wydania. Obie używają tej samej sekwencji co przycisk Aktualizuj — kopia "
+"zapasowa, weryfikacja, automatyczne wycofanie, dziennik operacji — i obie "
+"wysyłają raport e-mailem. Obie działają tylko w trybie Wydań."
+
+#: views/tab-help.php:177
+msgid "A. Nightly schedule"
+msgstr "A. Nocny harmonogram"
+
+#. translators: %s: URL of the settings tab.
+#: views/tab-help.php:183
+#, php-format
+msgid ""
+"On the %s tab, under “Automatic updates”, tick “Scheduled update” and pick a "
+"quiet hour."
+msgstr ""
+"Na zakładce %s, w sekcji „Aktualizacje automatyczne”, zaznacz „Aktualizacja "
+"z harmonogramu” i wybierz spokojną godzinę."
+
+#: views/tab-help.php:188
+msgid ""
+"Enter the e-mail addresses that should receive the report, separated by "
+"commas, and save."
+msgstr ""
+"Wpisz adresy e-mail, które mają dostawać raport, rozdzielone przecinkami, i "
+"zapisz."
+
+#: views/tab-help.php:189
+msgid ""
+"Click “Send a test e-mail” to make sure messages from this site arrive. If "
+"they do not, the site needs an SMTP plugin — WordPress alone often ends up "
+"in spam."
+msgstr ""
+"Kliknij „Wyślij testowy e-mail”, aby upewnić się, że wiadomości z tej strony "
+"docierają. Jeśli nie docierają, strona potrzebuje wtyczki SMTP — sam "
+"WordPress często ląduje w spamie."
+
+#: views/tab-help.php:190
+msgid ""
+"Click “Run now” once. It does exactly what the nightly run will do, so you "
+"see the whole chain work while you are watching."
+msgstr ""
+"Kliknij raz „Uruchom teraz”. Robi dokładnie to, co zrobi nocne uruchomienie, "
+"więc zobaczysz cały łańcuch w działaniu, gdy patrzysz."
+
+#: views/tab-help.php:193
+msgid "Why the run may be late, and how to make the hour exact"
+msgstr ""
+"Dlaczego uruchomienie może się spóźnić i jak sprawić, by godzina była "
+"dokładna"
+
+#: views/tab-help.php:194
+msgid ""
+"WordPress has no clock of its own. Its scheduler, WP-Cron, only wakes up "
+"when a page view or another request runs PHP. The chosen hour is therefore a "
+"“not before”. Common reasons for a late run:"
+msgstr ""
+"WordPress nie ma własnego zegara. Jego harmonogram, WP-Cron, budzi się tylko "
+"wtedy, gdy odsłona strony albo inne żądanie uruchomi PHP. Wybrana godzina to "
+"więc „nie wcześniej niż”. Typowe powody spóźnienia:"
+
+#: views/tab-help.php:196
+msgid ""
+"No visitors at night — the task waits for the first request after the "
+"scheduled time."
+msgstr ""
+"Brak odwiedzin w nocy — zadanie czeka na pierwsze żądanie po zaplanowanej "
+"godzinie."
+
+#: views/tab-help.php:197
+msgid ""
+"A page cache or a CDN answers visitors without running PHP, so even traffic "
+"does not wake the scheduler."
+msgstr ""
+"Cache stron albo CDN odpowiada odwiedzającym bez uruchamiania PHP, więc "
+"nawet ruch nie budzi harmonogramu."
+
+#: views/tab-help.php:198
+msgid ""
+"The hosting disabled WP-Cron and runs a system cron instead; the update "
+"happens on its next tick."
+msgstr ""
+"Hosting wyłączył WP-Cron i zamiast niego używa crona systemowego; "
+"aktualizacja odbywa się przy jego najbliższym uruchomieniu."
+
+#: views/tab-help.php:199
+msgid ""
+"Another update, restore or backup holds the lock at that moment; the run is "
+"skipped until the next day."
+msgstr ""
+"Inna aktualizacja, przywracanie albo kopia zapasowa trzyma w tym momencie "
+"blokadę; uruchomienie jest pomijane do następnego dnia."
+
+#: views/tab-help.php:200
+msgid ""
+"The site time zone or daylight saving changed; the schedule corrects itself "
+"on the next run or settings save."
+msgstr ""
+"Zmieniła się strefa czasowa strony albo czas letni/zimowy; harmonogram "
+"poprawia się przy następnym uruchomieniu lub zapisie ustawień."
+
+#: views/tab-help.php:201
+msgid ""
+"The server is busy or the previous cron worker is still running; WordPress "
+"skips a tick it cannot start."
+msgstr ""
+"Serwer jest zajęty albo poprzedni proces crona jeszcze trwa; WordPress "
+"pomija uruchomienie, którego nie może rozpocząć."
+
+#: views/tab-help.php:203
+msgid ""
+"For an exact hour, disable the page-view trigger and let the server call the "
+"scheduler every few minutes. Add this to wp-config.php:"
+msgstr ""
+"Aby godzina była dokładna, wyłącz wyzwalanie przez odsłony i pozwól "
+"serwerowi wywoływać harmonogram co kilka minut. Dodaj to do wp-config.php:"
+
+#: views/tab-help.php:205
+msgid ""
+"and ask the hosting for a system cron entry like this (most control panels "
+"have a form for it):"
+msgstr ""
+"i poproś hosting o taki wpis w cronie systemowym (większość paneli ma do "
+"tego formularz):"
+
+#: views/tab-help.php:208
+msgid "B. Update the moment a release is published (GitHub webhook)"
+msgstr "B. Aktualizacja w chwili opublikowania wydania (webhook GitHuba)"
+
+#: views/tab-help.php:209
+msgid ""
+"GitHub sends a signed message to this site every time a release is "
+"published. The plugin verifies the signature, checks that the message "
+"concerns the configured repository, and queues an update that runs within a "
+"minute or two. It never installs what the message says: it asks GitHub for "
+"the newest release with your own token, exactly like the nightly run. The "
+"site must be reachable from the internet — a local development site is not, "
+"unless a tunnel is used."
+msgstr ""
+"GitHub wysyła do tej strony podpisaną wiadomość za każdym razem, gdy "
+"publikowane jest wydanie. Wtyczka weryfikuje podpis, sprawdza, czy wiadomość "
+"dotyczy skonfigurowanego repozytorium, i kolejkuje aktualizację, która rusza "
+"w ciągu minuty lub dwóch. Nigdy nie instaluje tego, co mówi wiadomość: pyta "
+"GitHub o najnowsze wydanie własnym tokenem, dokładnie jak nocne "
+"uruchomienie. Strona musi być dostępna z internetu — lokalna strona "
+"deweloperska nie jest, chyba że przez tunel."
+
+#. translators: %s: URL of the settings tab.
+#: views/tab-help.php:215
+#, php-format
+msgid ""
+"On the %s tab, tick “Update as soon as a release is published on GitHub” and "
+"save. A green box shows the secret once — copy it now."
+msgstr ""
+"Na zakładce %s zaznacz „Aktualizuj, gdy tylko na GitHubie zostanie "
+"opublikowane wydanie” i zapisz. Zielona ramka pokaże sekret jeden raz — "
+"skopiuj go od razu."
+
+#. translators: %s: link to the repository webhook settings page.
+#: views/tab-help.php:224
+#, php-format
+msgid "On GitHub, open %s and click “Add webhook”."
+msgstr "Na GitHubie otwórz %s i kliknij „Add webhook”."
+
+#: views/tab-help.php:232
+msgid "Payload URL: the address shown under the checkbox after saving:"
+msgstr "Payload URL: adres pokazany pod polem wyboru po zapisaniu:"
+
+#: views/tab-help.php:235
+msgid "Content type: application/json."
+msgstr "Content type: application/json."
+
+#: views/tab-help.php:236
+msgid "Secret: paste the secret copied in step 1."
+msgstr "Secret: wklej sekret skopiowany w kroku 1."
+
+#: views/tab-help.php:237
+msgid ""
+"SSL verification: leave enabled (the site must have a valid HTTPS "
+"certificate)."
+msgstr ""
+"SSL verification: zostaw włączone (strona musi mieć ważny certyfikat HTTPS)."
+
+#: views/tab-help.php:238
+msgid ""
+"Which events: choose “Let me select individual events”, tick only “Releases” "
+"and untick “Pushes”."
+msgstr ""
+"Which events: wybierz „Let me select individual events”, zaznacz tylko "
+"„Releases” i odznacz „Pushes”."
+
+#: views/tab-help.php:239
+msgid ""
+"Make sure “Active” is ticked and click “Add webhook”. GitHub sends a ping "
+"straight away; under “Recent Deliveries” it should show a green tick with "
+"response 200, and the Settings tab shows “GitHub sent a ping”."
+msgstr ""
+"Upewnij się, że „Active” jest zaznaczone, i kliknij „Add webhook”. GitHub od "
+"razu wysyła ping; w „Recent Deliveries” powinien pojawić się zielony "
+"znacznik z odpowiedzią 200, a zakładka Ustawienia pokaże „GitHub wysłał "
+"ping”."
+
+#: views/tab-help.php:240
+msgid ""
+"Publish the next release as usual. Within a couple of minutes the theme is "
+"updated, the operation log lists it as “Automatic (GitHub webhook)”, and the "
+"report arrives by e-mail."
+msgstr ""
+"Opublikuj kolejne wydanie jak zwykle. W ciągu kilku minut motyw jest "
+"zaktualizowany, dziennik operacji pokazuje wpis „Automatycznie (webhook "
+"GitHuba)”, a raport przychodzi e-mailem."
+
+#: views/tab-help.php:243
+msgid "How the webhook is protected"
+msgstr "Jak webhook jest zabezpieczony"
+
+#: views/tab-help.php:245
+msgid ""
+"The address does not exist at all while the feature is off — it answers 404 "
+"like any unknown URL."
+msgstr ""
+"Gdy funkcja jest wyłączona, adres w ogóle nie istnieje — odpowiada 404 jak "
+"każdy nieznany adres."
+
+#: views/tab-help.php:246
+msgid ""
+"Every message must carry a signature (HMAC-SHA256 of the body under the "
+"secret). It is checked in constant time before anything else happens; "
+"unsigned or wrongly signed requests are rejected with 401/403 and only leave "
+"a note on the Settings tab."
+msgstr ""
+"Każda wiadomość musi nieść podpis (HMAC-SHA256 treści pod sekretem). Jest "
+"sprawdzany w stałym czasie, zanim cokolwiek innego się wydarzy; żądania bez "
+"podpisu lub z błędnym podpisem są odrzucane z kodem 401/403 i zostawiają "
+"tylko notatkę na zakładce Ustawienia."
+
+#: views/tab-help.php:247
+msgid ""
+"The secret is 64 random hexadecimal characters, generated by the plugin, "
+"stored encrypted like the token and never displayed again. It can be "
+"replaced at any time, or kept in wp-config.php as GTHU_WEBHOOK_SECRET."
+msgstr ""
+"Sekret to 64 losowe znaki szesnastkowe, generowane przez wtyczkę, "
+"przechowywane zaszyfrowane jak token i nigdy więcej nie wyświetlane. Można "
+"go w każdej chwili wymienić albo trzymać w wp-config.php jako "
+"GTHU_WEBHOOK_SECRET."
+
+#: views/tab-help.php:248
+msgid ""
+"Only “release published” events for the configured repository are accepted; "
+"a message about another repository is rejected. Drafts and, unless enabled, "
+"pre-releases are ignored."
+msgstr ""
+"Przyjmowane są wyłącznie zdarzenia „release published” dla skonfigurowanego "
+"repozytorium; wiadomość o innym repozytorium jest odrzucana. Szkice oraz, o "
+"ile nie włączono ich obsługi, wydania wstępne są ignorowane."
+
+#: views/tab-help.php:249
+msgid ""
+"The message never decides what gets installed. The plugin fetches the "
+"release list from GitHub with its own token and installs the newest one only "
+"if it is newer than the installed version."
+msgstr ""
+"Wiadomość nigdy nie decyduje, co zostanie zainstalowane. Wtyczka pobiera "
+"listę wydań z GitHuba własnym tokenem i instaluje najnowsze tylko wtedy, gdy "
+"jest nowsze od zainstalowanej wersji."
+
+#: views/tab-help.php:250
+msgid ""
+"Each delivery has an identifier; a redelivered or replayed message is "
+"recognised and does nothing. Oversized bodies are refused before being read."
+msgstr ""
+"Każde wywołanie ma identyfikator; ponownie dostarczona lub odtworzona "
+"wiadomość jest rozpoznawana i nic nie robi. Zbyt duże treści są odrzucane, "
+"zanim zostaną odczytane."
+
+#: views/tab-help.php:251
+msgid ""
+"The update itself runs under the same lock as a manual one, so it can never "
+"overlap with an update or a restore started from the admin."
+msgstr ""
+"Sama aktualizacja działa pod tą samą blokadą co ręczna, więc nigdy nie "
+"nałoży się na aktualizację ani przywracanie uruchomione z panelu."
+
+#: views/tab-help.php:256
 msgid "What exactly happens during an update"
 msgstr "Co dokładnie dzieje się przy aktualizacji"
 
-#: views/tab-help.php:174
+#: views/tab-help.php:258
 msgid ""
 "The plugin downloads the ZIP archive of the selected version from GitHub."
 msgstr "Wtyczka pobiera archiwum ZIP wybranej wersji z GitHuba."
 
-#: views/tab-help.php:175
+#: views/tab-help.php:259
 msgid ""
 "It unpacks it into a temporary directory and checks that there really is a "
 "theme inside, by looking for style.css."
@@ -874,19 +1506,19 @@ msgstr ""
 "Rozpakowuje je do katalogu tymczasowego i sprawdza, czy w środku faktycznie "
 "jest motyw (szuka pliku style.css)."
 
-#: views/tab-help.php:176
+#: views/tab-help.php:260
 msgid "It backs up the current theme."
 msgstr "Robi kopię zapasową obecnego motywu."
 
-#: views/tab-help.php:177
+#: views/tab-help.php:261
 msgid "It empties the theme directory, skipping protected paths."
 msgstr "Czyści katalog motywu, pomijając chronione ścieżki."
 
-#: views/tab-help.php:178
+#: views/tab-help.php:262
 msgid "It copies the new files in, again skipping protected paths."
 msgstr "Wgrywa nowe pliki, również pomijając chronione ścieżki."
 
-#: views/tab-help.php:179
+#: views/tab-help.php:263
 msgid ""
 "If anything goes wrong while copying, the theme is restored automatically "
 "from the backup."
@@ -894,7 +1526,7 @@ msgstr ""
 "Jeśli cokolwiek pójdzie nie tak na etapie wgrywania, motyw jest "
 "automatycznie przywracany z kopii zapasowej."
 
-#: views/tab-help.php:182
+#: views/tab-help.php:266
 msgid ""
 "Nothing in the theme directory changes until the backup exists, so a "
 "download error or a corrupt archive cannot disturb a working site."
@@ -903,15 +1535,15 @@ msgstr ""
 "zmieniane — błąd pobierania czy uszkodzone archiwum nie ruszą działającej "
 "strony."
 
-#: views/tab-help.php:187
+#: views/tab-help.php:271
 msgid "When something goes wrong"
 msgstr "Gdy coś nie działa"
 
-#: views/tab-help.php:189
+#: views/tab-help.php:273
 msgid "“GitHub rejected the token (401)”"
 msgstr "„GitHub odrzucił token (401)”"
 
-#: views/tab-help.php:190
+#: views/tab-help.php:274
 msgid ""
 "The token expired, or it was copied incompletely. Generate a new one and "
 "save it under Settings."
@@ -919,11 +1551,11 @@ msgstr ""
 "Token wygasł albo został skopiowany niekompletnie. Wygeneruj nowy i zapisz "
 "go w Ustawieniach."
 
-#: views/tab-help.php:192
+#: views/tab-help.php:276
 msgid "“No access to this repository (403)”"
 msgstr "„Brak uprawnień do tego repozytorium (403)”"
 
-#: views/tab-help.php:193
+#: views/tab-help.php:277
 msgid ""
 "The token exists but does not cover this repository. For a fine-grained "
 "token, check that the repository is on the “Only select repositories” list "
@@ -933,11 +1565,11 @@ msgstr ""
 "grained sprawdź, czy repozytorium jest na liście „Only select repositories” "
 "i czy ma uprawnienie Contents: Read-only."
 
-#: views/tab-help.php:195
+#: views/tab-help.php:279
 msgid "“Repository not found (404)”"
 msgstr "„Nie znaleziono repozytorium (404)”"
 
-#: views/tab-help.php:196
+#: views/tab-help.php:280
 msgid ""
 "Usually a typo in the repository name — or the repository is private and the "
 "token has not been saved yet."
@@ -945,11 +1577,11 @@ msgstr ""
 "Zwykle literówka w nazwie repozytorium — albo repozytorium jest prywatne, a "
 "token nie został jeszcze zapisany."
 
-#: views/tab-help.php:198
+#: views/tab-help.php:282
 msgid "“No style.css was found in the downloaded archive”"
 msgstr "„W pobranym archiwum nie znaleziono pliku style.css”"
 
-#: views/tab-help.php:199
+#: views/tab-help.php:283
 msgid ""
 "The repository should hold the theme itself — style.css in the repository "
 "root, or one directory below it. If you keep all of wp-content there, point "
@@ -959,12 +1591,12 @@ msgstr ""
 "repozytorium albo jeden katalog niżej. Jeśli trzymasz tam cały wp-content, "
 "wskaż zamiast tego repozytorium z samym motywem."
 
-#: views/tab-help.php:201
+#: views/tab-help.php:285
 msgid "“WordPress has no direct file access”"
 msgstr "„WordPress nie ma bezpośredniego dostępu do plików”"
 
 #. translators: %s: PHP constant definition.
-#: views/tab-help.php:206
+#: views/tab-help.php:290
 #, php-format
 msgid ""
 "The server does not let WordPress write files directly. Usually adding this "
@@ -975,12 +1607,12 @@ msgstr ""
 "wystarczy dodać w wp-config.php: %s — jeśli to nie pomoże, temat jest po "
 "stronie uprawnień do katalogu motywów."
 
-#: views/tab-help.php:212
+#: views/tab-help.php:296
 msgid "The client’s changes disappeared after an update"
 msgstr "Zmiany klienta zniknęły po aktualizacji"
 
 #. translators: %s: URL of the settings tab.
-#: views/tab-help.php:217
+#: views/tab-help.php:301
 #, php-format
 msgid ""
 "An update replaces the theme files with the repository version. Add anything "
@@ -989,15 +1621,15 @@ msgstr ""
 "Aktualizacja zastępuje pliki motywu wersją z repozytorium. Wszystko, co ma "
 "przetrwać, dopisz do listy chronionych ścieżek w zakładce %s."
 
-#: views/tab-settings.php:26
+#: views/tab-settings.php:33
 msgid "Where the theme comes from"
 msgstr "Skąd pobierać motyw"
 
-#: views/tab-settings.php:31
+#: views/tab-settings.php:38
 msgid "GitHub repository"
 msgstr "Repozytorium GitHub"
 
-#: views/tab-settings.php:43
+#: views/tab-settings.php:50
 msgid ""
 "You can simply paste the repository address from your browser — the plugin "
 "works out the owner and the name itself."
@@ -1005,22 +1637,22 @@ msgstr ""
 "Możesz wkleić sam adres repozytorium z przeglądarki — wtyczka sama wyciągnie "
 "z niego właściciela i nazwę."
 
-#: views/tab-settings.php:45
+#: views/tab-settings.php:52
 msgid ""
 "Examples: company-name/theme-name, https://github.com/company-name/theme-name"
 msgstr ""
 "Przykłady: nazwa-firmy/nazwa-motywu, https://github.com/nazwa-firmy/nazwa-"
 "motywu"
 
-#: views/tab-settings.php:52
+#: views/tab-settings.php:59
 msgid "Access token"
 msgstr "Token dostępu"
 
-#: views/tab-settings.php:57
+#: views/tab-settings.php:64
 msgid "The token is set in wp-config.php"
 msgstr "Token jest ustawiony w pliku wp-config.php"
 
-#: views/tab-settings.php:61
+#: views/tab-settings.php:68
 msgid ""
 "This is the safest option — the token never reaches the database. To change "
 "it, edit wp-config.php."
@@ -1028,28 +1660,28 @@ msgstr ""
 "To najbezpieczniejszy wariant — token nie trafia do bazy danych. Aby go "
 "zmienić, edytuj wp-config.php."
 
-#: views/tab-settings.php:75
+#: views/tab-settings.php:82
 msgid "A token is already saved. Leave the field empty to keep it."
 msgstr "Token jest już zapisany. Zostaw pole puste, żeby go nie zmieniać."
 
-#: views/tab-settings.php:77
+#: views/tab-settings.php:84
 msgid "Only required for private repositories."
 msgstr "Wymagany tylko dla repozytoriów prywatnych."
 
-#: views/tab-settings.php:80
+#: views/tab-settings.php:87
 msgid "How do I generate a token?"
 msgstr "Jak wygenerować token?"
 
-#: views/tab-settings.php:88
+#: views/tab-settings.php:95
 msgid "Delete the saved token"
 msgstr "Usuń zapisany token"
 
-#: views/tab-settings.php:98
+#: views/tab-settings.php:105
 msgid "Theme directory"
 msgstr "Katalog motywu"
 
 #. translators: %s: themes directory path.
-#: views/tab-settings.php:121
+#: views/tab-settings.php:128
 #, php-format
 msgid ""
 "Name of the folder in %s that should be overwritten. That is the one "
@@ -1058,26 +1690,26 @@ msgstr ""
 "Nazwa folderu w %s, który ma być nadpisywany. To on zostanie zastąpiony "
 "zawartością repozytorium."
 
-#: views/tab-settings.php:130 views/tab-settings.php:133
+#: views/tab-settings.php:137 views/tab-settings.php:140
 msgid "Download mode"
 msgstr "Tryb pobierania"
 
-#: views/tab-settings.php:142
+#: views/tab-settings.php:149
 msgid "Releases — recommended"
 msgstr "Wydania (releases) — zalecane"
 
-#: views/tab-settings.php:145
+#: views/tab-settings.php:152
 msgid ""
 "You install tagged, finished versions, and can go back to any earlier one."
 msgstr ""
 "Instalujesz oznaczone, gotowe wersje i możesz wrócić do dowolnej "
 "wcześniejszej."
 
-#: views/tab-settings.php:155
+#: views/tab-settings.php:162
 msgid "Branch — the current state of the code"
 msgstr "Gałąź (branch) — bieżący stan kodu"
 
-#: views/tab-settings.php:158
+#: views/tab-settings.php:165
 msgid ""
 "Pulls code straight from a branch, with no releases involved. Handy while "
 "working on the theme, but there is no version history to roll back to."
@@ -1085,19 +1717,19 @@ msgstr ""
 "Pobiera kod prosto z gałęzi, bez tworzenia wydań. Wygodne przy pracy nad "
 "motywem, ale nie ma wtedy historii wersji do cofnięcia."
 
-#: views/tab-settings.php:166
+#: views/tab-settings.php:173
 msgid "Branch name"
 msgstr "Nazwa gałęzi"
 
-#: views/tab-settings.php:178
+#: views/tab-settings.php:185
 msgid "Used in branch mode only."
 msgstr "Używane tylko w trybie gałęzi."
 
-#: views/tab-settings.php:185
+#: views/tab-settings.php:192
 msgid "ZIP file from the release"
 msgstr "Plik ZIP z wydania"
 
-#: views/tab-settings.php:197
+#: views/tab-settings.php:204
 msgid ""
 "Leave empty to download the repository source. Fill it in if you attach a "
 "built ZIP package to your releases — give the pattern of its name, for "
@@ -1107,23 +1739,23 @@ msgstr ""
 "wydań dołączasz zbudowaną paczkę ZIP — podaj wzorzec jej nazwy, np. motyw-*."
 "zip."
 
-#: views/tab-settings.php:203
+#: views/tab-settings.php:210
 msgid "Pre-releases"
 msgstr "Wersje wstępne"
 
-#: views/tab-settings.php:212
+#: views/tab-settings.php:219
 msgid "Also show releases marked as pre-release"
 msgstr "Pokazuj też wydania oznaczone jako pre-release"
 
-#: views/tab-settings.php:220
+#: views/tab-settings.php:227
 msgid "Files protected from overwriting"
 msgstr "Pliki chronione przed nadpisaniem"
 
-#: views/tab-settings.php:225
+#: views/tab-settings.php:232
 msgid "Protected paths"
 msgstr "Chronione ścieżki"
 
-#: views/tab-settings.php:236
+#: views/tab-settings.php:243
 msgid ""
 "One path per line, relative to the theme directory. These files and "
 "directories are neither deleted nor overwritten with the GitHub version."
@@ -1131,31 +1763,31 @@ msgstr ""
 "Jedna ścieżka w każdej linii, liczona od katalogu motywu. Te pliki i "
 "katalogi nie zostaną ani usunięte, ani nadpisane wersją z GitHuba."
 
-#: views/tab-settings.php:240
+#: views/tab-settings.php:247
 msgid "the whole translations directory"
 msgstr "cały katalog z tłumaczeniami"
 
-#: views/tab-settings.php:241
+#: views/tab-settings.php:248
 msgid "a single file"
 msgstr "pojedynczy plik"
 
-#: views/tab-settings.php:242
+#: views/tab-settings.php:249
 msgid "a file in a subdirectory"
 msgstr "plik w podkatalogu"
 
-#: views/tab-settings.php:243
+#: views/tab-settings.php:250
 msgid "every file with that extension, at any depth"
 msgstr "wszystkie pliki o takim rozszerzeniu, na dowolnym poziomie"
 
-#: views/tab-settings.php:244
+#: views/tab-settings.php:251
 msgid "lines starting with # are ignored"
 msgstr "linie zaczynające się od # są pomijane"
 
-#: views/tab-settings.php:251
+#: views/tab-settings.php:258
 msgid "Ignored paths"
 msgstr "Ignorowane ścieżki"
 
-#: views/tab-settings.php:262
+#: views/tab-settings.php:269
 msgid ""
 "Same syntax. These paths are never copied — not into backups, not from the "
 "GitHub archive — and are left alone on disk. Meant for development leftovers "
@@ -1168,7 +1800,7 @@ msgstr ""
 "które potrafią mieć dziesiątki tysięcy plików i wydłużyć kopię zapasową do "
 "wielu minut."
 
-#: views/tab-settings.php:265
+#: views/tab-settings.php:272
 msgid ""
 "Do not ignore a directory the theme needs at runtime, such as a committed "
 "vendor directory: it would not be installed from the archive."
@@ -1176,59 +1808,60 @@ msgstr ""
 "Nie ignoruj katalogu, którego motyw potrzebuje do działania, np. "
 "commitowanego katalogu vendor: nie zostałby zainstalowany z archiwum."
 
-#: views/tab-settings.php:273
+#: views/tab-settings.php:280
 msgid "Backups and notifications"
 msgstr "Kopie zapasowe i powiadomienia"
 
-#: views/tab-settings.php:277
+#: views/tab-settings.php:284
 msgid "Backup before an update"
 msgstr "Kopia przed aktualizacją"
 
-#: views/tab-settings.php:286
+#: views/tab-settings.php:293
 msgid "Back up the theme before every update"
 msgstr "Rób kopię zapasową motywu przed każdą aktualizacją"
 
-#: views/tab-settings.php:289
+#: views/tab-settings.php:296
 msgid "This lets a failed update be undone in one click. Recommended."
 msgstr ""
 "Dzięki temu nieudaną aktualizację można cofnąć jednym kliknięciem. Zalecane."
 
-#: views/tab-settings.php:296
+#: views/tab-settings.php:303
 msgid "How many backups to keep"
 msgstr "Ile kopii przechowywać"
 
-#: views/tab-settings.php:309
+#: views/tab-settings.php:316
 msgid ""
 "Older backups are deleted automatically so they do not fill up the server."
 msgstr ""
 "Starsze kopie są kasowane automatycznie, żeby nie zajmowały miejsca na "
 "serwerze."
 
-#: views/tab-settings.php:315
+#: views/tab-settings.php:322
 msgid "Notifications"
 msgstr "Powiadomienia"
 
-#: views/tab-settings.php:324
+#: views/tab-settings.php:331
 msgid "Check automatically and announce new versions in the dashboard"
 msgstr "Sprawdzaj automatycznie i informuj o nowych wersjach w kokpicie"
 
-#: views/tab-settings.php:327
+#: views/tab-settings.php:334
 msgid ""
-"Checks run twice a day. The plugin never updates the theme by itself — the "
-"decision is always yours."
+"Checks run twice a day and only show a notice. Installing without a click is "
+"a separate, opt-in feature — see “Automatic updates” below."
 msgstr ""
-"Sprawdzanie odbywa się dwa razy dziennie. Wtyczka nigdy nie aktualizuje "
-"motywu sama — decyzję zawsze podejmujesz Ty."
+"Sprawdzanie odbywa się dwa razy dziennie i tylko pokazuje powiadomienie. "
+"Instalowanie bez kliknięcia to osobna, opcjonalna funkcja — patrz "
+"„Aktualizacje automatyczne” poniżej."
 
-#: views/tab-settings.php:333
+#: views/tab-settings.php:340
 msgid "Uninstalling"
 msgstr "Odinstalowanie"
 
-#: views/tab-settings.php:342
+#: views/tab-settings.php:349
 msgid "When the plugin is deleted, remove its settings and backups as well"
 msgstr "Przy usuwaniu wtyczki skasuj też jej ustawienia i kopie zapasowe"
 
-#: views/tab-settings.php:345
+#: views/tab-settings.php:352
 msgid ""
 "This applies to deleting the plugin, not to deactivating it. The theme is "
 "left alone."
@@ -1236,15 +1869,283 @@ msgstr ""
 "Dotyczy trwałego usunięcia wtyczki, nie jej dezaktywacji. Motyw nie jest "
 "ruszany."
 
-#: views/tab-settings.php:352
+#: views/tab-settings.php:360
+msgid "Automatic updates"
+msgstr "Aktualizacje automatyczne"
+
+#: views/tab-settings.php:362
+msgid ""
+"With either option on, the plugin installs a newer release by itself, using "
+"exactly the same sequence as the Update button: lock, backup, verification, "
+"copy, automatic rollback on failure, entry in the operation log. Releases "
+"only — a branch has no version number to compare."
+msgstr ""
+"Z którąkolwiek z tych opcji wtyczka sama instaluje nowsze wydanie, używając "
+"dokładnie tej samej sekwencji co przycisk Aktualizuj: blokada, kopia "
+"zapasowa, weryfikacja, kopiowanie, automatyczne wycofanie przy błędzie, wpis "
+"w dzienniku operacji. Tylko wydania — gałąź nie ma numeru wersji do "
+"porównania."
+
+#: views/tab-settings.php:367
+msgid ""
+"The download mode is set to Branch. Automatic updates will not run until it "
+"is switched to Releases."
+msgstr ""
+"Tryb pobierania jest ustawiony na Gałąź. Aktualizacje automatyczne nie będą "
+"działać, dopóki nie przełączysz go na Wydania."
+
+#: views/tab-settings.php:373
+msgid "Scheduled update"
+msgstr "Aktualizacja z harmonogramu"
+
+#: views/tab-settings.php:382
+msgid ""
+"Once a day, check GitHub and install the newest release if it is newer than "
+"the installed one"
+msgstr ""
+"Raz dziennie sprawdzaj GitHub i instaluj najnowsze wydanie, jeśli jest "
+"nowsze od zainstalowanego"
+
+#: views/tab-settings.php:385
+msgid ""
+"When nothing newer is available, the run does nothing and nobody is e-mailed."
+msgstr ""
+"Gdy nie ma nic nowszego, uruchomienie nic nie robi i nikt nie dostaje maila."
+
+#: views/tab-settings.php:392
+msgid "Preferred time"
+msgstr "Preferowana godzina"
+
+#. translators: %s: timezone name from the general settings.
+#: views/tab-settings.php:406
+#, php-format
+msgid ""
+"Site time zone (%s). Pick a quiet hour: the update takes the theme offline "
+"for a moment while files are replaced."
+msgstr ""
+"Strefa czasowa strony (%s). Wybierz spokojną godzinę: podczas podmiany "
+"plików motyw jest na moment niedostępny."
+
+#. translators: %s: date and time.
+#: views/tab-settings.php:417
+#, php-format
+msgid "Next run planned for: %s"
+msgstr "Następne uruchomienie zaplanowane na: %s"
+
+#: views/tab-settings.php:425
+msgid "Why the update may run later than the time set here"
+msgstr ""
+"Dlaczego aktualizacja może uruchomić się później niż o ustawionej godzinie"
+
+#: views/tab-settings.php:427
+msgid ""
+"The time is a “not before”, not a guarantee. WordPress has no clock of its "
+"own — its scheduler (WP-Cron) only wakes up when something else runs PHP on "
+"the site. The run can therefore be late when:"
+msgstr ""
+"Godzina to „nie wcześniej niż”, a nie gwarancja. WordPress nie ma własnego "
+"zegara — jego harmonogram (WP-Cron) budzi się tylko wtedy, gdy coś innego "
+"uruchomi PHP na stronie. Uruchomienie może się więc spóźnić, gdy:"
+
+#: views/tab-settings.php:429
+msgid ""
+"Nobody visits the site. WP-Cron piggybacks on page views, so on a quiet site "
+"the 3:00 task runs with the first visitor of the morning — that may be 6:40."
+msgstr ""
+"Nikt nie odwiedza strony. WP-Cron podczepia się pod odsłony, więc na cichej "
+"stronie zadanie z 3:00 uruchamia się z pierwszym porannym odwiedzającym — to "
+"może być 6:40."
+
+#: views/tab-settings.php:430
+msgid ""
+"A page cache or CDN serves visitors without touching PHP. Cached pages do "
+"not wake the scheduler either, so even a busy site can look empty to it."
+msgstr ""
+"Cache stron albo CDN obsługuje odwiedzających bez dotykania PHP. Strony z "
+"cache też nie budzą harmonogramu, więc nawet ruchliwa strona może wyglądać "
+"dla niego na pustą."
+
+#. translators: %s: PHP constant name.
+#: views/tab-settings.php:435
+#, php-format
+msgid ""
+"%s is set in wp-config.php and the site relies on a system cron. The run "
+"then happens on the next tick of that cron — every 5 minutes, every hour, "
+"whatever the hosting configured."
+msgstr ""
+"W wp-config.php ustawiono %s i strona polega na cronie systemowym. "
+"Uruchomienie odbywa się wtedy przy najbliższym odpaleniu tego crona — co 5 "
+"minut, co godzinę, jak skonfigurował hosting."
+
+#: views/tab-settings.php:440
+msgid ""
+"Another operation holds the lock at that moment (an update or restore "
+"started by hand, a backup in progress). The run is skipped and tries again "
+"the next day."
+msgstr ""
+"Inna operacja trzyma w tym momencie blokadę (ręcznie uruchomiona "
+"aktualizacja lub przywracanie, trwająca kopia zapasowa). Uruchomienie jest "
+"pomijane i ponawiane następnego dnia."
+
+#: views/tab-settings.php:441
+msgid ""
+"The site time zone changes, or the clocks move for daylight saving. The "
+"schedule is corrected on the next run and on the next settings save, so one "
+"run can land an hour off."
+msgstr ""
+"Zmienia się strefa czasowa strony albo zegary przestawiają się na czas letni/"
+"zimowy. Harmonogram jest poprawiany przy następnym uruchomieniu i przy "
+"następnym zapisie ustawień, więc jedno uruchomienie może wypaść o godzinę "
+"obok."
+
+#: views/tab-settings.php:442
+msgid ""
+"The server is busy or the previous cron run is still going. WordPress runs "
+"one cron worker at a time and skips a tick it cannot start."
+msgstr ""
+"Serwer jest zajęty albo poprzednie uruchomienie crona jeszcze trwa. "
+"WordPress uruchamia tylko jeden proces crona naraz i pomija uruchomienie, "
+"którego nie może rozpocząć."
+
+#. translators: %s: PHP constant definition.
+#: views/tab-settings.php:448
+#, php-format
+msgid ""
+"For a time you can count on, ask the hosting to call wp-cron.php from a "
+"system cron every few minutes and add %s to wp-config.php. The Instructions "
+"tab shows how."
+msgstr ""
+"Aby godzina była pewna, poproś hosting o wywoływanie wp-cron.php z crona "
+"systemowego co kilka minut i dodaj %s do wp-config.php. Zakładka Instrukcja "
+"pokazuje, jak to zrobić."
+
+#: views/tab-settings.php:454
+msgid ""
+"DISABLE_WP_CRON is set on this site, so the time depends on the system cron "
+"of the server."
+msgstr ""
+"Na tej stronie ustawiono DISABLE_WP_CRON, więc godzina zależy od crona "
+"systemowego serwera."
+
+#: views/tab-settings.php:463
+msgid "E-mail reports to"
+msgstr "Raporty e-mail do"
+
+#: views/tab-settings.php:475
+msgid ""
+"One or more addresses separated by commas. After every automatic update "
+"(scheduled or from the webhook) they receive a plain text message with the "
+"previous and the new version, the backup name and the release notes written "
+"on GitHub. A failed attempt is reported the same way, with the error. "
+"Updates started by hand from the Update tab are not e-mailed."
+msgstr ""
+"Jeden lub więcej adresów rozdzielonych przecinkami. Po każdej automatycznej "
+"aktualizacji (z harmonogramu lub z webhooka) dostają wiadomość tekstową z "
+"poprzednią i nową wersją, nazwą kopii zapasowej i opisem wydania napisanym "
+"na GitHubie. Nieudana próba jest zgłaszana tak samo, razem z błędem. "
+"Aktualizacje uruchomione ręcznie z zakładki Aktualizacja nie są mailowane."
+
+#: views/tab-settings.php:490
+msgid "Update as soon as a release is published on GitHub"
+msgstr "Aktualizuj, gdy tylko na GitHubie zostanie opublikowane wydanie"
+
+#: views/tab-settings.php:493
+msgid ""
+"GitHub calls this site the moment you click “Publish release”; the plugin "
+"then queues an update that runs within a minute or two. The site must be "
+"reachable from the internet. Full setup steps are on the Instructions tab."
+msgstr ""
+"GitHub wywołuje tę stronę w chwili kliknięcia „Publish release”; wtyczka "
+"kolejkuje wtedy aktualizację, która rusza w ciągu minuty lub dwóch. Strona "
+"musi być dostępna z internetu. Pełna instrukcja konfiguracji jest na "
+"zakładce Instrukcja."
+
+#: views/tab-settings.php:498
+msgid "Payload URL to enter on GitHub:"
+msgstr "Payload URL do wpisania na GitHubie:"
+
+#: views/tab-settings.php:503
+msgid "The secret is set in wp-config.php (GTHU_WEBHOOK_SECRET)."
+msgstr "Sekret jest ustawiony w wp-config.php (GTHU_WEBHOOK_SECRET)."
+
+#. translators: %s: date and time.
+#: views/tab-settings.php:508
+#, php-format
+msgid ""
+"A secret was generated on %s and is stored encrypted. It cannot be displayed "
+"again; if it was lost, generate a new one and update the webhook on GitHub."
+msgstr ""
+"Sekret został wygenerowany %s i jest przechowywany zaszyfrowany. Nie można "
+"go wyświetlić ponownie; jeśli zaginął, wygeneruj nowy i zaktualizuj webhook "
+"na GitHubie."
+
+#: views/tab-settings.php:518
+msgid ""
+"Generate a new secret when saving (the old one stops working immediately)"
+msgstr ""
+"Wygeneruj nowy sekret przy zapisie (stary natychmiast przestaje działać)"
+
+#: views/tab-settings.php:523
+msgid "No secret is available yet. Save the settings to generate one."
+msgstr "Nie ma jeszcze sekretu. Zapisz ustawienia, aby go wygenerować."
+
+#: views/tab-settings.php:525
+msgid ""
+"Tick the box and save: the plugin generates a secret and shows it once, "
+"together with the address to enter on GitHub."
+msgstr ""
+"Zaznacz pole i zapisz: wtyczka wygeneruje sekret i pokaże go jeden raz, "
+"razem z adresem do wpisania na GitHubie."
+
+#. translators: 1: date and time, 2: what happened.
+#: views/tab-settings.php:533
+#, php-format
+msgid "Last delivery %1$s: %2$s"
+msgstr "Ostatnie wywołanie %1$s: %2$s"
+
+#: views/tab-settings.php:545
+msgid "Last automatic run"
+msgstr "Ostatnie automatyczne uruchomienie"
+
+#: views/tab-settings.php:563
 msgid "Save settings"
 msgstr "Zapisz ustawienia"
 
-#: views/tab-settings.php:356
+#: views/tab-settings.php:567
+msgid "Try the automation"
+msgstr "Wypróbuj automatyzację"
+
+#: views/tab-settings.php:569
+msgid ""
+"“Run now” does exactly what the nightly run does — including installing a "
+"newer release, if there is one, and e-mailing the report. Save the settings "
+"first."
+msgstr ""
+"„Uruchom teraz” robi dokładnie to, co nocne uruchomienie — łącznie z "
+"instalacją nowszego wydania, jeśli takie jest, i wysłaniem raportu e-mailem. "
+"Najpierw zapisz ustawienia."
+
+#: views/tab-settings.php:578
+msgid ""
+"Run the automatic update now? If GitHub has a newer release, it will be "
+"installed straight away."
+msgstr ""
+"Uruchomić automatyczną aktualizację teraz? Jeśli na GitHubie jest nowsze "
+"wydanie, zostanie od razu zainstalowane."
+
+#: views/tab-settings.php:580
+msgid "Run now"
+msgstr "Uruchom teraz"
+
+#: views/tab-settings.php:588
+msgid "Send a test e-mail"
+msgstr "Wyślij testowy e-mail"
+
+#: views/tab-settings.php:595
 msgid "Check the configuration"
 msgstr "Sprawdź konfigurację"
 
-#: views/tab-settings.php:358
+#: views/tab-settings.php:597
 msgid ""
 "The plugin will connect to GitHub and check that the repository is reachable "
 "with the saved token. Nothing is downloaded or changed."
@@ -1252,7 +2153,7 @@ msgstr ""
 "Wtyczka połączy się z GitHubem i sprawdzi, czy repozytorium jest dostępne z "
 "zapisanym tokenem. Nic nie zostanie pobrane ani zmienione."
 
-#: views/tab-settings.php:364
+#: views/tab-settings.php:603
 msgid "Test connection"
 msgstr "Testuj połączenie"
 
@@ -1581,6 +2482,14 @@ msgstr "Zakończono"
 msgid "Failed"
 msgstr "Nie powiodło się"
 
-#: views/tab-update.php:448
+#: views/tab-update.php:442
+msgid "Automatic (schedule)"
+msgstr "Automatycznie (harmonogram)"
+
+#: views/tab-update.php:444
+msgid "Automatic (GitHub webhook)"
+msgstr "Automatycznie (webhook GitHuba)"
+
+#: views/tab-update.php:460
 msgid "Last error"
 msgstr "Ostatni błąd"
