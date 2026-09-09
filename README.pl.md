@@ -47,7 +47,11 @@ views/                        szablony zakładek
 assets/                       style i skrypt panelu
 languages/                    plik .pot do tłumaczeń
 tests/                        testy PHPUnit (działają bez WordPressa)
+readme.txt                    wpis w katalogu wordpress.org
+.wordpress-org/               baner, ikony i zrzuty do katalogu (nigdy nie trafiają do paczki)
+.distignore                   co pomija paczka ZIP wydania
 .github/workflows/ci.yml      lint, PHPCS, PHPStan i testy przy każdym pushu
+.github/workflows/release.yml buduje i publikuje ZIP po tagu v*
 composer.json                 zależności deweloperskie i skrypty kontrolne
 phpcs.xml.dist                ruleset WordPress Coding Standards
 phpstan.neon.dist             konfiguracja analizy statycznej

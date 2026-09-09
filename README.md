@@ -47,7 +47,11 @@ views/                        tab templates
 assets/                       admin styles and script
 languages/                    .pot file for translations
 tests/                        PHPUnit suite (runs without WordPress)
+readme.txt                    wordpress.org directory listing
+.wordpress-org/               banner, icons and screenshots for the directory (never shipped)
+.distignore                   what the release ZIP leaves out
 .github/workflows/ci.yml      lint, PHPCS, PHPStan and tests on every push
+.github/workflows/release.yml builds and publishes the ZIP on a v* tag
 composer.json                 dev dependencies and the check scripts
 phpcs.xml.dist                WordPress Coding Standards ruleset
 phpstan.neon.dist             static analysis configuration
