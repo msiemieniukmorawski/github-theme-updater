@@ -4,7 +4,7 @@
 
 Updates a WordPress theme straight from a GitHub repository - private ones included - with backups, version rollback, and per-path protection against overwriting.
 
-- **Version:** 2.3.0
+- **Version:** 2.3.1
 - **Author:** [ms-m.pl](https://ms-m.pl)
 - **Requires:** WordPress 5.8+, PHP 7.4+
 - **Text domain:** `github-theme-updater`
@@ -324,7 +324,9 @@ They deliberately do **not** live under `wp-content/upgrade/`: WordPress empties
 
 ### Could wordpress.org overwrite my theme or this plugin?
 
-Only if a theme or plugin in the wordpress.org directory shares the slug - then core would happily offer an "update" that replaces your code with a stranger's. The plugin declares `Update URI: false`, which tells WordPress never to look it up in the directory, and it filters `site_transient_update_themes` so the managed theme slug is dropped from directory responses. For belt and braces, add `Update URI: https://your-domain.example/` to the theme's `style.css` as well.
+Your theme, no. The plugin filters `site_transient_update_themes` so the managed theme slug is dropped from directory responses, which is what stops core offering an "update" that would replace your code with a stranger's when a wordpress.org theme happens to share the slug. For belt and braces, add `Update URI: https://your-domain.example/` to the theme's `style.css` as well.
+
+The plugin itself is a different matter, and deliberately so. Up to 2.3.0 it declared `Update URI: false`, which told WordPress never to look it up in the directory. That header was removed in 2.3.1, because the plugin is now published on wordpress.org and the directory is where its own updates come from. If you install it from a GitHub release rather than from the directory, and you do not want wordpress.org serving it, add the header back to `github-theme-updater.php` - but note that you then also give up security updates.
 
 ### Does it work on multisite?
 
