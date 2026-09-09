@@ -52,6 +52,7 @@ CHANGELOG.md
 README.md
 README.pl.md
 PROMPT.md
+CONTRIBUTING.md
 
 # --- Build artefacts ---------------------------------------------------------
 *.zip
