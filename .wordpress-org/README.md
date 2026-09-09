@@ -34,56 +34,22 @@ Screenshot numbering has to line up with the numbered list under
 described by item 1, and so on. A mismatch shows the wrong caption under the
 wrong image, which nothing warns you about.
 
-## Sources
+## Editing these files
 
-`src/` holds the HTML the banner and the icons were rendered from. It is kept
-in the repository on purpose: a PNG cannot be edited afterwards, so the only
-practical way to adjust a banner is to change the HTML and render it again.
-Being under `.wordpress-org/`, it is excluded from the ZIP along with
-everything else here, and it should not be copied into SVN either - upload only
-the PNG and SVG files listed above.
+The HTML the banner and the PNG icons were rendered from is not kept in this
+repository. That has one consequence worth knowing before you try to tweak
+something:
 
-To re-render after editing the HTML (Windows, headless Chrome, nothing to
-install):
+- **`icon.svg` is the master for the icon.** It is plain, hand-written SVG, so
+  edit it directly and re-export `icon-128x128.png` and `icon-256x256.png` from
+  it at 128 and 256 pixels square.
+- **The banner PNGs have no source.** Changing the banner means rebuilding the
+  artwork, not editing it. Keep that in mind before deciding a small change is
+  cheap.
 
-```powershell
-$chrome = "C:\Program Files\Google\Chrome\Application\chrome.exe"
-$src    = (Resolve-Path .wordpress-org\src).Path -replace '\\','/'
-$flags  = @('--headless=old','--disable-gpu','--disable-lcd-text',
-            '--force-color-profile=srgb','--hide-scrollbars')
-
-& $chrome @flags --screenshot=".wordpress-org/banner-772x250.png" `
-  --window-size=772,250 "file:///$src/banner.html"
-
-& $chrome @flags --force-device-scale-factor=2 `
-  --screenshot=".wordpress-org/banner-1544x500.png" `
-  --window-size=772,250 "file:///$src/banner.html"
-
-& $chrome @flags --screenshot=".wordpress-org/icon-128x128.png" `
-  --window-size=128,128 "file:///$src/icon.html"
-
-& $chrome @flags --force-device-scale-factor=2 `
-  --screenshot=".wordpress-org/icon-256x256.png" `
-  --window-size=128,128 "file:///$src/icon.html"
-```
-
-Three of those flags are not decoration:
-
-- `--disable-lcd-text` turns off subpixel antialiasing. Without it Chrome
-  renders small text with ClearType, which bakes orange and blue fringes into
-  the glyph edges - clearly visible if you sample a pixel, and wrong on any
-  background other than the one it was rendered against. `--headless=new`
-  happens to disable it already; `--headless=old` does not.
-- `--force-color-profile=srgb` keeps the output independent of whatever
-  profile the monitor is using.
-- `--headless=old` is used because `--headless=new` silently produced no file
-  at all on this machine while a normal Chrome session was running. It exits
-  zero and writes nothing, so check that the PNG exists rather than trusting
-  the exit code. If `--headless=old` is ever dropped from Chrome, close the
-  running Chrome instances and go back to `--headless=new`.
-
-Then check that the files really came out at the intended size, because a wrong
-dimension is rejected on upload and is invisible to the eye:
+Whatever you use to produce a replacement, check two things afterwards, because
+neither is visible to the eye and wordpress.org rejects a file that gets them
+wrong:
 
 ```powershell
 Add-Type -AssemblyName System.Drawing
@@ -94,11 +60,11 @@ Get-ChildItem .wordpress-org\*.png | ForEach-Object {
 }
 ```
 
-Two things the HTML has to keep doing, or the render comes out wrong:
-`body` needs a zero margin and an explicitly painted background, and every font
-has to be a system font or embedded as a `data:` URI. Chrome screenshots before
-a webfont finishes downloading, so a linked webfont silently renders as the
-fallback.
+The dimensions have to match the table above exactly. And if the artwork was
+produced by screenshotting a browser, subpixel antialiasing has to be off
+(`--disable-lcd-text` in Chrome) - otherwise small text carries orange and blue
+fringes baked into the glyph edges, which are obvious against any background
+other than the one it was rendered on.
 
 ## Screenshots are not rendered
 
