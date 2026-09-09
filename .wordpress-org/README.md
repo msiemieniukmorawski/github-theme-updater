@@ -49,23 +49,38 @@ install):
 ```powershell
 $chrome = "C:\Program Files\Google\Chrome\Application\chrome.exe"
 $src    = (Resolve-Path .wordpress-org\src).Path -replace '\\','/'
+$flags  = @('--headless=old','--disable-gpu','--disable-lcd-text',
+            '--force-color-profile=srgb','--hide-scrollbars')
 
-& $chrome --headless=new --disable-gpu --hide-scrollbars `
-  --screenshot=".wordpress-org/banner-772x250.png" --window-size=772,250 `
-  "file:///$src/banner.html"
+& $chrome @flags --screenshot=".wordpress-org/banner-772x250.png" `
+  --window-size=772,250 "file:///$src/banner.html"
 
-& $chrome --headless=new --disable-gpu --hide-scrollbars --force-device-scale-factor=2 `
-  --screenshot=".wordpress-org/banner-1544x500.png" --window-size=772,250 `
-  "file:///$src/banner.html"
+& $chrome @flags --force-device-scale-factor=2 `
+  --screenshot=".wordpress-org/banner-1544x500.png" `
+  --window-size=772,250 "file:///$src/banner.html"
 
-& $chrome --headless=new --disable-gpu --hide-scrollbars `
-  --screenshot=".wordpress-org/icon-128x128.png" --window-size=128,128 `
-  "file:///$src/icon.html"
+& $chrome @flags --screenshot=".wordpress-org/icon-128x128.png" `
+  --window-size=128,128 "file:///$src/icon.html"
 
-& $chrome --headless=new --disable-gpu --hide-scrollbars --force-device-scale-factor=2 `
-  --screenshot=".wordpress-org/icon-256x256.png" --window-size=128,128 `
-  "file:///$src/icon.html"
+& $chrome @flags --force-device-scale-factor=2 `
+  --screenshot=".wordpress-org/icon-256x256.png" `
+  --window-size=128,128 "file:///$src/icon.html"
 ```
+
+Three of those flags are not decoration:
+
+- `--disable-lcd-text` turns off subpixel antialiasing. Without it Chrome
+  renders small text with ClearType, which bakes orange and blue fringes into
+  the glyph edges - clearly visible if you sample a pixel, and wrong on any
+  background other than the one it was rendered against. `--headless=new`
+  happens to disable it already; `--headless=old` does not.
+- `--force-color-profile=srgb` keeps the output independent of whatever
+  profile the monitor is using.
+- `--headless=old` is used because `--headless=new` silently produced no file
+  at all on this machine while a normal Chrome session was running. It exits
+  zero and writes nothing, so check that the PNG exists rather than trusting
+  the exit code. If `--headless=old` is ever dropped from Chrome, close the
+  running Chrome instances and go back to `--headless=new`.
 
 Then check that the files really came out at the intended size, because a wrong
 dimension is rejected on upload and is invisible to the eye:
