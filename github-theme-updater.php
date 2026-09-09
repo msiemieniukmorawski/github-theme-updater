@@ -3,12 +3,11 @@
  * Plugin Name:       GitHub Theme Updater
  * Plugin URI:        https://github.com/msiemieniukmorawski/github-theme-updater
  * Description:       Updates a WordPress theme straight from a GitHub repository, private ones included, with backups, version rollback and per-path protection against overwriting.
- * Version:           2.3.0
+ * Version:           2.3.1
  * Requires at least: 5.8
  * Requires PHP:      7.4
  * Author:            ms-m.pl
  * Author URI:        https://ms-m.pl
- * Update URI:        false
  * License:           GPL-2.0-or-later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain:       github-theme-updater
@@ -21,7 +20,7 @@ namespace MSM\GitHubThemeUpdater;
 
 defined( 'ABSPATH' ) || exit;
 
-const VERSION     = '2.3.0';
+const VERSION     = '2.3.1';
 const PLUGIN_FILE = __FILE__;
 
 define( __NAMESPACE__ . '\PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
