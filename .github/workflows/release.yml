@@ -1,0 +1,153 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  SLUG: github-theme-updater
+
+jobs:
+  release:
+    name: Build and publish
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # The plugin has no build step: no package.json, no Gutenberg block, and
+      # no runtime Composer dependencies. What is in the repository is what
+      # ships, so the package is assembled straight from the checkout.
+
+      - name: Check that the tag matches the declared version
+        if: ${{ startsWith(github.ref, 'refs/tags/') }}
+        run: |
+          set -euo pipefail
+
+          tag_version="${GITHUB_REF_NAME#v}"
+
+          # Each pattern has to hit exactly one line. If a later edit adds a
+          # second "Version:" line anywhere, this fails loudly instead of
+          # silently comparing against the wrong one.
+          expect_one() {
+            local label="$1" file="$2" pattern="$3" count
+            count="$(grep -Pc "$pattern" "$file" || true)"
+            if [ "$count" != "1" ]; then
+              echo "::error::$label matched $count lines in $file, expected exactly 1"
+              grep -Pn "$pattern" "$file" || true
+              exit 1
+            fi
+          }
+
+          expect_one "Plugin header version" "$SLUG.php" '^\s*\*\s*Version:\s*[0-9.]+'
+          expect_one "VERSION constant"      "$SLUG.php" "^const VERSION\s*=\s*'[0-9.]+';"
+          expect_one "Stable tag"            readme.txt  '^Stable tag:\s*[0-9.]+'
+
+          header_version="$(grep -Po '^\s*\*\s*Version:\s*\K[0-9.]+' "$SLUG.php")"
+          const_version="$(grep -Po "^const VERSION\s*=\s*'\K[0-9.]+" "$SLUG.php")"
+          stable_tag="$(grep -Po '^Stable tag:\s*\K[0-9.]+' readme.txt)"
+
+          echo "tag=$tag_version header=$header_version const=$const_version stable_tag=$stable_tag"
+
+          failed=0
+          [ "$tag_version" = "$header_version" ] || { echo "::error::Tag $tag_version does not match the plugin header version $header_version"; failed=1; }
+          [ "$tag_version" = "$const_version" ]  || { echo "::error::Tag $tag_version does not match the VERSION constant $const_version"; failed=1; }
+          [ "$tag_version" = "$stable_tag" ]     || { echo "::error::Tag $tag_version does not match Stable tag $stable_tag in readme.txt"; failed=1; }
+          exit "$failed"
+
+      - name: Build the distributable ZIP
+        run: |
+          set -euo pipefail
+
+          # The archive has to unpack into a directory named after the slug,
+          # because that is the directory name WordPress expects under
+          # wp-content/plugins/.
+          rm -rf /tmp/dist && mkdir -p "/tmp/dist/$SLUG"
+          rsync -a --exclude-from=.distignore --exclude='.git' ./ "/tmp/dist/$SLUG/"
+          (cd /tmp/dist && zip -rq "$GITHUB_WORKSPACE/$SLUG.zip" "$SLUG")
+
+          echo "### Package contents" >> "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+          unzip -l "$SLUG.zip" >> "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+
+          unzip -l "$SLUG.zip"
+
+      - name: Check what the package does and does not contain
+        run: |
+          set -euo pipefail
+
+          listing="$(unzip -Z1 "$SLUG.zip")"
+
+          fail=0
+
+          # Everything the plugin needs in order to run.
+          for required in \
+            "$SLUG/$SLUG.php" \
+            "$SLUG/readme.txt" \
+            "$SLUG/LICENSE" \
+            "$SLUG/uninstall.php" \
+            "$SLUG/includes/class-plugin.php" \
+            "$SLUG/views/tab-update.php" \
+            "$SLUG/assets/admin.css" \
+            "$SLUG/languages/$SLUG.pot"
+          do
+            if ! grep -qxF "$required" <<< "$listing"; then
+              echo "::error::Missing from the package: $required"
+              fail=1
+            fi
+          done
+
+          # Anything development-only that must never ship.
+          for forbidden in \
+            "$SLUG/vendor/" \
+            "$SLUG/node_modules/" \
+            "$SLUG/tests/" \
+            "$SLUG/docs/" \
+            "$SLUG/.github/" \
+            "$SLUG/.wordpress-org/" \
+            "$SLUG/composer.json" \
+            "$SLUG/composer.lock" \
+            "$SLUG/CLAUDE.md" \
+            "$SLUG/phpcs.xml.dist"
+          do
+            if grep -qF "$forbidden" <<< "$listing"; then
+              echo "::error::Should not be in the package: $forbidden"
+              grep -F "$forbidden" <<< "$listing" | head -5
+              fail=1
+            fi
+          done
+
+          # The version inside the packaged header has to be the one released.
+          packaged_version="$(unzip -p "$SLUG.zip" "$SLUG/$SLUG.php" | grep -Po '^\s*\*\s*Version:\s*\K[0-9.]+')"
+          echo "Packaged version: $packaged_version"
+          if [ "${GITHUB_REF_TYPE:-}" = "tag" ] && [ "$packaged_version" != "${GITHUB_REF_NAME#v}" ]; then
+            echo "::error::Packaged version $packaged_version does not match the tag ${GITHUB_REF_NAME#v}"
+            fail=1
+          fi
+
+          exit "$fail"
+
+      # Uploaded on every run, tag or not, so a manual dispatch produces a
+      # package to inspect without publishing a release.
+      - name: Upload the package as an artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.SLUG }}-zip
+          path: ${{ env.SLUG }}.zip
+          if-no-files-found: error
+
+      - name: Publish the GitHub release
+        if: ${{ startsWith(github.ref, 'refs/tags/') }}
+        uses: softprops/action-gh-release@v2
+        with:
+          files: ${{ env.SLUG }}.zip
+          generate_release_notes: true

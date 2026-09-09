@@ -3,6 +3,43 @@
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and the project uses [Semantic Versioning](https://semver.org/).
 
+## [2.3.1] - 2026-09-09
+
+### Fixed
+
+- **Backups survived an opted-in uninstall.** `uninstall.php` deleted
+  `wp-content/upgrade/gthu-backups`, the location used before 2.1, while
+  `Backup_Manager` has stored backups in `wp-content/gthu-backups` since then.
+  Deleting the plugin with "remove its settings and backups as well" enabled
+  therefore wiped the options but left every backup on disk. Both directories
+  are now removed, the current one through the `gthu_backup_dir` filter so a
+  relocated directory is covered too.
+
+### Changed
+
+- **`Update URI: false` removed from the plugin header.** It told WordPress
+  never to look the plugin up in the wordpress.org directory, which was right
+  while GitHub releases were the only distribution channel and is wrong now
+  that the plugin is published in the directory - it would have blocked every
+  update, security ones included. Protection of the *managed theme* is
+  unaffected: it never depended on this header, but on the
+  `site_transient_update_themes` filter, which still drops the theme slug from
+  directory responses.
+- Plugin header fields reordered to the order the directory expects, with no
+  change in values.
+
+### Added
+
+- **`readme.txt`** in wordpress.org format, with the description, installation
+  steps, FAQ, screenshot captions, changelog and upgrade notices.
+- **`.distignore`** listing everything kept out of the distributable ZIP, and
+  **`.github/workflows/release.yml`**, which builds that ZIP on a `v*` tag,
+  checks the tag against the plugin header and `Stable tag`, and attaches the
+  package to a GitHub release.
+- **`.wordpress-org/`** with the directory banner, icons and screenshots, plus
+  the HTML the banner and icons are rendered from. None of it ships in the ZIP.
+- A release procedure in `CONTRIBUTING.md`.
+
 ## [2.3.0] - 2026-09-08
 
 ### Added

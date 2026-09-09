@@ -4,7 +4,7 @@
 
 Aktualizacja motywu WordPressa prosto z repozytorium GitHub (także prywatnego), z kopiami zapasowymi, przywracaniem wersji i ochroną wybranych plików przed nadpisaniem.
 
-- **Wersja:** 2.3.0
+- **Wersja:** 2.3.1
 - **Autor:** [ms-m.pl](https://ms-m.pl)
 - **Wymagania:** WordPress 5.8+, PHP 7.4+
 - **Text domain:** `github-theme-updater`
@@ -47,7 +47,11 @@ views/                        szablony zakładek
 assets/                       style i skrypt panelu
 languages/                    plik .pot do tłumaczeń
 tests/                        testy PHPUnit (działają bez WordPressa)
+readme.txt                    wpis w katalogu wordpress.org
+.wordpress-org/               baner, ikony i zrzuty do katalogu (nigdy nie trafiają do paczki)
+.distignore                   co pomija paczka ZIP wydania
 .github/workflows/ci.yml      lint, PHPCS, PHPStan i testy przy każdym pushu
+.github/workflows/release.yml buduje i publikuje ZIP po tagu v*
 composer.json                 zależności deweloperskie i skrypty kontrolne
 phpcs.xml.dist                ruleset WordPress Coding Standards
 phpstan.neon.dist             konfiguracja analizy statycznej
@@ -324,7 +328,9 @@ Celowo **nie** leżą w `wp-content/upgrade/`: WordPress czyści ten katalog prz
 
 ### Czy wordpress.org może nadpisać mój motyw albo tę wtyczkę?
 
-Tylko wtedy, gdy motyw albo wtyczka w katalogu wordpress.org ma ten sam slug - wtedy core chętnie zaproponuje „aktualizację”, która podmieni Twój kod na cudzy. Wtyczka deklaruje `Update URI: false`, co każe WordPressowi nigdy nie szukać jej w katalogu, i filtruje `site_transient_update_themes`, usuwając slug zarządzanego motywu z odpowiedzi katalogu. Dla pewności dodaj też `Update URI: https://twoja-domena.example/` do `style.css` motywu.
+Twojego motywu nie. Wtyczka filtruje `site_transient_update_themes`, usuwając slug zarządzanego motywu z odpowiedzi katalogu - i to właśnie powstrzymuje core przed zaproponowaniem „aktualizacji”, która podmieniłaby Twój kod na cudzy, gdy motyw z wordpress.org ma przypadkiem ten sam slug. Dla pewności dodaj też `Update URI: https://twoja-domena.example/` do `style.css` motywu.
+
+Z samą wtyczką jest inaczej, i to celowo. Do wersji 2.3.0 deklarowała `Update URI: false`, co kazało WordPressowi nigdy nie szukać jej w katalogu. W 2.3.1 ten nagłówek został usunięty, bo wtyczka jest publikowana na wordpress.org i to stamtąd pochodzą jej własne aktualizacje. Jeśli instalujesz ją z wydania na GitHubie i nie chcesz, żeby serwował ją wordpress.org, dopisz nagłówek z powrotem do `github-theme-updater.php` - ale pamiętaj, że rezygnujesz wtedy także z aktualizacji bezpieczeństwa.
 
 ### Czy działa na multisite?
 

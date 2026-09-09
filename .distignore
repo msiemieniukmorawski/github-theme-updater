@@ -1,0 +1,60 @@
+# Everything listed here is kept out of the distributable ZIP.
+#
+# Consumed by `rsync --exclude-from=.distignore` in .github/workflows/release.yml.
+# rsync ignores blank lines and lines starting with '#'.
+#
+# The rule of thumb: if a file is not needed by the plugin at runtime, it does
+# not belong in the package. Note that `assets/` IS needed - it holds the
+# admin CSS and JS. The wordpress.org banner and icon live in `.wordpress-org/`,
+# which is excluded here on purpose: those go to the SVN `assets/` directory,
+# never into the ZIP.
+
+# --- Version control and CI --------------------------------------------------
+.git
+.gitattributes
+.github
+.gitignore
+
+# --- Agent and editor configuration ------------------------------------------
+.claude
+CLAUDE.md
+.editorconfig
+.vscode
+.idea
+
+# --- Packaging metadata ------------------------------------------------------
+.distignore
+.wordpress-org
+
+# --- Dependency manifests ----------------------------------------------------
+# The plugin has no runtime dependencies, so vendor/ is a dev-only artefact.
+# If a runtime package is ever added, remove the vendor rule or the plugin
+# will ship without its autoloader.
+composer.json
+composer.lock
+vendor
+node_modules
+package.json
+package-lock.json
+src
+
+# --- Tooling configuration ---------------------------------------------------
+phpcs.xml.dist
+phpstan.neon.dist
+phpunit.xml.dist
+.phpunit.cache
+.phpunit.result.cache
+
+# --- Tests and documentation -------------------------------------------------
+tests
+docs
+CHANGELOG.md
+README.md
+README.pl.md
+PROMPT.md
+CONTRIBUTING.md
+
+# --- Build artefacts ---------------------------------------------------------
+*.zip
+*.tar
+*.tar.gz

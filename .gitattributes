@@ -1,0 +1,23 @@
+# Line endings.
+#
+# The WordPress Coding Standards ruleset enforces LF, and CI runs on Linux,
+# so a Windows checkout with core.autocrlf=true used to fail `composer phpcs`
+# locally on files that were perfectly fine in the repository. Pinning eol=lf
+# makes the working tree match what CI sees.
+* text=auto eol=lf
+
+# Binary files, so Git never tries to translate or diff them as text.
+*.png  binary
+*.jpg  binary
+*.jpeg binary
+*.gif  binary
+*.ico  binary
+*.mo   binary
+*.zip  binary
+*.woff  binary
+*.woff2 binary
+
+# Treat these as text but keep diffs readable.
+*.pot text
+*.po  text
+*.svg text

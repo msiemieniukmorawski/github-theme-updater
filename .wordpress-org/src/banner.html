@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>GitHub Theme Updater - banner 772x250</title>
+<style>
+  /*
+   * Rendered at 772x250. The 1544x500 variant is the same page at
+   * --force-device-scale-factor=2, so every measurement here is in CSS pixels
+   * and nothing may depend on the device pixel ratio.
+   *
+   * Palette is taken from the plugin's own admin UI (assets/admin.css):
+   *   #2271b1  WordPress admin blue, the primary button and links
+   *   #1d2327  the near-black of the admin heading text
+   *   #00a32a  the green used for a successful state
+   * Fonts are the system stack the WordPress admin itself uses, so nothing is
+   * fetched over the network - Chrome screenshots before a webfont arrives.
+   */
+
+  :root {
+    --ink:   #1d2327;
+    --blue:  #2271b1;
+    --blue-light: #4f94d4;
+    --green: #00a32a;
+    --paper: #f6f7f7;
+  }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    width: 772px;
+    height: 250px;
+    overflow: hidden;
+    background: var(--ink);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+                 "Helvetica Neue", Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .banner {
+    position: relative;
+    width: 772px;
+    height: 250px;
+    background:
+      radial-gradient(circle at 78% 50%, rgba(34, 113, 177, 0.55) 0%, rgba(34, 113, 177, 0) 55%),
+      linear-gradient(135deg, #1d2327 0%, #1d2327 45%, #16324a 100%);
+    background-color: var(--ink);
+  }
+
+  /* A faint grid, so the flat background has some texture at full size but
+     disappears at thumbnail scale. */
+  .grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+    background-size: 28px 28px;
+  }
+
+  /* Text stays in the left half with a 44px margin: wordpress.org crops the
+     banner on narrow screens and lays its own plugin name over it. */
+  .content {
+    position: absolute;
+    left: 44px;
+    top: 0;
+    height: 250px;
+    width: 380px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .title {
+    margin: 0;
+    font-size: 40px;
+    line-height: 1.08;
+    font-weight: 700;
+    letter-spacing: -0.6px;
+    color: #ffffff;
+  }
+
+  .title .accent {
+    color: var(--blue-light);
+  }
+
+  .promise {
+    margin: 14px 0 0;
+    font-size: 17px;
+    line-height: 1.35;
+    font-weight: 400;
+    color: rgba(255, 255, 255, 0.72);
+  }
+
+  .rule {
+    width: 54px;
+    height: 3px;
+    margin-top: 18px;
+    background: var(--green);
+    border-radius: 2px;
+  }
+
+  /* The mark on the right: the same arrow-into-bracket shape as the icon, so
+     the two read as one family. */
+  .mark {
+    position: absolute;
+    right: 56px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+</style>
+</head>
+<body>
+  <div class="banner">
+    <div class="grid"></div>
+
+    <div class="content">
+      <h1 class="title">GitHub<br>Theme <span class="accent">Updater</span></h1>
+      <p class="promise">Ship your theme from a repository</p>
+      <div class="rule"></div>
+    </div>
+
+    <svg class="mark" width="150" height="150" viewBox="0 0 128 128" fill="none"
+         xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <!-- Left and right brackets: "this is code". -->
+      <path d="M44 26 L22 64 L44 102" stroke="#4f94d4" stroke-width="9"
+            stroke-linecap="round" stroke-linejoin="round" opacity="0.55"/>
+      <path d="M84 26 L106 64 L84 102" stroke="#4f94d4" stroke-width="9"
+            stroke-linecap="round" stroke-linejoin="round" opacity="0.55"/>
+      <!-- Download arrow: "it comes down into the site". -->
+      <path d="M64 30 L64 82" stroke="#ffffff" stroke-width="10" stroke-linecap="round"/>
+      <path d="M46 66 L64 84 L82 66" stroke="#ffffff" stroke-width="10"
+            stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M44 98 L84 98" stroke="#00a32a" stroke-width="10" stroke-linecap="round"/>
+    </svg>
+  </div>
+</body>
+</html>

@@ -41,15 +41,26 @@ delete_option( 'gthu_last_installed_version' );
 
 /**
  * Backups live outside the database, so they need an explicit cleanup.
+ *
+ * Two directories are covered: the current one, matching the default in
+ * Backup_Manager, and the `upgrade/` location used by releases before 2.1.
+ * A site that upgraded from one of those can still hold files there.
  */
-$gthu_backup_dir = apply_filters( 'gthu_backup_dir', trailingslashit( WP_CONTENT_DIR ) . 'upgrade/gthu-backups' );
-
 require_once ABSPATH . 'wp-admin/includes/file.php';
 
-if ( is_dir( $gthu_backup_dir ) && WP_Filesystem() ) {
+$gthu_backup_dirs = array(
+	(string) apply_filters( 'gthu_backup_dir', trailingslashit( WP_CONTENT_DIR ) . 'gthu-backups' ),
+	trailingslashit( WP_CONTENT_DIR ) . 'upgrade/gthu-backups',
+);
+
+if ( WP_Filesystem() ) {
 	global $wp_filesystem;
 
 	if ( $wp_filesystem ) {
-		$wp_filesystem->delete( $gthu_backup_dir, true );
+		foreach ( array_unique( $gthu_backup_dirs ) as $gthu_backup_dir ) {
+			if ( is_dir( $gthu_backup_dir ) ) {
+				$wp_filesystem->delete( untrailingslashit( $gthu_backup_dir ), true );
+			}
+		}
 	}
 }
